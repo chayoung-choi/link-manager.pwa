@@ -1,2 +1,2 @@
-# pwa.link-manager
+# link-manager.pwa
  pwa-based link manager
