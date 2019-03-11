@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 <body>
 
 <div ng-app="myApp" ng-controller="myCtrl">
@@ -15,34 +16,25 @@
 <p>The $http service requests a page on the server, and the response is set as the value of the "myWelcome" variable.</p>
 
 <script>
+
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope, $http) {
-		/* 파라메터로 보낼 임의의 데이터 객체 */
-	var dataObject =
-	{
-		sheet_name : "bag",
-		id : "cyoung90"
-	}
+	/* 파라메터로 보낼 임의의 데이터 객체 */
+	var sheet_name = "bag";
+	var id = "cyoung90";
 
 	$http({
-		method: 'GET', //방식
-		url: 'https://script.google.com/macros/s/AKfycbyNWc8-vFjZWLpKOAzKgaxgQ5QUOnKwEy0jxCgb4y4SbLqW5emb/exec', /* 통신할 URL */
-		data: dataObject, /* 파라메터로 보낼 데이터 */
-		headers: {'Content-Type': 'application/json; charset=utf-8'} //헤더
-	})
-	.success(function(data, status, headers, config) {
-		if( data ) {
-			/* 성공적으로 결과 데이터가 넘어 왔을 때 처리 */
-			console.log(data);
-		}
-		else {
-			/* 통신한 URL에서 데이터가 넘어오지 않았을 때 처리 */
-		}
-	})
-	.error(function(data, status, headers, config) {
-		/* 서버와의 연결이 정상적이지 않을 때 처리 */
-		console.log(status);
-	});
+	  method: 'GET',
+	  url: 'https://script.google.com/macros/s/AKfycbyNWc8-vFjZWLpKOAzKgaxgQ5QUOnKwEy0jxCgb4y4SbLqW5emb/exec?sheet_name='+sheet_name+'&id='+id
+	}).then(function successCallback(response) {
+	    // this callback will be called asynchronously
+	    // when the response is available
+			console.log(response.data);
+	  }, function errorCallback(response) {
+	    // called asynchronously if an error occurs
+	    // or server returns response with an error status.
+			console.log(response.data);
+	  });
 });
 </script>
 
