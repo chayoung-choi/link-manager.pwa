@@ -12,16 +12,28 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
 
 	<script>
+    $(document).ready(function(){
+      // 1. navbar a tag click
+      $('.navbar a').click(function(){
+          $(".navbar-collapse").collapse('hide');
+      });
+    });
+
 		var app = angular.module("myApp", ["ngRoute"]);
 		app.config(function($routeProvider) {
 		    $routeProvider
 		    .when("/", {
 		        templateUrl : "html/main.html"
 		    })
+        .when("/links", {
+            templateUrl : "views/links.html"
+        })
 		    .when("/red", {
 		        templateUrl : "html/red.html"
 		    });
 		});
+
+
 	</script>
 
   <style>
@@ -32,21 +44,30 @@
   </style>
 
 </head>
-<body ng-app="myApp">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="#/!"><img src="static/img/logo_o.png" alt="Logo" style="width:60px;"></a>
-	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+<body ng-app="myApp" style="height:1500px">
+  <div class="container-fluid text-white-50 bg-dark" style="text-align:center;">
+    <strong>Chayoung</strong>Developers 2019 | Project 1.
+  </div>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+	  <a class="navbar-brand" href="#/!">
+      <img src="static/img/logo_o.png" alt="Logo" style="width:60px;">
+    </a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
 
-	  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+	  <div class="collapse navbar-collapse" id="navbarToggler">
 	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 	      <li class="nav-item active">
-	        <a class="nav-link" href="#/!">Home <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="#/!">Home</a>
+          <!-- <a class="nav-link" href="#/!">Home</a> -->
 	      </li>
 	      <li class="nav-item">
-	        <a class="nav-link" href="#!red">RED</a>
+	        <a class="nav-link" href="#!links">Links</a>
 	      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#!red">RED</a>
+        </li>
 	      <li class="nav-item">
 	        <a class="nav-link disabled" href="#">Disabled</a>
 	      </li>
@@ -57,6 +78,10 @@
 	    </form>
 	  </div>
 	</nav>
-	<div ng-view>asdfasdfasdfasf</div>
+	<div ng-view class="container-fluid pt-3">
+    <div style="text-align:center;">
+      <div class="spinner-border"></div>
+    </div>
+  </div>
 </body>
 </html>
