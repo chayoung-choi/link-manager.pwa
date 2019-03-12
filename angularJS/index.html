@@ -7,9 +7,9 @@
 <div ng-app="myApp" ng-controller="myCtrl">
 	<p>Today's welcome message is:</p>
 	<ul>
-	  <!-- <li ng-repeat="x in myData">
-	    {{ x.Name + ', ' + x.Country }}
-	  </li> -->
+	  <li ng-repeat="x in myData">
+	    {{ x.id + ' | ' + x.hero + ' | ' + x.shards }}
+	  </li>
 	</ul>
 </div>
 
@@ -20,16 +20,18 @@
 var app = angular.module('myApp', []);
 app.controller('myCtrl', function($scope, $http) {
 	/* 파라메터로 보낼 임의의 데이터 객체 */
-	var sheet_name = "bag";
-	var id = "cyoung90";
+	var sheet_name = "heros";
+	//var id = "cyoung90";
 
 	$http({
 	  method: 'GET',
-	  url: 'https://script.google.com/macros/s/AKfycbyNWc8-vFjZWLpKOAzKgaxgQ5QUOnKwEy0jxCgb4y4SbLqW5emb/exec?sheet_name='+sheet_name+'&id='+id
+	  url: 'https://script.google.com/macros/s/AKfycbyNWc8-vFjZWLpKOAzKgaxgQ5QUOnKwEy0jxCgb4y4SbLqW5emb/exec?sheet_name='+sheet_name//+'&id='+id
 	}).then(function successCallback(response) {
 	    // this callback will be called asynchronously
 	    // when the response is available
-			console.log(response.data);
+			console.log(response.data.list);
+			$scope.myData = response.data.list;
+			console.log($scope.myData);
 	  }, function errorCallback(response) {
 	    // called asynchronously if an error occurs
 	    // or server returns response with an error status.
