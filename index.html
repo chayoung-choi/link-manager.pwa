@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" ng-app="myApp">
 <head>
   <title>Link-Manager</title>
   <meta charset="utf-8">
@@ -10,6 +10,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+  <script type="text/javascript" src="/resource/js/core.min.js"></script>
+  <script type="text/javascript" src="/resource/js/sha256.min.js"></script>
 
 	<script>
     $(document).ready(function(){
@@ -17,21 +19,11 @@
       $('.navbar a').click(function(){
           $(".navbar-collapse").collapse('hide');
       });
+
+      console.log(CryptoJS.SHA256("mos1234!").toString());
     });
 
-		var app = angular.module("myApp", ["ngRoute"]);
-		app.config(function($routeProvider) {
-		    $routeProvider
-		    .when("/", {
-		        templateUrl : "html/main.html"
-		    })
-        .when("/links", {
-            templateUrl : "views/links.html"
-        })
-		    .when("/red", {
-		        templateUrl : "html/red.html"
-		    });
-		});
+
 
 
 	</script>
@@ -44,7 +36,7 @@
   </style>
 
 </head>
-<body ng-app="myApp" style="height:1500px">
+<body style="height:1500px">
   <div class="container-fluid text-white-50 bg-dark" style="text-align:center;">
     <strong>Chayoung</strong>Developers 2019 | Project 1.
   </div>
@@ -60,7 +52,6 @@
 	    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 	      <li class="nav-item active">
 	        <a class="nav-link" href="#/!">Home</a>
-          <!-- <a class="nav-link" href="#/!">Home</a> -->
 	      </li>
 	      <li class="nav-item">
 	        <a class="nav-link" href="#!links">Links</a>
@@ -83,5 +74,7 @@
       <div class="spinner-border"></div>
     </div>
   </div>
+
+  <script src="scripts/app.js"></script>
 </body>
 </html>

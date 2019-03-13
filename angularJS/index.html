@@ -25,6 +25,8 @@ app.controller('myCtrl', function($scope, $http) {
 
 	$http({
 	  method: 'GET',
+		// LM-url
+		// https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec
 	  url: 'https://script.google.com/macros/s/AKfycbyNWc8-vFjZWLpKOAzKgaxgQ5QUOnKwEy0jxCgb4y4SbLqW5emb/exec?sheet_name='+sheet_name//+'&id='+id
 	}).then(function successCallback(response) {
 	    // this callback will be called asynchronously

@@ -1,6 +1,9 @@
 <script>
   $(document).ready(function(){
-    //alert("Asfe");
+    // $("#btnAdd").on("click", function(){
+    //   console.log("btnAdd");
+    //   getA("A");
+    // });
   });
 
 </script>
@@ -14,13 +17,21 @@
       }
     }
   </style>
-<div class="card-columns">
+<!-- <div>
+  <ul  >
+    <li ng-repeat="x in names">
+      {{ x.name + ', ' + x.country }}
+    </li>
+  </ul>
+</div> -->
+<div class="card-columns" ng-controller="linksCtrl">
   <div class="card">
     <img src="" class="card-img-top fakeimg" alt="">
     <div class="card-body">
       <h5 class="card-title">Card title that wraps to a new line</h5>
       <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
     </div>
+    <button type="button" class="btn btn-primary" id="btnAdd" ng-click="myFunction()">Primary</button>
   </div>
   <div class="card p-3">
     <blockquote class="blockquote mb-0 card-body">
@@ -35,9 +46,10 @@
   <div class="card">
     <img src="" class="card-img-top fakeimg" alt="">
     <div class="card-body">
-      <h5 class="card-title">Card title</h5>
-      <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      <h5 class="card-title">dec sha256</h5>
+      <p class="card-text"><input type="text" ng-model="user.pw" ng-change="fn_decSha256()"></p>
+      <p class="card-text"> {{user.pw}} </p>
+      <p class="card-text" ng-model="user.decSha256"> {{user.decSha256}} </p>
     </div>
   </div>
   <div class="card bg-primary text-white text-center p-3">
