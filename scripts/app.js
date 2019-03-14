@@ -37,7 +37,10 @@
       .when("/links", {
           templateUrl : "views/links.html"
       })
-      .when("/red", {
+      .when("/deck", {
+          templateUrl : "views/deck.html"
+      })
+      .when("/last", {
           templateUrl : "html/red.html"
       });
   });
