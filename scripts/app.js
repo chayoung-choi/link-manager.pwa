@@ -13,9 +13,10 @@
   // };
 //------------------------------------------------------------------------------
 
-// $("#btnAdd").click(function(){
-//   console.log("btnAdd");
-// });
+  // $("#btn_login").click(function(){
+  //   console.log("btnAdd");
+  // });
+
 // document.getElementById('btnAdd').addEventListener('click', function() {
 //  console.log("btnAdd");
 // });
@@ -31,7 +32,7 @@
   var app = angular.module("myApp", ["ngRoute"]);
   app.config(function($routeProvider) {
       $routeProvider
-      .when("/", {
+      .when("/main", {
           templateUrl : "html/main.html"
       })
       .when("/links", {
@@ -60,9 +61,38 @@
         $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
       };
   });
-  // app.controller("clickBtnAdd", function ($scope) {
-  //
-  // });
+  app.controller('httpCtrl', function($scope, $http) {
+    $scope.getHttp = function(){
+      /* 파라메터로 보낼 임의의 데이터 객체 */
+      var sheet_name = "host";
+      var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+      console.log($scope.username, id);
+      $http({
+        method: 'GET',
+        // LM-url
+        // https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec
+        url: 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name='+sheet_name+'&id='+id
+      }).then(function successCallback(response) {
+        // this callback will be called asynchronously
+        // when the response is available
+        console.log(response.data.list);
+        $scope.myData = response.data.list;
+        console.log($scope.myData);
+        location.href = "#!links";
+        $("#loginForm").modal('toggle');
+      }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+        console.log(response.data);
+      });
+    }
+  });
+  app.controller("loginModalCtrl", function ($scope) {
+    $("#loginForm").modal('toggle');
+    $('#loginForm').on('hidden.bs.modal', function (e) {
+      $("#loginForm").modal('toggle');
+    })
+  });
 
 //------------------------------------------------------------------------------
 

@@ -138,12 +138,12 @@
   				<h4 class="modal-title">Manager Login</h4>
   			</div>
   			<div class="modal-body">
-  				<form action="/examples/actions/confirmation.php" method="post">
+  				<form method="post" ng-controller="httpCtrl">
   					<div class="form-group">
-  						<input type="text" class="form-control" name="username" placeholder="Username" required="required">
+  						<input type="text" class="form-control" ng-model="username" name="username" placeholder="Username" required="required">
   					</div>
   					<div class="form-group">
-  						<button type="submit" id="btn_login" class="btn btn-primary btn-lg btn-block login-btn">Sign in</button>
+  						<button type="submit" id="btn_login" ng-click="getHttp()" class="btn btn-primary btn-lg btn-block login-btn">Sign in</button>
   					</div>
   				</form>
   			</div>
