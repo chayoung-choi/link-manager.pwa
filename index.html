@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr" ng-app="myApp">
+<html lang="kr">
 <head>
   <title>Link-Manager</title>
   <meta charset="utf-8">
@@ -12,20 +12,11 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
   <script type="text/javascript" src="/resource/js/core.min.js"></script>
   <script type="text/javascript" src="/resource/js/sha256.min.js"></script>
-
+  <base href="/index.html"/>
 	<script>
+
     $(document).ready(function(){
-      // 1. navbar a tag click
-      // $('.navbar a').click(function(){
-      //     $(".navbar-collapse").collapse('hide');
-      // });
 
-      // console.log(CryptoJS.SHA256("mos1234!").toString());
-
-      $("#loginForm").modal('toggle');
-      $('#loginForm').on('hidden.bs.modal', function (e) {
-        $("#loginForm").modal('toggle');
-      })
 
     });
 
@@ -33,126 +24,13 @@
 
 	</script>
 
-  <style type="text/css">
-    body {
-  		font-family: 'Varela Round', sans-serif;
-  	}
-  	.modal-login {
-  		color: #636363;
-  		width: 350px;
-      /* 화면 사이즈에 따라 수직 정렬 */
-      display: flex;
-      justify-content:center;
-      align-items: center;
-      margin: auto;
-  	}
-  	.modal-login .modal-content {
-  		padding: 20px;
-  		border-radius: 5px;
-  		border: none;
-  	}
-  	.modal-login .modal-header {
-  		border-bottom: none;
-      position: relative;
-      justify-content: center;
-  	}
-  	.modal-login h4 {
-  		text-align: center;
-  		font-size: 26px;
-  		margin: 30px 0 -15px;
-  	}
-  	.modal-login .form-control:focus {
-  		border-color: #70c5c0;
-  	}
-  	.modal-login .form-control, .modal-login .btn {
-  		min-height: 40px;
-  		border-radius: 3px;
-  	}
-  	.modal-login .modal-footer {
-  		background: #ecf0f1;
-  		border-color: #dee4e7;
-  		text-align: center;
-      justify-content: center;
-  		margin: 0 -20px -20px;
-  		border-radius: 5px;
-  		font-size: 13px;
-  	}
-  	.modal-login .modal-footer a {
-  		color: #999;
-  	}
-  	.modal-login .avatar {
-  		position: absolute;
-  		margin: 0 auto;
-  		left: 0;
-  		right: 0;
-  		top: -70px;
-  		width: 95px;
-  		height: 95px;
-  		border-radius: 50%;
-  		z-index: 9;
-  		background: #60c7c1;
-  		padding: 15px;
-  		box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-  	}
-  	.modal-login .avatar img {
-  		width: 100%;
-  	}
-    .modal-login .btn {
-      color: #fff;
-      border-radius: 4px;
-  		background: #60c7c1;
-  		text-decoration: none;
-  		transition: all 0.4s;
-      line-height: normal;
-      border: none;
-    }
-  	.modal-login .btn:hover, .modal-login .btn:focus {
-  		background: #45aba6;
-  		outline: none;
-  	}
-  	.trigger-btn {
-  		display: inline-block;
-  		margin: 100px auto;
-  	}
-    .modal-dialog {
-      /* 화면 사이즈에 따라 수직 정렬 */
-      /* vh : viewport height 단위값  */
-      vertical-align: middle;
-      height:90vh;
-    }
-
-  </style>
 
 </head>
 <body ng-app="myApp">
   <div class="container-fluid text-white-50 bg-dark" style="text-align:center;">
     <strong>Chayoung</strong>Developers 2019 | Project 1.
   </div>
-  <div id="loginForm" class="modal fade">
-  	<div class="modal-dialog modal-login">
-  		<div class="modal-content">
-  			<div class="modal-header">
-  				<div class="avatar">
-  					<img src="resource/img/icon/verified_user.png" alt="verified_user">
-  				</div>
-  				<h4 class="modal-title">Manager Login</h4>
-  			</div>
-  			<div class="modal-body">
-  				<form method="post" ng-controller="httpCtrl">
-  					<div class="form-group">
-  						<input type="text" class="form-control" ng-model="username" name="username" placeholder="Username" required="required">
-  					</div>
-  					<div class="form-group">
-  						<button type="submit" id="btn_login" ng-click="getHttp()" class="btn btn-primary btn-lg btn-block login-btn">Sign in</button>
-  					</div>
-  				</form>
-  			</div>
-  			<div class="modal-footer">
-  				<a href="#">Forgot username?</a>
-  			</div>
-  		</div>
-  	</div>
-  </div>
+
   <div ng-view class="container-fluid pt-3">
     <div style="text-align:center;">
       <div class="spinner-border"></div>

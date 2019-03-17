@@ -30,8 +30,14 @@
   // });
 
   var app = angular.module("myApp", ["ngRoute"]);
-  app.config(function($routeProvider) {
+  app.config(function($routeProvider, $locationProvider) {
+      // $locationProvider.html5Mode(true);
+
       $routeProvider
+      .when("/", {
+          templateUrl : "views/sign.html",
+          controller  : "loginModalCtrl"
+      })
       .when("/main", {
           templateUrl : "html/main.html"
       })
@@ -44,6 +50,17 @@
       .when("/last", {
           templateUrl : "html/red.html"
       });
+      // .otherwise({
+      //   template : "<h1>None</h1><p>Nothing has been selected</p>"
+      // });
+      // // .otherwise({redirectTo: '/'});
+
+  });
+  app.controller("loginModalCtrl", function ($scope) {
+    $("#loginForm").modal('toggle');
+    $('#loginForm').on('hidden.bs.modal', function (e) {
+      $("#loginForm").modal('toggle');
+    })
   });
   app.controller("linksCtrl", function ($scope) {
       $scope.names = [
@@ -61,8 +78,8 @@
         $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
       };
   });
-  app.controller('httpCtrl', function($scope, $http) {
-    $scope.getHttp = function(){
+  app.controller('httpCtrl', function($scope, $http, $location) {
+    $scope.signIn = function(){
       /* 파라메터로 보낼 임의의 데이터 객체 */
       var sheet_name = "host";
       var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
@@ -78,7 +95,7 @@
         console.log(response.data.list);
         $scope.myData = response.data.list;
         console.log($scope.myData);
-        location.href = "#!links";
+        $location.path("links");
         $("#loginForm").modal('toggle');
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
@@ -87,12 +104,7 @@
       });
     }
   });
-  app.controller("loginModalCtrl", function ($scope) {
-    $("#loginForm").modal('toggle');
-    $('#loginForm').on('hidden.bs.modal', function (e) {
-      $("#loginForm").modal('toggle');
-    })
-  });
+
 
 //------------------------------------------------------------------------------
 
