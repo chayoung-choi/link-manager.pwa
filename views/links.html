@@ -1,51 +1,29 @@
-<script>
-  $(document).ready(function(){
-    // $("#btnAdd").on("click", function(){
-    //   console.log("btnAdd");
-    //   getA("A");
-    // });
-    // $('.dropdown-toggle, .dropdown-menu').on('mouseover', function () {
-    //   $(this).dropdown('show');
-    // });
-    // $('.dropdown-toggle, .dropdown-menu').on('mouseout', function () {
-    //   $(this).dropdown('hide');
-    // });
-
-  });
-
-</script>
-<style>
-  /* .card-columns {
-    @include media-breakpoint-only(sm) {
-      column-count: 4;
-    }
-    @include media-breakpoint-only(md) {
-      column-count: 5;
-    }
-  } */
-</style>
-<div class="card-columns">
-  <div class="card bg-light mb-3 shadow-sm">
-    <div class="card-header">관리시스템</div>
-    <div class="card-body">
-      <p class="card-text">스마트MOS 관리시스템</p>
-      <div class="btn-group container" role="group" aria-label="aria_target_1">
-        <button type="button" class="btn btn-success">Local</button>
-        <button type="button" class="btn btn-primary">QA</button>
-        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          운영
-        </button>
-        <div class="dropdown-menu dropdown-menu-sm-right">
-          <a class="dropdown-item" href="#">WAS1</a>
-          <a class="dropdown-item" href="#">WAS2</a>
-          <a class="dropdown-item" href="#">WAS3</a>
-          <a class="dropdown-item" href="#">WAS4</a>
+<!-- 공통 코드 -->
+<div ng-include="'/include/navigation.html'"/></div>
+<div class="container-fluid pt-3">
+<!-- 공통 코드 -->
+  <div class="card-columns">
+    <div class="card bg-light mb-3 shadow-sm">
+      <div class="card-header">관리시스템</div>
+      <div class="card-body">
+        <p class="card-text">스마트MOS 관리시스템</p>
+        <div class="btn-group container" role="group" aria-label="aria_target_1">
+          <button type="button" class="btn btn-success">Local</button>
+          <button type="button" class="btn btn-primary">QA</button>
+          <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            운영
+          </button>
+          <div class="dropdown-menu dropdown-menu-sm-right">
+            <a class="dropdown-item" href="#">WAS1</a>
+            <a class="dropdown-item" href="#">WAS2</a>
+            <a class="dropdown-item" href="#">WAS3</a>
+            <a class="dropdown-item" href="#">WAS4</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 <template>
   <div class="card bg-light mb-3 shadow-sm">
     <div class="card-header">관리시스템</div>

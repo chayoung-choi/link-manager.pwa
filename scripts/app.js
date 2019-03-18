@@ -1,16 +1,16 @@
 (function() {
   'use strict';
 
-  // var app = {
-  //   // isLoading: true,
-  //   // visibleCards: {},
-  //   // selectedCities: [],
-  //   // spinner: document.querySelector('.loader'),
-  //   // cardTemplate: document.querySelector('.cardTemplate'),
-  //   // container: document.querySelector('.main'),
-  //   // addDialog: document.querySelector('.dialog-container'),
-  //   daysOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  // };
+  var app = {
+    // isLoading: true,
+    // visibleCards: {},
+    // selectedCities: [],
+    // spinner: document.querySelector('.loader'),
+    // cardTemplate: document.querySelector('.cardTemplate'),
+    // container: document.querySelector('.main'),
+    // addDialog: document.querySelector('.dialog-container'),
+    daysOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  };
 //------------------------------------------------------------------------------
 
   // $("#btn_login").click(function(){
@@ -31,12 +31,12 @@
 
   var app = angular.module("myApp", ["ngRoute"]);
   app.config(function($routeProvider, $locationProvider) {
-      // $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
 
       $routeProvider
       .when("/", {
-          templateUrl : "views/sign.html",
-          controller  : "loginModalCtrl"
+          templateUrl : "views/sign.html"
+        , controller  : "loginModalCtrl"
       })
       .when("/main", {
           templateUrl : "html/main.html"
@@ -49,18 +49,22 @@
       })
       .when("/last", {
           templateUrl : "html/red.html"
-      });
-      // .otherwise({
-      //   template : "<h1>None</h1><p>Nothing has been selected</p>"
-      // });
-      // // .otherwise({redirectTo: '/'});
+      })
+      .otherwise({redirectTo: '/'});
+
 
   });
+  // #1-1.
   app.controller("loginModalCtrl", function ($scope) {
     $("#loginForm").modal('toggle');
+    console.log("1", $scope.modalShow);
     $('#loginForm').on('hidden.bs.modal', function (e) {
-      $("#loginForm").modal('toggle');
-    })
+      console.log("2-1");
+      if ( $scope.modalShow == 'true' ){
+        console.log("2-2");
+        $("#loginForm").modal('toggle');
+      }
+    });
   });
   app.controller("linksCtrl", function ($scope) {
       $scope.names = [
@@ -79,7 +83,12 @@
       };
   });
   app.controller('httpCtrl', function($scope, $http, $location) {
+    console.log("2", $scope.modalShow);
     $scope.signIn = function(){
+
+      $scope.modalShow = false;
+      $("#loginForm").modal('hide');
+      console.log("3", $scope.modalShow);
       /* 파라메터로 보낼 임의의 데이터 객체 */
       var sheet_name = "host";
       var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
@@ -95,8 +104,10 @@
         console.log(response.data.list);
         $scope.myData = response.data.list;
         console.log($scope.myData);
-        $location.path("links");
-        $("#loginForm").modal('toggle');
+        $scope.modalShow = false;
+console.log("4", $scope.modalShow);
+        $location.path("deck");
+
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
