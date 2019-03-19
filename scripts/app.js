@@ -55,9 +55,12 @@
 
   });
   // #1-1.
-  app.controller("loginModalCtrl", function ($scope) {
+  app.controller("loginModalCtrl", function ($scope, $location) {
     $("#loginForm").modal('toggle');
-    console.log("1", $scope.modalShow);
+
+    console.log("0", $location.path());
+
+    $scope.pathname = $location.path();
     $('#loginForm').on('hidden.bs.modal', function (e) {
       console.log("2-1");
       if ( $scope.modalShow == 'true' ){
@@ -106,7 +109,7 @@
         console.log($scope.myData);
         $scope.modalShow = false;
 console.log("4", $scope.modalShow);
-        $location.path("deck");
+        $location.path("links");
 
       }, function errorCallback(response) {
         // called asynchronously if an error occurs

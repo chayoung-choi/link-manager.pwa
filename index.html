@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html lang="kr" ng-app="myApp" ng-controller="loginModalCtrl">
 <head>
   <title>Link-Manager</title>
   <meta charset="utf-8">
@@ -10,9 +10,15 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-  <script type="text/javascript" src="/resource/js/core.min.js"></script>
-  <script type="text/javascript" src="/resource/js/sha256.min.js"></script>
-  <base href="/index.html"/>
+  <script type="text/javascript" src="resource/js/core.min.js"></script>
+  <script type="text/javascript" src="resource/js/sha256.min.js"></script>
+  <base ng-bind="$location.port()" href="/index.html"/>
+  <script>
+    $(document).ready(function(){
+      // console.log("pathname", {{pathname}});
+      
+    });
+  </script>
   <style type="text/css">
     body {
   		font-family: 'Varela Round', sans-serif;
@@ -103,7 +109,7 @@
 
   </style>
 </head>
-<body ng-app="myApp">
+<body>
   <div class="container-fluid text-white-50 bg-dark" style="text-align:center;">
     <strong>Chayoung</strong>Developers 2019 | Project 1.
   </div>
