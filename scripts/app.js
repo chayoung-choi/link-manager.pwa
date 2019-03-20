@@ -54,13 +54,21 @@
 
 
   });
+  // #0. init
+  app.controller("initCtrl", function($scope, $location){
+
+    $scope.pathname = $location.path();
+    var pathname = $location.path();
+    console.log("0", $location.path(), pathname);
+    console.log("1", $location);
+
+    // document.getElementsByTagName("base").attr("", pathname);
+  });
+
   // #1-1.
   app.controller("loginModalCtrl", function ($scope, $location) {
     $("#loginForm").modal('toggle');
 
-    console.log("0", $location.path());
-
-    $scope.pathname = $location.path();
     $('#loginForm').on('hidden.bs.modal', function (e) {
       console.log("2-1");
       if ( $scope.modalShow == 'true' ){
