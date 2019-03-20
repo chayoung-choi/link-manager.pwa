@@ -31,7 +31,7 @@
 
   var app = angular.module("myApp", ["ngRoute"]);
   app.config(function($routeProvider, $locationProvider) {
-      // $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true);
 
       $routeProvider
       .when("/", {
@@ -57,12 +57,13 @@
   // #0. init
   app.controller("initCtrl", function($scope, $location){
 
-    $scope.pathname = $location.path();
+    $scope.pathname = $location.absUrl();
     var pathname = $location.path();
     console.log("0", $location.path(), pathname);
     console.log("1", $location);
 
-    // document.getElementsByTagName("base").attr("", pathname);
+    document.getElementsByTagName("base").href = $location.absUrl();
+    console.log("2 absUrl", $location.absUrl());
   });
 
   // #1-1.
