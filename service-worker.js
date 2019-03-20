@@ -15,10 +15,10 @@
 var dataCacheName = 'linksData-v1';
 var cacheName = 'linkManagerPWA-1';
 var filesToCache = [
-  '/',
-  '/index.html',
-  '/views/links.html',
-  '/scripts/app.js'
+  '/link-manager.pwa/',
+  '/link-manager.pwa/index.html',
+  '/link-manager.pwa/views/links.html',
+  '/link-manager.pwa/scripts/app.js'
   // '/styles/inline.css',
   // '/images/clear.png'
 ];
