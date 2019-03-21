@@ -1,114 +1,131 @@
 <style type="text/css">
   body {
-		font-family: 'Varela Round', sans-serif;
+		/* font-family: 'Varela Round', sans-serif; */
+    background: gray;
 	}
-	.modal-login {
-		color: #636363;
-		width: 350px;
+  .form {
+    width : 100%;
+    height: 100%;
+  }
+  .sign-form {
+  	color: #636363;
+  	width: 350px;
     /* 화면 사이즈에 따라 수직 정렬 */
     display: flex;
     justify-content:center;
     align-items: center;
     margin: auto;
-	}
-	.modal-login .modal-content {
-		padding: 20px;
-		border-radius: 5px;
-		border: none;
-	}
-	.modal-login .modal-header {
-		border-bottom: none;
-    position: relative;
-    justify-content: center;
-	}
-	.modal-login h4 {
-		text-align: center;
-		font-size: 26px;
-		margin: 30px 0 -15px;
-	}
-	.modal-login .form-control:focus {
-		border-color: #70c5c0;
-	}
-	.modal-login .form-control, .modal-login .btn {
-		min-height: 40px;
-		border-radius: 3px;
-	}
-	.modal-login .modal-footer {
-		background: #ecf0f1;
-		border-color: #dee4e7;
-		text-align: center;
-    justify-content: center;
-		margin: 0 -20px -20px;
-		border-radius: 5px;
-		font-size: 13px;
-	}
-	.modal-login .modal-footer a {
-		color: #999;
-	}
-	.modal-login .avatar {
-		position: absolute;
-		margin: 0 auto;
-		left: 0;
-		right: 0;
-		top: -70px;
-		width: 95px;
-		height: 95px;
-		border-radius: 50%;
-		z-index: 9;
-		background: #60c7c1;
-		padding: 15px;
-		box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-	}
-	.modal-login .avatar img {
-		width: 100%;
-	}
-  .modal-login .btn {
-    color: #fff;
-    border-radius: 4px;
-		background: #60c7c1;
-		text-decoration: none;
-		transition: all 0.4s;
-    line-height: normal;
-    border: none;
-  }
-	.modal-login .btn:hover, .modal-login .btn:focus {
-		background: #45aba6;
-		outline: none;
-	}
-	.trigger-btn {
-		display: inline-block;
-		margin: 100px auto;
-	}
-  .modal-dialog {
-    /* 화면 사이즈에 따라 수직 정렬 */
     /* vh : viewport height 단위값  */
     vertical-align: middle;
     height:90vh;
   }
-
+  .sign-form .sign-content {
+  	padding: 20px;
+  	border-radius: 5px;
+  	border: none;
+    background-color: white;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .sign-form .sign-header {
+  	border-bottom: none;
+    position: relative;
+    justify-content: center;
+  }
+  .sign-form .sign-header .sign-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  .sign-form .sign-body {
+    padding: 1rem;
+  }
+  .sign-form h4 {
+  	text-align: center;
+  	font-size: 26px;
+  	margin: 30px 0 -15px;
+  }
+  .sign-form .form-control:focus {
+  	border-color: #70c5c0;
+  }
+  .sign-form .form-control, .sign-form .btn {
+  	min-height: 40px;
+  	border-radius: 3px;
+  }
+  .sign-form .sign-footer {
+  	background: #ecf0f1;
+  	border-color: #dee4e7;
+  	text-align: center;
+    justify-content: center;
+  	margin: 0 -20px -20px;
+  	border-radius: 5px;
+  	font-size: 13px;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+  }
+  .sign-form .sign-footer a {
+  	color: #999;
+  }
+  .sign-form .avatar {
+  	position: absolute;
+  	margin: 0 auto;
+  	left: 0;
+  	right: 0;
+  	top: -70px;
+  	width: 95px;
+  	height: 95px;
+  	border-radius: 50%;
+  	z-index: 9;
+  	background: #60c7c1;
+  	padding: 15px;
+  	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  }
+  .sign-form .avatar img {
+  	width: 100%;
+  }
+  .sign-form .btn {
+    color: #fff;
+    border-radius: 4px;
+  	background: #60c7c1;
+  	text-decoration: none;
+  	transition: all 0.4s;
+    line-height: normal;
+    border: none;
+  }
+  .sign-form .btn:hover, .sign-form .btn:focus {
+  	background: #45aba6;
+  	outline: none;
+  }
+  .trigger-btn {
+  	display: inline-block;
+  	margin: 100px auto;
+  }
 </style>
-<hidden id="modalShow" ng-init="modalShow='true'"/>
-<div id="loginForm" class="modal fade">
-  <div class="modal-dialog modal-login">
-    <div class="modal-content">
-      <div class="modal-header">
+<div id="signForm" class="form">
+  <div class="sign-form">
+    <div class="sign-content">
+      <div class="sign-header">
         <div class="avatar">
           <img src="resource/img/icon/verified_user.png" alt="verified_user">
         </div>
-        <h4 class="modal-title">Manager Login</h4>
+        <h4 class="sign-title">Manager Login</h4>
       </div>
-      <div class="modal-body">
+      <div class="sign-body">
         <form ng-controller="httpCtrl" ng-submit="signIn()">
           <div class="form-group">
             <input type="text" class="form-control" ng-model="username" name="username" placeholder="Username" required="required">
           </div>
           <div class="form-group">
-            <button type="submit" id="btn_login" class="btn btn-primary btn-lg btn-block login-btn">Sign in</button>
+            <button type="submit" id="signIn-btn" class="btn btn-primary btn-lg btn-block">
+              <span id="signIn-spinner" class="spinner-border spinner-border-sm d-none"></span>
+              Sign in
+            </button>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <a href="#">Forgot username?</a>
+      <div class="sign-footer">
+        <a href="#" onclick="alert('준비 중 입니다.')">Forgot username?</a>
       </div>
     </div>
   </div>

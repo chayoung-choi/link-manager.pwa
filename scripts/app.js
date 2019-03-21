@@ -36,7 +36,7 @@
       $routeProvider
       .when("/", {
           templateUrl : "views/sign.html"
-        , controller  : "loginModalCtrl"
+        // , controller  : "loginModalCtrl"
       })
       .when("/main", {
           templateUrl : "html/main.html"
@@ -55,29 +55,29 @@
 
   });
   // #0. init
-  app.controller("initCtrl", function($scope, $location){
+  // app.controller("initCtrl", function($scope, $location){
+  //
+  //   $scope.pathname = $location.absUrl();
+  //   var pathname = $location.path();
+  //   console.log("0", $location.path(), pathname);
+  //   console.log("1", $location);
+  //
+  //   document.getElementsByTagName("base").href = $location.absUrl();
+  //   console.log("2 absUrl", $location.absUrl());
+  // });
 
-    $scope.pathname = $location.absUrl();
-    var pathname = $location.path();
-    console.log("0", $location.path(), pathname);
-    console.log("1", $location);
-
-    document.getElementsByTagName("base").href = $location.absUrl();
-    console.log("2 absUrl", $location.absUrl());
-  });
-
-  // #1-1.
-  app.controller("loginModalCtrl", function ($scope, $location) {
-    $("#loginForm").modal('toggle');
-
-    $('#loginForm').on('hidden.bs.modal', function (e) {
-      console.log("2-1");
-      if ( $scope.modalShow == 'true' ){
-        console.log("2-2");
-        $("#loginForm").modal('toggle');
-      }
-    });
-  });
+  // // #1-1.
+  // app.controller("loginModalCtrl", function ($scope, $location) {
+  //   $("#loginForm").modal('toggle');
+  //
+  //   $('#loginForm').on('hidden.bs.modal', function (e) {
+  //     console.log("2-1");
+  //     if ( $scope.modalShow == 'true' ){
+  //       console.log("2-2");
+  //       $("#loginForm").modal('toggle');
+  //     }
+  //   });
+  // });
   app.controller("linksCtrl", function ($scope) {
       $scope.names = [
         {name:'Jani',country:'Norway'},
@@ -95,39 +95,48 @@
       };
   });
   app.controller('httpCtrl', function($scope, $http, $location) {
-    console.log("2", $scope.modalShow);
+
     $scope.signIn = function(){
 
-      $scope.modalShow = false;
-      $("#loginForm").modal('hide');
-      console.log("3", $scope.modalShow);
+      $("#signIn-btn")[0].disabled = true;
+      $("#signIn-spinner").removeClass("d-none");
+      $("[name='username'")[0].disabled= false;
+
       /* 파라메터로 보낼 임의의 데이터 객체 */
       var sheet_name = "host";
       var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
       console.log($scope.username, id);
+
       $http({
         method: 'GET',
         // LM-url
-        // https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec
         url: 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name='+sheet_name+'&id='+id
       }).then(function successCallback(response) {
         // this callback will be called asynchronously
         // when the response is available
-        console.log(response.data.list);
         $scope.myData = response.data.list;
         console.log($scope.myData);
-        $scope.modalShow = false;
-console.log("4", $scope.modalShow);
+
         $location.path("links");
 
       }, function errorCallback(response) {
         // called asynchronously if an error occurs
         // or server returns response with an error status.
         console.log(response.data);
+        $("#signIn-btn")[0].disabled = false;
+        $("#signIn-spinner").addClass("d-none");
+        $("[name='username'")[0].disabled= false;
       });
     }
   });
 
+  app.controller('commonCtrl', function($scope){
+    $scope.getMsg = function(code){
+      var msgObj = {
+        prep  : "준비 중 입니다."
+      }
+    };
+  });
 
 //------------------------------------------------------------------------------
 
