@@ -1,7 +1,8 @@
 (function() {
   'use strict';
 
-  var app = {
+  var appStorage = {
+    appPath: "/link-manager.pwa",
     // isLoading: true,
     // visibleCards: {},
     // selectedCities: [],
@@ -31,26 +32,27 @@
 
   var app = angular.module("myApp", ["ngRoute"]);
   app.config(function($routeProvider, $locationProvider) {
+      var pathname = appStorage.appPath;
       $locationProvider.html5Mode(true);
 
       $routeProvider
       .when("/", {
-          templateUrl : "views/sign.html"
+          templateUrl : pathname+"/views/sign.html"
         // , controller  : "loginModalCtrl"
       })
       .when("/main", {
-          templateUrl : "html/main.html"
+          templateUrl : pathname+"/html/main.html"
       })
       .when("/links", {
-          templateUrl : "views/links.html"
+          templateUrl : pathname+"/views/links.html"
       })
       .when("/deck", {
-          templateUrl : "views/deck.html"
+          templateUrl : pathname+"/views/deck.html"
       })
       .when("/last", {
-          templateUrl : "html/red.html"
+          templateUrl : pathname+"/html/red.html"
       })
-      .otherwise({redirectTo: '/'});
+      .otherwise({redirectTo: pathname+"/views/sign.html"});
 
 
   });
@@ -95,12 +97,12 @@
       };
   });
   app.controller('httpCtrl', function($scope, $http, $location) {
-
+console.log("appStorage", appStorage);
     $scope.signIn = function(){
 
       $("#signIn-btn")[0].disabled = true;
       $("#signIn-spinner").removeClass("d-none");
-      $("[name='username'")[0].disabled= false;
+      $("[name='username'")[0].disabled= true;
 
       /* 파라메터로 보낼 임의의 데이터 객체 */
       var sheet_name = "host";

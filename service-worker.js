@@ -17,10 +17,20 @@ var cacheName = 'linkManagerPWA-1';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
+  // ----------- include
+  '/link-manager.pwa/include/navigation.html',
+  // ----------- views
+  '/link-manager.pwa/views/deck.html',
   '/link-manager.pwa/views/links.html',
+  '/link-manager.pwa/views/sign.html',
+  // ----------- resource - img
+  '/link-manager.pwa/resource/img/icon/verified_user.png',
+  '/link-manager.pwa/resource/img/logo_o.png',
+  // ----------- resource - js
+  '/link-manager.pwa/resource/js/core.min.js',
+  '/link-manager.pwa/resource/js/sha256.min.js',
+  // ----------- app.js
   '/link-manager.pwa/scripts/app.js'
-  // '/styles/inline.css',
-  // '/images/clear.png'
 ];
 
 self.addEventListener('install', function(e) {
@@ -31,4 +41,40 @@ self.addEventListener('install', function(e) {
       return cache.addAll(filesToCache);
     })
   );
+});
+
+self.addEventListener('activate', function(e) {
+  console.log('[ServiceWorker] Activate');
+  e.waitUntil(
+    caches.keys().then(function(keyList) {
+      return Promise.all(keyList.map(function(key) {
+        if (key !== cacheName && key !== dataCacheName) {
+          console.log('[ServiceWorker] Removing old cache', key);
+          return caches.delete(key);
+        }
+      }));
+    })
+  );
+  return self.clients.claim();
+});
+
+self.addEventListener('fetch', function(e) {
+  console.log('[Service Worker] Fetch', e.request.url);
+  var dataUrl = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec';
+  if (e.request.url.indexOf(dataUrl) > -1) {
+    e.respondWith(
+      caches.open(dataCacheName).then(function(cache) {
+        return fetch(e.request).then(function(response){
+          cache.put(e.request.url, response.clone());
+          return response;
+        });
+      })
+    );
+  } else {
+    e.respondWith(
+      caches.match(e.request).then(function(response) {
+        return response || fetch(e.request);
+      })
+    );
+  }
 });
