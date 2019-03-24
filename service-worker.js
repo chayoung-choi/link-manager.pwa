@@ -24,8 +24,12 @@ var filesToCache = [
   '/link-manager.pwa/views/links.html',
   '/link-manager.pwa/views/sign.html',
   // ----------- resource - img
-  '/link-manager.pwa/resource/img/icon/verified_user.png',
-  '/link-manager.pwa/resource/img/logo_o.png',
+  '/link-manager.pwa/resource/img/icons/verified_user.png',
+  '/link-manager.pwa/resource/img/logo/logo_ccy_128-128.png',
+  '/link-manager.pwa/resource/img/logo/logo_ccy_144-144.png',
+  '/link-manager.pwa/resource/img/logo/logo_ccy_152-152.png',
+  '/link-manager.pwa/resource/img/logo/logo_ccy_192-192.png',
+  '/link-manager.pwa/resource/img/logo/logo_ccy_256-256.png',
   // ----------- resource - js
   '/link-manager.pwa/resource/js/core.min.js',
   '/link-manager.pwa/resource/js/sha256.min.js',

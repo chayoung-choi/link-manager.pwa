@@ -4,6 +4,9 @@
   <title>Link-Manager</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base href="/link-manager.pwa/" />
+  <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:;
+        script-src 'self' https://ajax.googleapis.com https://cdnjs.cloudflare.com/ajax/libs https://maxcdn.bootstrapcdn.com; style-src 'self' https://maxcdn.bootstrapcdn.com; "> -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -13,7 +16,15 @@
   <script type="text/javascript" src="resource/js/core.min.js"></script>
   <script type="text/javascript" src="resource/js/sha256.min.js"></script>
   <link rel="manifest" href="/link-manager.pwa/manifest.json">
-  <base href="/link-manager.pwa/" />
+
+  <!-- Add to home screen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="LM.PWA">
+  <link rel="apple-touch-icon" href="resource/img/logo/logo_ccy_128-128.png">
+  <!-- Windows용 타일 아이콘 -->
+  <meta name="msapplication-TileImage" content="resource/img/logo/logo_ccy_128-128.png">
+  <meta name="msapplication-TileColor" content="#2F3BA2">
   <script>
     $(document).ready(function(){
 
