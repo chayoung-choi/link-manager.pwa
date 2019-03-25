@@ -24,6 +24,7 @@ var filesToCache = [
   '/link-manager.pwa/views/links.html',
   '/link-manager.pwa/views/sign.html',
   // ----------- resource - img
+  '/link-manager.pwa/favicon.ico',
   '/link-manager.pwa/resource/img/icons/verified_user.png',
   '/link-manager.pwa/resource/img/logo/logo_ccy_128-128.png',
   '/link-manager.pwa/resource/img/logo/logo_ccy_144-144.png',
