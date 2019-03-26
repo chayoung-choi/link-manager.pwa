@@ -3,6 +3,7 @@
 
   var appStorage = {
     appPath: "/link-manager.pwa",
+    id : "",
     // isLoading: true,
     // visibleCards: {},
     // selectedCities: [],
@@ -38,6 +39,7 @@
       $routeProvider
       .when("/", {
           templateUrl : pathname+"/views/sign.html"
+          // templateUrl : pathname+"/views/links.html"
         // , controller  : "loginModalCtrl"
       })
       .when("/main", {
@@ -80,6 +82,8 @@
   //     }
   //   });
   // });
+
+
   app.controller("linksCtrl", function ($scope) {
       $scope.names = [
         {name:'Jani',country:'Norway'},
@@ -96,6 +100,8 @@
         $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
       };
   });
+
+
   app.controller('httpCtrl', function($scope, $http, $location) {
 console.log("appStorage", appStorage);
     $scope.signIn = function(){
@@ -119,6 +125,7 @@ console.log("appStorage", appStorage);
         $scope.myData = response.data.list;
         console.log($scope.myData);
 
+        appStorage.id = id;
         $location.path("links");
 
       }, function errorCallback(response) {
@@ -131,7 +138,6 @@ console.log("appStorage", appStorage);
       });
     }
   });
-
   app.controller('commonCtrl', function($scope){
     $scope.getMsg = function(code){
       var msgObj = {
@@ -139,30 +145,49 @@ console.log("appStorage", appStorage);
       }
     };
   });
-
 //------------------------------------------------------------------------------
-
-  app.getLinkList = function(id) {
-    console.log("get");
-    return;
+  appStorage.updateLinkList = function() {
+    // var keys = Object.keys(app.visibleCards);
+    // keys.forEach(function(key) {
+    var id = appStorage.id;
+    app.getLinkList(id);
+    // });
+  };
+//------------------------------------------------------------------------------
+  appStorage.getLinkList = function(id) {
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
+
+    if ('caches' in window) {
+      caches.match(url).then(function(response) {
+        if (response) {
+          response.json().then(function updateFromCache(json) {
+console.log("#1 json", json);
+            var results = json.query.results;
+console.log("#2 results", results);
+            // results.key = key;
+            // results.label = label;
+            // results.created = json.query.created;
+            // app.updateForecastCard(results);
+          });
+        }
+      });
+    }
+    // Fetch the latest data.
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
       if (request.readyState === XMLHttpRequest.DONE) {
         if (request.status === 200) {
           var response = JSON.parse(request.response);
           var results = response.query.results;
+console.log("#3 response", response);
           // results.key = key;
           // results.label = label;
           // results.created = response.query.created;
           // app.updateForecastCard(results);
-          console.log("#1-1");
         }
-        console.log("#1-2");
       } else {
-        // Return the initial weather forecast since no data is available.
+console.log("#4 err", response);
         // app.updateForecastCard(initialWeatherForecast);
-        console.log("err");
       }
     };
     request.open('GET', url);

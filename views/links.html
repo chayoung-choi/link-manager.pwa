@@ -1,23 +1,88 @@
+<style type="text/css">
+  .card-columns {
+    @include media-breakpoint-only(md) {
+      column-count: 1;
+    }
+    @include media-breakpoint-only(lg) {
+      column-count: 4;
+    }
+    @include media-breakpoint-only(xl) {
+      column-count: 5;
+    }
+  }
+</style>
+<!-- // Extra small devices (portrait phones, 576px 미만) - xs
+    @media (max-width: 575px) { ... }
+
+    // Small devices (landscape phones, 576px 이상) - sm
+    @media (min-width: 576px) and (max-width: 767px) { ... }
+
+    // Medium devices (tablets, 768px 이상) - md
+    @media (min-width: 768px) and (max-width: 991px) { ... }
+
+    // Large devices (desktops, 992px 이상) - lg
+    @media (min-width: 992px) and (max-width: 1199px) { ... }
+
+    // Extra large devices (large desktops, 1200px 이상)  - xl
+    @media (min-width: 1200px) { ... } -->
 <!-- 공통 코드 -->
 <div ng-include="'/link-manager.pwa/include/navigation.html'"/></div>
 <div class="container-fluid pt-3">
 <!-- 공통 코드 -->
   <div class="card-columns">
-    <div class="card bg-light mb-3 shadow-sm">
-      <div class="card-header">관리시스템</div>
-      <div class="card-body">
-        <p class="card-text">스마트MOS 관리시스템</p>
-        <div class="btn-group container" role="group" aria-label="aria_target_1">
-          <button type="button" class="btn btn-success">Local</button>
-          <button type="button" class="btn btn-primary">QA</button>
-          <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            운영
-          </button>
-          <div class="dropdown-menu dropdown-menu-sm-right">
-            <a class="dropdown-item" href="#">WAS1</a>
-            <a class="dropdown-item" href="#">WAS2</a>
-            <a class="dropdown-item" href="#">WAS3</a>
-            <a class="dropdown-item" href="#">WAS4</a>
+    <div class="card bg-light">
+      <div class="card-header"><span name="category">관리시스템</span></div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-light">
+            <p class="card-text"><span name="label">스마트MOS 관리시스템</span></p>
+            <div class="btn-group" role="group" aria-label="aria_target">
+              <button type="button" class="btn btn-success">Local</button>
+              <button type="button" class="btn btn-primary">QA</button>
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                운영
+              </button>
+              <div class="dropdown-menu dropdown-menu-sm-right">
+                <a class="dropdown-item" href="#">WAS1</a>
+                <a class="dropdown-item" href="#">WAS2</a>
+                <a class="dropdown-item" href="#">WAS3</a>
+                <a class="dropdown-item" href="#">WAS4</a>
+              </div>
+            </div>
+          </li>
+          <li class="list-group-item bg-light">
+            <p class="card-text">연말정산연말정산연말정산연말정산연말정산연말정산연말정산연말정산</p>
+            <div class="btn-group" role="group" aria-label="aria_target">
+              <button type="button" class="btn btn-success">Local</button>
+              <button type="button" class="btn btn-primary">QA</button>
+              <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                운영
+              </button>
+              <div class="dropdown-menu dropdown-menu-sm-right">
+                <a class="dropdown-item" href="#">WAS1</a>
+                <a class="dropdown-item" href="#">WAS2</a>
+                <a class="dropdown-item" href="#">WAS3</a>
+                <a class="dropdown-item" href="#">WAS4</a>
+              </div>
+              </div>
+          </li>
+        </ul>
+      </div>
+      <div class="card bg-light mb-3 shadow-sm">
+        <div class="card-header">연말정산</div>
+        <div class="card-body">
+          <p class="card-text">수수료명세서</p>
+          <div class="btn-group container" role="group" aria-label="aria_target">
+            <button type="button" class="btn btn-success">Local</button>
+            <button type="button" class="btn btn-primary">QA</button>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              운영
+            </button>
+            <div class="dropdown-menu dropdown-menu-sm-right">
+              <a class="dropdown-item" href="#">WAS1</a>
+              <a class="dropdown-item" href="#">WAS2</a>
+              <a class="dropdown-item" href="#">WAS3</a>
+              <a class="dropdown-item" href="#">WAS4</a>
+            </div>
           </div>
         </div>
       </div>
@@ -26,10 +91,10 @@
 </div>
 <template>
   <div class="card bg-light mb-3 shadow-sm">
-    <div class="card-header">관리시스템</div>
+    <div class="card-header">연말정산</div>
     <div class="card-body">
-      <p class="card-text">스마트MOS 관리시스템</p>
-      <div class="btn-group container" role="group" aria-label="aria_target_1">
+      <p class="card-text">수수료명세서</p>
+      <div class="btn-group container" role="group" aria-label="aria_target">
         <button type="button" class="btn btn-success">Local</button>
         <button type="button" class="btn btn-primary">QA</button>
         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
