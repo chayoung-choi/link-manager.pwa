@@ -3,7 +3,9 @@
 
   var appStorage = {
     appPath: "/link-manager.pwa",
+    appVer: {verName: "0.0.2", verCode:"20190326.02"},
     id : "",
+    hostList  : [],
     // isLoading: true,
     // visibleCards: {},
     // selectedCities: [],
@@ -36,6 +38,8 @@
       var pathname = appStorage.appPath;
       $locationProvider.html5Mode(true);
 
+console.log("index appStorage #0", appStorage);
+
       $routeProvider
       .when("/", {
           templateUrl : pathname+"/views/sign.html"
@@ -58,17 +62,20 @@
 
 
   });
+
   // #0. init
-  // app.controller("initCtrl", function($scope, $location){
-  //
-  //   $scope.pathname = $location.absUrl();
-  //   var pathname = $location.path();
-  //   console.log("0", $location.path(), pathname);
-  //   console.log("1", $location);
-  //
-  //   document.getElementsByTagName("base").href = $location.absUrl();
-  //   console.log("2 absUrl", $location.absUrl());
-  // });
+  app.controller("initCtrl", function($scope, $location){
+
+    // $scope.pathname = $location.absUrl();
+    // var pathname = $location.path();
+    // console.log("0", $location.path(), pathname);
+    // console.log("1", $location);
+    //
+    // document.getElementsByTagName("base").href = $location.absUrl();
+    // console.log("2 absUrl", $location.absUrl());
+    var appVer = appStorage.appVer;
+    $scope.appVer = appVer;
+  });
 
   // // #1-1.
   // app.controller("loginModalCtrl", function ($scope, $location) {
@@ -103,7 +110,7 @@
 
 
   app.controller('httpCtrl', function($scope, $http, $location) {
-console.log("appStorage", appStorage);
+console.log("signIn>init appStorage #1", appStorage);
     $scope.signIn = function(){
 
       $("#signIn-btn")[0].disabled = true;
@@ -120,12 +127,12 @@ console.log("appStorage", appStorage);
         // LM-url
         url: 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name='+sheet_name+'&id='+id
       }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
         $scope.myData = response.data.list;
-        console.log($scope.myData);
 
         appStorage.id = id;
+        appStorage.hostList = response.data.list;
+console.log("signIn>appStorage #2", appStorage);
+
         $location.path("links");
 
       }, function errorCallback(response) {
@@ -138,6 +145,8 @@ console.log("appStorage", appStorage);
       });
     }
   });
+
+
   app.controller('commonCtrl', function($scope){
     $scope.getMsg = function(code){
       var msgObj = {
@@ -145,6 +154,8 @@ console.log("appStorage", appStorage);
       }
     };
   });
+
+
 //------------------------------------------------------------------------------
   appStorage.updateLinkList = function() {
     // var keys = Object.keys(app.visibleCards);
@@ -153,6 +164,8 @@ console.log("appStorage", appStorage);
     app.getLinkList(id);
     // });
   };
+
+
 //------------------------------------------------------------------------------
   appStorage.getLinkList = function(id) {
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
