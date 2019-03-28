@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath: "/link-manager.pwa",
-    appVer: {verName: "0.0.3", verCode:"20190327.01"},
+    appVer: {verName: "0.0.4", verCode:"20190328.01"},
     id : "",
     hostList  : [],
     // isLoading: true,
@@ -21,9 +21,9 @@
   //   console.log("btnAdd");
   // });
 
-// document.getElementById('btnAdd').addEventListener('click', function() {
-//  console.log("btnAdd");
-// });
+  // document.getElementById('btnReset').addEventListener('click', function() {
+  //  console.log("btnAdd");
+  // });
 
   // angular.module('myApp', []).controller('namesCtrl', function($scope) {
   //   $scope.names = [
@@ -65,49 +65,32 @@ console.log("index appStorage #0", appStorage);
 
   // #0. init
   app.controller("initCtrl", function($scope, $location){
-
+console.log("[controller:initCtrl]");
     // $scope.pathname = $location.absUrl();
-    // var pathname = $location.path();
-    // console.log("0", $location.path(), pathname);
-    // console.log("1", $location);
-    //
     // document.getElementsByTagName("base").href = $location.absUrl();
-    // console.log("2 absUrl", $location.absUrl());
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
+
+    // #0-1. [GET] 서버 Link List
+    $scope.updateLinkList = function() {
+console.log("[GET] 서버 Link List");
+      appStorage.updateLinkList();
+    };
   });
 
-  // // #1-1.
-  // app.controller("loginModalCtrl", function ($scope, $location) {
-  //   $("#loginForm").modal('toggle');
-  //
-  //   $('#loginForm').on('hidden.bs.modal', function (e) {
-  //     console.log("2-1");
-  //     if ( $scope.modalShow == 'true' ){
-  //       console.log("2-2");
-  //       $("#loginForm").modal('toggle');
-  //     }
-  //   });
-  // });
-
-
   app.controller("linksCtrl", function ($scope) {
+console.log("[controller:linksCtrl]");
       $scope.names = [
         {name:'Jani',country:'Norway'},
         {name:'Hege',country:'Sweden'},
         {name:'Kai',country:'Denmark'}
       ];
 
-      $scope.myFunction = function() {
-        console.log("오예~");
-      };
-
       $scope.fn_decSha256 = function() {
         // console.log(CryptoJS.SHA256("mos1234!").toString());
         $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
       };
   });
-
 
   app.controller('httpCtrl', function($scope, $http, $location) {
 console.log("signIn>init appStorage #1", appStorage);
@@ -158,25 +141,28 @@ console.log("signIn>appStorage #2", appStorage);
 
 //------------------------------------------------------------------------------
   appStorage.updateLinkList = function() {
+console.log("appStorage.updateLinkList");
     // var keys = Object.keys(app.visibleCards);
     // keys.forEach(function(key) {
     var id = appStorage.id;
-    app.getLinkList(id);
+    appStorage.getLinkList(id);
     // });
   };
 
 
 //------------------------------------------------------------------------------
   appStorage.getLinkList = function(id) {
+console.log("[appStorage.getLinkList] id", id);
+    id="smos"
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
-
+console.log("[appStorage.getLinkList] url", url);
     if ('caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
           response.json().then(function updateFromCache(json) {
-console.log("#1 json", json);
-            var results = json.query.results;
-console.log("#2 results", results);
+console.log("[appStorage.getLinkList] #1 json", json);
+//             var results = json.query.results;
+// console.log("[appStorage.getLinkList] #2 results", results);
             // results.key = key;
             // results.label = label;
             // results.created = json.query.created;
@@ -191,15 +177,15 @@ console.log("#2 results", results);
       if (request.readyState === XMLHttpRequest.DONE) {
         if (request.status === 200) {
           var response = JSON.parse(request.response);
-          var results = response.query.results;
-console.log("#3 response", response);
+          // var results = response.query.results;
+console.log("[appStorage.getLinkList] #3 response", response);
           // results.key = key;
           // results.label = label;
           // results.created = response.query.created;
           // app.updateForecastCard(results);
         }
       } else {
-console.log("#4 err", response);
+console.log("[appStorage.getLinkList] #4 err", response);
         // app.updateForecastCard(initialWeatherForecast);
       }
     };

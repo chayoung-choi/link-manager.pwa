@@ -102,7 +102,7 @@
   	margin: 100px auto;
   }
 </style>
-<div id="signForm" class="form">
+<div id="signForm" class="form" ng-app="myApp">
   <div class="sign-form">
     <div class="sign-content">
       <div class="sign-header">
@@ -130,4 +130,7 @@
     </div>
   </div>
 </div>
-<p class="text-center">AppVer : {{appVer.verName}} ({{appVer.verCode}})</p>
+<div class="fixed-bottom text-center">
+  AppVer : {{appVer.verName}} ({{appVer.verCode}})
+  <!-- <p class="text-center">AppVer : {{appVer.verName}} ({{appVer.verCode}})</p> -->
+</div>
