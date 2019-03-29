@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath: "/link-manager.pwa",
-    appVer: {verName: "0.0.4", verCode:"20190328.01"},
+    appVer: {verName: "0.0.5", verCode:"20190329.01"},
     id : "",
     hostList  : [],
     // isLoading: true,
@@ -152,10 +152,9 @@ console.log("appStorage.updateLinkList");
 
 //------------------------------------------------------------------------------
   appStorage.getLinkList = function(id) {
-console.log("[appStorage.getLinkList] id", id);
-    id="smos"
+    console.log("[appStorage.getLinkList]");
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
-console.log("[appStorage.getLinkList] url", url);
+
     if ('caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
