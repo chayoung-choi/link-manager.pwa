@@ -11,6 +11,12 @@
     }
   }
 </style>
+<script>
+  function openWin(url){
+    window.open(url, "_blank");
+}
+</script>
+
 <!-- // Extra small devices (portrait phones, 576px 미만) - xs
     @media (max-width: 575px) { ... }
 
@@ -38,7 +44,7 @@
 
             <p class="card-text"><span name="label">스마트MOS 관리시스템</span></p>
             <div class="btn-group w-100" role="group" aria-label="aria_target">
-              <button type="button" class="btn btn-success">
+              <button type="button" class="btn btn-success" onclick="window.open('www.naver.com', '_blank');">
                 <div class="d-none d-sm-block d-md-none">L</div>
                 <div class="d-sm-none d-md-block">Local</div>
               </button>
@@ -115,8 +121,14 @@
     <div class="card-body">
       <p class="card-text">수수료명세서</p>
       <div class="btn-group w-100" role="group" aria-label="aria_target">
-        <button type="button" class="btn btn-success">Local</button>
-        <button type="button" class="btn btn-primary">QA</button>
+        <button type="button" class="btn btn-success">
+          <div class="d-none d-sm-block d-md-none">L</div>
+          <div class="d-sm-none d-md-block">Local</div>
+        </button>
+        <button type="button" class="btn btn-primary">
+          <div class="d-none d-sm-block d-md-none">Q</div>
+          <div class="d-sm-none d-md-block">QA</div>
+        </button>
         <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           운영
         </button>

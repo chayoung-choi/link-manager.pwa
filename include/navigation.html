@@ -1,9 +1,6 @@
 	<script>
     $(document).ready(function(){
-			console.log("드루와");
 			$("nav-link").click(function(e){
-				console.log("nav click", $(this).parent());
-				console.log("nav click", $(".nav-item"));
 				$(".nav-item").removeClass("active");
 				$(this).parent().addClass("active");
 			});
