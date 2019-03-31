@@ -2,10 +2,10 @@
   'use strict';
 
   var appStorage = {
-    appPath: "/link-manager.pwa",
-    appVer: {verName: "0.0.7", verCode:"20190330.01"},
-    id : "",
-    hostList  : [],
+    appPath  : "/link-manager.pwa",
+    appVer   : {verName: "0.0.8", verCode:"20190331.01"},
+    user     : {id : "", name: ""},
+    hostList : [],
     // isLoading: true,
     visibleCards: {},
     // selectedCities: [],
@@ -13,7 +13,7 @@
     // cardTemplate: document.querySelector('template').content,
     // container: document.querySelector('.main'),
     // addDialog: document.querySelector('.dialog-container'),
-    daysOfWeek: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   };
 //------------------------------------------------------------------------------
 
@@ -122,10 +122,11 @@ console.log("index appStorage #0", appStorage);
       }).then(function successCallback(response) {
         $scope.myData = response.data.list;
 
-        appStorage.id = id;
+        var user = {"name":$scope.username, "id":id};
+        appStorage.user = user;
         appStorage.hostList = response.data.list;
         console.log("[function:signIn>http-success>appStorage]", appStorage);
-
+        appStorage.saveLocalStorage("id");
         // success시 links view로 이동
         $location.path("links");
 
@@ -262,6 +263,12 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
     request.open('GET', url);
     request.send();
   };
+
+  // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
+  appStorage.saveLocalStorage= function(key) {
+    var obj = appStorage[key];
+    localStorage[key] = obj;
+  };
 //------------------------------------------------------------------------------
   var initLinkData = {
     seq: 1,
@@ -274,6 +281,12 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
     updated: "2019-03-20T15:00:00.000Z"
   }
 //------------------------------------------------------------------------------
+
+  appStorage.id = localStorage.id;
+  if (appStorage.id){
+
+  }
+
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
              .register('./service-worker.js')
