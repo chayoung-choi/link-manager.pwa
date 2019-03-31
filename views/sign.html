@@ -101,6 +101,11 @@
   	display: inline-block;
   	margin: 100px auto;
   }
+  .custom-control-input:checked~.custom-control-label::before{
+    color: #fff;
+    border-color: #60c7c1;
+    background-color: #60c7c1;
+  }
 </style>
 <div id="signForm" class="form" ng-app="myApp">
   <div class="sign-form">
@@ -112,7 +117,7 @@
         <h4 class="sign-title">Manager Login</h4>
       </div>
       <div class="sign-body">
-        <form ng-controller="httpCtrl" ng-submit="signIn()">
+        <form ng-controller="signCtrl" ng-submit="signIn()">
           <div class="form-group">
             <input type="text" class="form-control" ng-model="username" name="username" placeholder="Username" required="required">
           </div>
@@ -121,6 +126,10 @@
               <span id="signIn-spinner" class="spinner-border spinner-border-sm d-none"></span>
               Sign in
             </button>
+          </div>
+          <div class="form-group custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="autoSignInSwitch" ng-model="autoSignInSwitch">
+            <label class="custom-control-label" for="autoSignInSwitch">Auto Sign in</label>
           </div>
         </form>
       </div>
