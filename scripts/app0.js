@@ -63,27 +63,33 @@ console.log("init appStorage", appStorage);
 
   });
 
-  // [Ctrl:initCtrl]
+  // #0. init
   app.controller("initCtrl", function($scope, $location){
     console.log("[Ctrl:initCtrl]");
 
+    // $scope.pathname = $location.absUrl();
+    // document.getElementsByTagName("base").href = $location.absUrl();
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
 
-    // [Fn:initCtrl.signIn()]
-    $scope.signIn = function() {
+    $scope.signIn3 = function() {
       console.log("[Fn:initCtrl.signIn()]");
 
-      // var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+      // 로그인버튼 클릭 시 id input disabled
+      $("#signIn-btn")[0].disabled = true;
+      $("#signIn-spinner").removeClass("d-none");
+      $("[name='username'")[0].disabled = true;
 
-      appStorage.signIn($scope, $location);
+      var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+      $scope.id = id;
+      appStorage.signIn($scope);
 
-      // console.log("id", id);
-      // console.log("id", appStorage.user.id);
-      // if (id == appStorage.user.id){
-      //   console.log("로그인");
-      //   $location.path("links");
-      // }
+      console.log("id", id);
+      console.log("id", appStorage.user.id);
+      if (id == appStorage.user.id){
+        console.log("로그인");
+        $location.path("links");
+      }
 
     };
 
@@ -97,6 +103,31 @@ console.log("init appStorage", appStorage);
       console.log("[GET] 서버 Link List");
       // appStorage.getLinkList();
        appStorage.updateLinkCard();
+    };
+  });
+
+  // [Ctrl:linksCtrl]
+  app.controller("signCtrl", function ($scope, $location) {
+    console.log("[Ctrl:signCtrl]");
+
+    $scope.signIn = function() {
+      console.log("[Fn:signCtrl.signIn()]");
+
+      // 로그인버튼 클릭 시 id input disabled
+      // $("#signIn-btn")[0].disabled = true;
+      // $("#signIn-spinner").removeClass("d-none");
+      // $("[name='username'")[0].disabled = true;
+
+      var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+      $scope.id = id;
+      appStorage.signIn($scope, $location);
+
+      console.log("id", id);
+      console.log("id", appStorage.user.id);
+      if (id == appStorage.user.id){
+        console.log("로그인");
+
+      }
     };
   });
 
@@ -115,6 +146,122 @@ console.log("init appStorage", appStorage);
         $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
       };
   });
+
+  // [Ctrl:httpCtrl]
+  app.controller('httpCtrl', function($scope, $http, $location) {
+    console.log("[Ctrl:httpCtrl>appStorage]", appStorage);
+
+    // if (localStorage.user){
+    //   var user = JSON.parse(localStorage.user);
+    //   $scope.username = user.name;
+    //   $scope.autoSignInSwitch = user.autoSignIn;
+    //
+    //
+    //         // 로그인버튼 클릭 시 id input disabled
+    //         $("#signIn-btn")[0].disabled = true;
+    //         $("#signIn-spinner").removeClass("d-none");
+    //         $("[name='username'")[0].disabled= true;
+    //
+    //         // 파라메터로 보낼 임의의 데이터 객체
+    //         var sheet_name = "host";
+    //         var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+    //
+    //         $http({
+    //           method: 'GET',
+    //           // LM-url
+    //           url: 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name='+sheet_name+'&id='+id
+    //         }).then(function successCallback(response) {
+    //           $scope.myData = response.data.list;
+    //
+    //           var user = {"name":$scope.username, "id":id, "autoSignIn":$scope.autoSignInSwitch};
+    //           appStorage.user = user;
+    //           appStorage.saveLocalStorage("user", user);
+    //           appStorage.hostList = response.data.list;
+    //           appStorage.saveLocalStorage("hostList", response.data.list);
+    //
+    //           // success시 links view로 이동
+    //           $location.path("links");
+    //
+    //         }, function errorCallback(response) {
+    //           // called asynchronously if an error occurs
+    //           // or server returns response with an error status.
+    //           console.log("[function:signIn>http-error>response.data]", response.data);
+    //
+    //           $("#signIn-btn")[0].disabled = false;
+    //           $("#signIn-spinner").addClass("d-none");
+    //           $("[name='username'")[0].disabled= false;
+    //         });
+    // }
+
+    // $scope.signIn = function(){
+    //
+    //   // 로그인버튼 클릭 시 id input disabled
+    //   $("#signIn-btn")[0].disabled = true;
+    //   $("#signIn-spinner").removeClass("d-none");
+    //   $("[name='username'")[0].disabled = true;
+    //
+    //   var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+    //   $scope.id = id;
+    //   appStorage.signIn($scope, $location);
+    //
+    //   console.log("id", id);
+    //   console.log("id", appStorage.user.id);
+    //   if (id == appStorage.user.id){
+    //     console.log("로그인");
+    //     $location.path("links");
+    //   }
+    // }
+
+    // [Fn:signIn]
+  //   $scope.signIn2 = function(){
+  //     console.log("[Fn:signIn]");
+  //
+  //     // 로그인버튼 클릭 시 id input disabled
+  //     $("#signIn-btn")[0].disabled = true;
+  //     $("#signIn-spinner").removeClass("d-none");
+  //     $("[name='username'")[0].disabled= true;
+  //
+  //     // 파라메터로 보낼 임의의 데이터 객체
+  //     var sheet_name = "host";
+  //     var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+  //
+  //     $http({
+  //       method: 'GET',
+  //       // LM-url
+  //       url: 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name='+sheet_name+'&id='+id
+  //     }).then(function successCallback(response) {
+  //       $scope.myData = response.data.list;
+  //
+  //       var user = {"name":$scope.username, "id":id, "autoSignIn":$scope.autoSignInSwitch};
+  //       appStorage.user = user;
+  //       appStorage.saveLocalStorage("user", user);
+  //       appStorage.hostList = response.data.list;
+  //       appStorage.saveLocalStorage("hostList", response.data.list);
+  //
+  //       // success시 links view로 이동
+  //       $location.path("links");
+  //
+  //     }, function errorCallback(response) {
+  //       // called asynchronously if an error occurs
+  //       // or server returns response with an error status.
+  //       console.log("[function:signIn>http-error>response.data]", response.data);
+  //
+  //       $("#signIn-btn")[0].disabled = false;
+  //       $("#signIn-spinner").addClass("d-none");
+  //       $("[name='username'")[0].disabled= false;
+  //     });
+  //   }
+  });
+
+
+  app.controller('commonCtrl', function($scope){
+    $scope.getMsg = function(code){
+      var msgObj = {
+        prep  : "준비 중 입니다."
+      }
+    };
+  });
+
 
 //------------------------------------------------------------------------------
 /*
@@ -188,39 +335,17 @@ console.log("init appStorage", appStorage);
   appStorage.signIn = function($scope, $location) {
     console.log("[Fn:appStorage.signIn]");
 
-    var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
-console.log("id", id);
-    $scope.id = id;
-    // $location.path("links");
+    $location.path("links");
     // 파라메터로 보낼 임의의 데이터 객체
     $scope.sheetName = "host";
 
     // appStorage.user.id = id;
-    appStorage.getHttp($scope, $location);
-
-
-
-    $scope.$watch('hostList', function(newValue, oldValue) {
-       if (newValue === oldValue) { return; }
-       console.log("오예!", $scope.hostList);
-     }, true);
-
-    //
-    //   console.log("asdfasdfasdfasdfasdfasdf");
-    //   // success시 links view로 이동
-    //   $location.path("links");
-    //   $scope.$apply();
-    // });
-    // $.when(  ).done(function(){
-    //   console.log("asdfasdfasdf");
-    //   console.log("appStorage", appStorage);
-    //   console.log("saveLocalStorage", localStorage);
-    // });
+    appStorage.getHttp($scope);
 
   }
 
   // [Fn:appStorage.getHttp] - 서버에서 Http Get 통신
-  appStorage.getHttp = function($scope, $location) {
+  appStorage.getHttp = function($scope) {
     console.log("[Fn:appStorage.getHttp]");
 
     var sheetName = $scope.sheetName;
@@ -228,7 +353,7 @@ console.log("id", id);
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
             + "id=" + id;
-console.log(url);
+
     if ('caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
@@ -256,7 +381,7 @@ console.log(url);
         if (request.status === 200) {
           var response = JSON.parse(request.response);
           var results = response.list;
-console.log(response);
+
           switch (sheetName){
             case "host" :
               var user = {"name":$scope.username, "id":id, "autoSignIn":$scope.autoSignInSwitch};
@@ -264,13 +389,12 @@ console.log(response);
               appStorage.saveLocalStorage("user", user);
               appStorage.hostList = results;
               appStorage.saveLocalStorage("hostList", results);
-              $scope.hostList = results;
-              console.log("$scope.hostList", $scope.hostList, results);
-              console.log("[Fn:appStorage.getHttp>XMLHttpRequest>links>>>>>>>>]");
 
+              console.log("[Fn:appStorage.getHttp>XMLHttpRequest>links>>>>>>>>]");
+              // success시 links view로 이동
+              // $location.path("links");
               break;
           }
-
           // appStorage.updateLinkList(results);
 
         }

@@ -107,7 +107,7 @@
     background-color: #60c7c1;
   }
 </style>
-<div id="signForm" class="form" ng-app="myApp">
+<div id="signForm" class="form">
   <div class="sign-form">
     <div class="sign-content">
       <div class="sign-header">
@@ -117,7 +117,7 @@
         <h4 class="sign-title">Manager Login</h4>
       </div>
       <div class="sign-body">
-        <form ng-controller="signCtrl" ng-submit="signIn()">
+        <form ng-controller="initCtrl" ng-submit="signIn()">
           <div class="form-group">
             <input type="text" class="form-control" ng-model="username" name="username" placeholder="Username" required="required">
           </div>
