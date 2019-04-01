@@ -3,8 +3,9 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.0", verCode:"20190401.01"},
-    user     : {id : "", name: "", autoSignIn: ""},
+    appVer   : {verName: "0.1.1", verCode:"20190401.02"},
+    user     : {id : "", name: "", pw: ""},
+    autoSignIn : "",
     hostList : [],
     // isLoading: true,
     visibleCards: {},
@@ -73,18 +74,7 @@ console.log("init appStorage", appStorage);
     // [Fn:initCtrl.signIn()]
     $scope.signIn = function() {
       console.log("[Fn:initCtrl.signIn()]");
-
-      // var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
-
       appStorage.signIn($scope, $location);
-
-      // console.log("id", id);
-      // console.log("id", appStorage.user.id);
-      // if (id == appStorage.user.id){
-      //   console.log("로그인");
-      //   $location.path("links");
-      // }
-
     };
 
     // #0-1. [GET] 서버 Link List
@@ -188,22 +178,19 @@ console.log("init appStorage", appStorage);
   appStorage.signIn = function($scope, $location) {
     console.log("[Fn:appStorage.signIn]");
 
-    var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
-console.log("id", id);
-    $scope.id = id;
-    // $location.path("links");
     // 파라메터로 보낼 임의의 데이터 객체
+    var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+    $scope.id = id;
     $scope.sheetName = "host";
 
-    // appStorage.user.id = id;
     appStorage.getHttp($scope, $location);
 
-
-
-    $scope.$watch('hostList', function(newValue, oldValue) {
-       if (newValue === oldValue) { return; }
-       console.log("오예!", $scope.hostList);
-     }, true);
+    // $scope.$watch('hostList', function(newValue, oldValue) {
+    //    if (newValue === oldValue) { return; }
+    //    console.log("오예!", $scope.hostList);
+    //    console.log("newValue!", newValue);
+    //    console.log("oldValue!", oldValue);
+    //  }, true);
 
     //
     //   console.log("asdfasdfasdfasdfasdfasdf");
@@ -228,21 +215,38 @@ console.log("id", id);
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
             + "id=" + id;
-console.log(url);
+
+    var signIn = false; // 로그인 여부
     if ('caches' in window) {
       caches.match(url).then(function(response) {
+
+console.log("[Fn:appStorage.getHttp] #1 caches response", response);
         if (response) {
           response.json().then(function updateFromCache(json) {
             console.log("[Fn:appStorage.getHttp>caches>json]", json);
-//             var results = json.query.results;
-// console.log("[appStorage.getLinkList] #2 results", results);
+            var results = json.list;
+console.log("[Fn:appStorage.getHttp] #1 caches results", json.query);
+console.log("[Fn:appStorage.getHttp] #1 caches results", results);
             // results.key = key;
             // results.label = label;
             // results.created = json.query.created;
             // app.updateForecastCard(results);
             switch (sheetName){
               case "host" :
+              if (results){
+                var user = {"name":$scope.username, "id":id, "pw":""};
+                var swch =  $scope.autoSignInSwitch;
+                appStorage.user = user;
+                appStorage.autoSignIn = swch;
+                appStorage.hostList = results;
+                appStorage.saveLocalStorage("user", user);
+                appStorage.saveLocalStorage("autoSignIn", swch);
+                appStorage.saveLocalStorage("hostList", results);
 
+                $location.path("links");
+                $scope.$apply();
+                signIn = true;
+              }
                 break;
             }
           });
@@ -259,15 +263,24 @@ console.log(url);
 console.log(response);
           switch (sheetName){
             case "host" :
-              var user = {"name":$scope.username, "id":id, "autoSignIn":$scope.autoSignInSwitch};
+console.log("[Fn:appStorage.getHttp] #2 XMLHttpRequest results", results);
+              if (results.length == 0){
+                console.log("없다.");
+                return;
+              }
+              var user = {"name":$scope.username, "id":id, "pw":""};
+              var swch =  $scope.autoSignInSwitch;
               appStorage.user = user;
-              appStorage.saveLocalStorage("user", user);
+              appStorage.autoSignIn = swch;
               appStorage.hostList = results;
+              appStorage.saveLocalStorage("user", user);
+              appStorage.saveLocalStorage("autoSignIn", swch);
               appStorage.saveLocalStorage("hostList", results);
-              $scope.hostList = results;
-              console.log("$scope.hostList", $scope.hostList, results);
-              console.log("[Fn:appStorage.getHttp>XMLHttpRequest>links>>>>>>>>]");
 
+              if (!signIn && results != null){
+                $location.path("links");
+                $scope.$apply();
+              }
               break;
           }
 
@@ -341,6 +354,10 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
   appStorage.saveLocalStorage = function(key, val) {
     localStorage[key] = JSON.stringify(val);
   };
+  // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
+  // appStorage.saveLocalStorage = function(key, val) {
+  //   localStorage[key] = JSON.stringify(val);
+  // };
 //------------------------------------------------------------------------------
   var initLinkData = {
     seq: 1,
