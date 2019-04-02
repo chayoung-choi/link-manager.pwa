@@ -106,40 +106,40 @@ console.log("init appStorage", appStorage);
 
     };
 
-    // [Fn:initCtrl.updateLinkCardList() - Links View 카드 업데이트]
-    $scope.updateLinkCardList = function() {
-      console.log("[Fn:initCtrl.updateLinkCardList()]");
-      appStorage.updateLinkCardList();
+    // [Fn:initCtrl.getLinkCardList() - Links 카드 가져오기]
+    $scope.getLinkCardList = function() {
+      console.log("[Fn:initCtrl.getLinkCardList()]");
+      appStorage.getLinkCardList($scope);
     };
 
-    // #0-1. [GET] 서버 Link List
-    $scope.getLinkList = function() {
-      console.log("[GET] 서버 Link List");
-      appStorage.getLinkList();
-    };
+    // // #0-1. [GET] 서버 Link List
+    // $scope.getLinkList = function() {
+    //   console.log("[GET] 서버 Link List");
+    //   appStorage.getLinkList();
+    // };
 
-    $scope.updateLinkCard = function() {
-      console.log("[GET] 서버 Link List");
-      // appStorage.getLinkList();
-       appStorage.updateLinkCard();
-    };
+    // $scope.updateLinkCard = function() {
+    //   console.log("[GET] 서버 Link List");
+    //   // appStorage.getLinkList();
+    //    appStorage.updateLinkCard();
+    // };
   });
 
   // [Ctrl:linksCtrl]
-  app.controller("linksCtrl", function ($scope) {
-    console.log("[controller:linksCtrl]");
-
-      $scope.names = [
-        {name:'Jani',country:'Norway'},
-        {name:'Hege',country:'Sweden'},
-        {name:'Kai',country:'Denmark'}
-      ];
-
-      $scope.fn_decSha256 = function() {
-        // console.log(CryptoJS.SHA256("mos1234!").toString());
-        $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
-      };
-  });
+  // app.controller("linksCtrl", function ($scope) {
+  //   console.log("[controller:linksCtrl]");
+  //
+  //     $scope.names = [
+  //       {name:'Jani',country:'Norway'},
+  //       {name:'Hege',country:'Sweden'},
+  //       {name:'Kai',country:'Denmark'}
+  //     ];
+  //
+  //     $scope.fn_decSha256 = function() {
+  //       // console.log(CryptoJS.SHA256("mos1234!").toString());
+  //       $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
+  //     };
+  // });
 
 //------------------------------------------------------------------------------
 /*
@@ -193,23 +193,29 @@ console.log("init appStorage", appStorage);
 
   }
 
-  // [fn:appStorage.updateLinkList] - link data 업데이트
-  appStorage.updateLinkList = function(dataList) {
-    console.log("[appStorage.fn:updateLinkList>dataList]", dataList);
+  // [Fn:appStorage.updateLinkCardList] - link Card 업데이트  _190402
+  appStorage.updateLinkCardList = function(dataList) {
+    console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
 
     for (var i=0; i<dataList.length; i++){
-      console.log("[appStorage.fn:updateLinkList>dataList["+i+"]", dataList[i]);
+      console.log("[Fn:appStorage.updateLinkCardList>dataList["+i+"]", dataList[i]);
       var seq = dataList[i].seq;
       appStorage.updateLinkCard(dataList[i]);
     }
 
   };
 
+  // [Fn:appStorage.getLinkCardList] - Card List 가져오기 _190402
+  appStorage.getLinkCardList = function($scope){
+    console.log("[Fn:appStorage.updateLinkCardList()]");
+    $scope.sheetName = "links";
+    appStorage.getHttp($scope, null);
+  }
 
 //------------------------------------------------------------------------------
 //  backend method
 //------------------------------------------------------------------------------
-  // [Fn:appStorage.signIn] - 로그인
+  // [Fn:appStorage.signIn] - 로그인 _190402
   appStorage.signIn = function($scope, $location) {
     console.log("[Fn:appStorage.signIn]");
 
@@ -225,7 +231,7 @@ console.log("init appStorage", appStorage);
     appStorage.getHttp($scope, $location);
   }
 
-  // [Fn:appStorage.getHttp] - 서버에서 Http Get 통신
+  // [Fn:appStorage.getHttp] - 서버에서 Http Get 통신 _190402
   appStorage.getHttp = function($scope, $location) {
     console.log("[Fn:appStorage.getHttp]");
 
@@ -233,7 +239,7 @@ console.log("init appStorage", appStorage);
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
             + "id=" + $scope.id;
-
+console.log("[Fn:appStorage.getHttp] #0 url", url);
     if ('caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
@@ -254,6 +260,9 @@ console.log("[Fn:appStorage.getHttp] #1 caches results", results);
                 } else {
 
                 }
+                break;
+
+              case "links" :
                 break;
             }
           });
