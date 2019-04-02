@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.2", verCode:"20190402.02"},
+    appVer   : {verName: "0.1.3", verCode:"20190402.03"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : [],
@@ -37,29 +37,44 @@
   var app = angular.module("myApp", ["ngRoute"]);
   app.config(function($routeProvider, $locationProvider) {
       var pathname = appStorage.appPath;
-      $locationProvider.html5Mode(true);
 
 console.log("init appStorage", appStorage);
-
+      // $locationProvider.html5Mode(true);
       $routeProvider
-      .when("/", {
-          templateUrl : pathname+"/views/sign.html"
-          // templateUrl : pathname+"/views/links.html"
-        // , controller  : "loginModalCtrl"
-      })
-      .when("/links", {
-          templateUrl : pathname+"/views/links.html"
-      })
-      .when("/deck", {
-          templateUrl : pathname+"/views/deck.html"
-      })
-      .when("/last", {
-          templateUrl : pathname+"/html/red.html"
-      })
-      .otherwise({redirectTo: pathname+"/views/sign.html"});
-
+        .when("/", {
+            templateUrl : pathname+"/views/sign.html"
+            // templateUrl : pathname+"/views/links.html"
+          // , controller  : "loginModalCtrl"
+        })
+        .when("/links", {
+            templateUrl : pathname+"/views/links.html"
+        })
+        .when("/deck", {
+            templateUrl : pathname+"/views/deck.html"
+        })
+        .when("/last", {
+            templateUrl : pathname+"/html/red.html"
+        })
+        .otherwise({redirectTo: "/"});
 
   });
+
+  // app.all('/*', function (req, res) {
+  //   res.sendFile('index.html', { root:"/link-manager.pwa/views" });
+  // });
+
+  // app.use(function (req, res) {
+  //   res.sendFile('./link-manager.pwa/index.html');
+  // });
+
+  // app.run(function($rootScope){
+  //   $rootScope.$on('$routeChangeStart', function(e, curr, prev){
+  //     $rootScope.IsLoading = true;
+  //   });
+  //   $rootScope.$on('$routeChangeSuccess', function(e, curr, prev){
+  //     $rootScope.IsLoading = false;
+  //   });
+  // });
 
   // [Ctrl:initCtrl]
   app.controller("initCtrl", function($scope, $location, $timeout){
@@ -197,6 +212,7 @@ console.log("init appStorage", appStorage);
   appStorage.updateLinkCardList = function(dataList) {
     console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
 
+    // document.querySelector('.card-columns').remove(); // container 초기화
     for (var i=0; i<dataList.length; i++){
       console.log("[Fn:appStorage.updateLinkCardList>dataList["+i+"]", dataList[i]);
       var seq = dataList[i].seq;
@@ -208,6 +224,7 @@ console.log("init appStorage", appStorage);
   // [Fn:appStorage.getLinkCardList] - Card List 가져오기 _190402
   appStorage.getLinkCardList = function($scope){
     console.log("[Fn:appStorage.updateLinkCardList()]");
+    $scope.id = appStorage.user.id;
     $scope.sheetName = "links";
     appStorage.getHttp($scope, null);
   }
@@ -239,15 +256,15 @@ console.log("init appStorage", appStorage);
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
             + "id=" + $scope.id;
-console.log("[Fn:appStorage.getHttp] #0 url", url);
+    console.log("[Fn:appStorage.getHttp] #0 url", url);
+
     if ('caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
-console.log("[Fn:appStorage.getHttp] #1 caches response", response);
+          console.log("[Fn:appStorage.getHttp] #1 caches response", response);
           response.json().then(function updateFromCache(json) {
-            console.log("[Fn:appStorage.getHttp>caches>json]", json);
             var results = json.list;
-console.log("[Fn:appStorage.getHttp] #1 caches results", results);
+            console.log("[Fn:appStorage.getHttp] #1 caches results", results);
 
             switch (sheetName){
               case "host" :
@@ -263,6 +280,7 @@ console.log("[Fn:appStorage.getHttp] #1 caches results", results);
                 break;
 
               case "links" :
+                appStorage.updateLinkCardList(results);
                 break;
             }
           });
@@ -285,7 +303,7 @@ console.log("[Fn:appStorage.getHttp] #1 caches results", results);
                 appStorage.saveToStorage("user", user);
                 appStorage.saveToStorage("hostList", results);
                 appStorage.saveToStorage("autoSignIn", $scope.autoSignInSwitch);
-console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
+                console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
 
                 $location.path("links");
                 $scope.$apply();
@@ -295,9 +313,11 @@ console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
                 $("[name='username'")[0].disabled= false;
               }
               break;
-          }
 
-          // appStorage.updateLinkList(results);
+            case "links" :
+              appStorage.updateLinkCardList(results);
+              break;
+          }
 
         }
       } else {
@@ -369,10 +389,6 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
     appStorage[key] = val;
     localStorage[key] = JSON.stringify(val);
   };
-  // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
-  // appStorage.saveLocalStorage = function(key, val) {
-  //   localStorage[key] = JSON.stringify(val);
-  // };
 //------------------------------------------------------------------------------
   var initLinkData = {
     seq: 1,

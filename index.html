@@ -35,13 +35,32 @@
   <!-- Windows용 타일 아이콘 -->
   <meta name="msapplication-TileImage" content="resource/img/logo/logo_ccy_128-128.png">
   <meta name="msapplication-TileColor" content="#4fb9a0">
+
   <script>
     $(document).ready(function(){
 
     });
   </script>
+  <style type="text/css">
+    body.loading {
+      overflow: hidden;
+    }
+    body.loading .loadingModal {
+      display: block;
+    }
+    .loadingModal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(244, 249, 251, 0.80) url(resource/img/icons/verified_user.png) 50% 50% no-repeat;
+    }
+  </style>
 </head>
-<body class="bg-gray">
+<body class="bg-gray" ng-class="{loading:IsLoading}">
   <div class="container-fluid text-white-50 bg-dark" style="text-align:center;">
     <strong>Chayoung</strong>Developers 2019 | Project 1.
   </div>
@@ -50,6 +69,7 @@
       <span class="spinner-border spinner-border-xl"></span>
     </div>
   </div>
+  <div class="loadingModal"></div>
   <script src="scripts/app.js"></script>
 </body>
 </html>
