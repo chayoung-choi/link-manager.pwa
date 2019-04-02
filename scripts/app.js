@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.1", verCode:"20190401.02"},
+    appVer   : {verName: "0.1.2", verCode:"20190402.02"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : [],
@@ -47,9 +47,6 @@ console.log("init appStorage", appStorage);
           // templateUrl : pathname+"/views/links.html"
         // , controller  : "loginModalCtrl"
       })
-      .when("/main", {
-          templateUrl : pathname+"/html/main.html"
-      })
       .when("/links", {
           templateUrl : pathname+"/views/links.html"
       })
@@ -65,16 +62,54 @@ console.log("init appStorage", appStorage);
   });
 
   // [Ctrl:initCtrl]
-  app.controller("initCtrl", function($scope, $location){
-    console.log("[Ctrl:initCtrl]");
+  app.controller("initCtrl", function($scope, $location, $timeout){
+    console.log("[Ctrl:initCtrl]", appStorage);
 
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
+    // $scope.autoSignInSwitch = appStorage.autoSignIn;
 
-    // [Fn:initCtrl.signIn()]
+    // [Fn:initCtrl.signIn() - 로그인]
     $scope.signIn = function() {
       console.log("[Fn:initCtrl.signIn()]");
+      if ($scope.autoSignInSwitch != true){
+         $scope.autoSignInSwitch = "";
+      }
       appStorage.signIn($scope, $location);
+    };
+
+    // [Fn:initCtrl.autoSignIn() - 자동로그인]
+    $scope.autoSignIn = function() {
+      console.log("[Fn:initCtrl.autoSignIn()]", $scope.autoSignInSwitch, localStorage.autoSignIn);
+
+      if ( appStorage.autoSignIn == true ){
+        // 로그인버튼 클릭 시 id input disabled
+        $("#signIn-btn")[0].disabled = true;
+        $("#signIn-spinner").removeClass("d-none");
+        $("[name='username'")[0].disabled = true;
+
+        $scope.autoSignInSwitch = true;
+        $scope.username = appStorage.user.name;
+
+        $timeout(function () {
+          console.log("2초 auto 로그인");
+          // $scope.theTime = new Date().toLocaleTimeString();
+          if ( $scope.autoSignInSwitch ){
+            appStorage.signIn($scope, $location);
+          } else {
+            $("#signIn-btn")[0].disabled = false;
+            $("#signIn-spinner").addClass("d-none");
+            $("[name='username'")[0].disabled= false;
+          }
+        }, 2000);
+      }
+
+    };
+
+    // [Fn:initCtrl.updateLinkCardList() - Links View 카드 업데이트]
+    $scope.updateLinkCardList = function() {
+      console.log("[Fn:initCtrl.updateLinkCardList()]");
+      appStorage.updateLinkCardList();
     };
 
     // #0-1. [GET] 서버 Link List
@@ -178,32 +213,16 @@ console.log("init appStorage", appStorage);
   appStorage.signIn = function($scope, $location) {
     console.log("[Fn:appStorage.signIn]");
 
+    $("#signIn-btn")[0].disabled = true;
+    $("#signIn-spinner").removeClass("d-none");
+    $("[name='username'")[0].disabled = true;
+
     // 파라메터로 보낼 임의의 데이터 객체
-    var id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
-    $scope.id = id;
+    $scope.id = CryptoJS.SHA256($scope.username).toString().toUpperCase();
+    $scope.pw = CryptoJS.SHA256("").toString().toUpperCase();
     $scope.sheetName = "host";
 
     appStorage.getHttp($scope, $location);
-
-    // $scope.$watch('hostList', function(newValue, oldValue) {
-    //    if (newValue === oldValue) { return; }
-    //    console.log("오예!", $scope.hostList);
-    //    console.log("newValue!", newValue);
-    //    console.log("oldValue!", oldValue);
-    //  }, true);
-
-    //
-    //   console.log("asdfasdfasdfasdfasdfasdf");
-    //   // success시 links view로 이동
-    //   $location.path("links");
-    //   $scope.$apply();
-    // });
-    // $.when(  ).done(function(){
-    //   console.log("asdfasdfasdf");
-    //   console.log("appStorage", appStorage);
-    //   console.log("saveLocalStorage", localStorage);
-    // });
-
   }
 
   // [Fn:appStorage.getHttp] - 서버에서 Http Get 통신
@@ -211,42 +230,30 @@ console.log("init appStorage", appStorage);
     console.log("[Fn:appStorage.getHttp]");
 
     var sheetName = $scope.sheetName;
-    var id  =  $scope.id;
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
-            + "id=" + id;
+            + "id=" + $scope.id;
 
-    var signIn = false; // 로그인 여부
     if ('caches' in window) {
       caches.match(url).then(function(response) {
-
-console.log("[Fn:appStorage.getHttp] #1 caches response", response);
         if (response) {
+console.log("[Fn:appStorage.getHttp] #1 caches response", response);
           response.json().then(function updateFromCache(json) {
             console.log("[Fn:appStorage.getHttp>caches>json]", json);
             var results = json.list;
-console.log("[Fn:appStorage.getHttp] #1 caches results", json.query);
 console.log("[Fn:appStorage.getHttp] #1 caches results", results);
-            // results.key = key;
-            // results.label = label;
-            // results.created = json.query.created;
-            // app.updateForecastCard(results);
+
             switch (sheetName){
               case "host" :
-              if (results){
-                var user = {"name":$scope.username, "id":id, "pw":""};
-                var swch =  $scope.autoSignInSwitch;
-                appStorage.user = user;
-                appStorage.autoSignIn = swch;
-                appStorage.hostList = results;
-                appStorage.saveLocalStorage("user", user);
-                appStorage.saveLocalStorage("autoSignIn", swch);
-                appStorage.saveLocalStorage("hostList", results);
+                if ( results.length > 0 ){
+                // if ( $scope.id == appStorage.user.id && $scope.pw == appStorage.user.pw ){
+                  console.log("캐시 로그인", $scope.autoSignInSwitch);
+                  appStorage.saveToStorage("autoSignIn", $scope.autoSignInSwitch);
+                  $location.path("links");
+                  $scope.$apply();
+                } else {
 
-                $location.path("links");
-                $scope.$apply();
-                signIn = true;
-              }
+                }
                 break;
             }
           });
@@ -260,26 +267,23 @@ console.log("[Fn:appStorage.getHttp] #1 caches results", results);
         if (request.status === 200) {
           var response = JSON.parse(request.response);
           var results = response.list;
-console.log(response);
+
           switch (sheetName){
             case "host" :
-console.log("[Fn:appStorage.getHttp] #2 XMLHttpRequest results", results);
-              if (results.length == 0){
-                console.log("없다.");
-                return;
-              }
-              var user = {"name":$scope.username, "id":id, "pw":""};
-              var swch =  $scope.autoSignInSwitch;
-              appStorage.user = user;
-              appStorage.autoSignIn = swch;
-              appStorage.hostList = results;
-              appStorage.saveLocalStorage("user", user);
-              appStorage.saveLocalStorage("autoSignIn", swch);
-              appStorage.saveLocalStorage("hostList", results);
+              if ( results.length > 0 ){
+                console.log("통신 로그인");
+                var user = {"name":$scope.username, "id":$scope.id, "pw":$scope.pw};
+                appStorage.saveToStorage("user", user);
+                appStorage.saveToStorage("hostList", results);
+                appStorage.saveToStorage("autoSignIn", $scope.autoSignInSwitch);
+console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
 
-              if (!signIn && results != null){
                 $location.path("links");
                 $scope.$apply();
+              } else {
+                $("#signIn-btn")[0].disabled = false;
+                $("#signIn-spinner").addClass("d-none");
+                $("[name='username'")[0].disabled= false;
               }
               break;
           }
@@ -351,7 +355,9 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
   };
 
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
-  appStorage.saveLocalStorage = function(key, val) {
+  appStorage.saveToStorage = function(key, val) {
+    console.log("[appStorage.saveToStorage>key:val]",key,val);
+    appStorage[key] = val;
     localStorage[key] = JSON.stringify(val);
   };
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
@@ -372,10 +378,11 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
 //------------------------------------------------------------------------------
 
   appStorage.user = localStorage.user;
-  appStorage.hostList = localStorage.hostList;
   if (appStorage.user){
+    console.log("appStorage set");
     appStorage.user = JSON.parse(appStorage.user);
-    appStorage.hostList = JSON.parse(appStorage.hostList);
+    appStorage.hostList = JSON.parse(localStorage.hostList);
+    appStorage.autoSignIn = JSON.parse(localStorage.autoSignIn);
   }
 
   if ('serviceWorker' in navigator) {

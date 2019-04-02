@@ -117,7 +117,7 @@
         <h4 class="sign-title">Manager Login</h4>
       </div>
       <div class="sign-body">
-        <form ng-controller="initCtrl" ng-submit="signIn()">
+        <form ng-controller="initCtrl" ng-submit="signIn()" ng-init="autoSignIn()">
           <div class="form-group">
             <input type="text" class="form-control" ng-model="username" name="username" placeholder="Username" required="required">
           </div>
