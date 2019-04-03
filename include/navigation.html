@@ -8,7 +8,7 @@
 	</script>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-  <a class="navbar-brand d-none d-sm-block" href="/link-manager.pwa/">
+  <a class="navbar-brand d-none d-sm-block" href="#/!">
     <img src="/link-manager.pwa/resource/img/logo/logo_ccy_128-128.png" alt="Logo" style="width:50px;" class="rounded">
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,14 +18,17 @@
   <div class="collapse navbar-collapse justify-content-center" id="navbarToggler">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item active">
-        <a class="nav-link" href="/link-manager.pwa/links">Links</a>
+        <a class="nav-link" href="#!links">Links</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/link-manager.pwa/deck">Test</a>
+        <a class="nav-link" href="#!deck">Test</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/link-manager.pwa/last">Last</a>
+        <a class="nav-link" href="#!last">Last</a>
       </li>
+			<li class="nav-item">
+				<a class="nav-link" href="#/!" ng-click="signOut()">signOut</a>
+			</li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search"> -->
