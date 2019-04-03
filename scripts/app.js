@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.3", verCode:"20190402.03"},
+    appVer   : {verName: "0.1.4", verCode:"20190403.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : [],
@@ -43,8 +43,6 @@ console.log("init appStorage", appStorage);
       $routeProvider
         .when("/", {
             templateUrl : pathname+"/views/sign.html"
-            // templateUrl : pathname+"/views/links.html"
-          // , controller  : "loginModalCtrl"
         })
         .when("/links", {
             templateUrl : pathname+"/views/links.html"
@@ -55,7 +53,7 @@ console.log("init appStorage", appStorage);
         .when("/last", {
             templateUrl : pathname+"/html/red.html"
         })
-        .otherwise({redirectTo: "/"});
+        .otherwise({redirectTo : "/"});
 
   });
 
@@ -78,7 +76,6 @@ console.log("init appStorage", appStorage);
 
   // [Ctrl:initCtrl]
   app.controller("initCtrl", function($scope, $location, $timeout){
-    console.log("[Ctrl:initCtrl]", appStorage);
 
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
@@ -121,94 +118,48 @@ console.log("init appStorage", appStorage);
 
     };
 
+    // [Fn:initCtrl.signOut()
+    $scope.signOut = function() {
+      console.log("[Fn:initCtrl.signOut()]");
+      appStorage.clearStorage();
+    };
+
     // [Fn:initCtrl.getLinkCardList() - Links 카드 가져오기]
     $scope.getLinkCardList = function() {
       console.log("[Fn:initCtrl.getLinkCardList()]");
       appStorage.getLinkCardList($scope);
     };
-
-    // // #0-1. [GET] 서버 Link List
-    // $scope.getLinkList = function() {
-    //   console.log("[GET] 서버 Link List");
-    //   appStorage.getLinkList();
-    // };
-
-    // $scope.updateLinkCard = function() {
-    //   console.log("[GET] 서버 Link List");
-    //   // appStorage.getLinkList();
-    //    appStorage.updateLinkCard();
-    // };
   });
 
-  // [Ctrl:linksCtrl]
-  // app.controller("linksCtrl", function ($scope) {
-  //   console.log("[controller:linksCtrl]");
-  //
-  //     $scope.names = [
-  //       {name:'Jani',country:'Norway'},
-  //       {name:'Hege',country:'Sweden'},
-  //       {name:'Kai',country:'Denmark'}
-  //     ];
-  //
-  //     $scope.fn_decSha256 = function() {
-  //       // console.log(CryptoJS.SHA256("mos1234!").toString());
-  //       $scope.user.decSha256 = CryptoJS.SHA256($scope.user.pw).toString().toUpperCase();
-  //     };
-  // });
 
+  // [Ctrl:signOutCtrl]
+  app.controller("signOutCtrl", function ($scope) {
+    console.log("[Ctrl:signOutCtrl]");
+    appStorage.clearStorage();
+  });
+
+  // [Fn:appStorage.clearStorage] - localStorage 초기화 _190403
+  appStorage.clearStorage = function(){
+    localStorage.clear();
+  }
 //------------------------------------------------------------------------------
 /*
   * appStorage *
-  // reloadLinkList()
+  getLinkCardList() - 서버 통신
   updateLinkList(dataList)
   updateLinkCard(data)
-  getLinkList() - 서버 통신
 */
-// [fn:appStorage.updateLinkCard] - card 업데이트
-  appStorage.reloadLinkList = function(data) {
 
+  // [Fn:appStorage.getLinkCardList()] - Card List 가져오기 _190402
+  appStorage.getLinkCardList = function($scope){
+    console.log("[Fn:appStorage.updateLinkCardList()>$scope]", $scope);
+    $scope.id = appStorage.user.id;
+    $scope.sheetName = "links";
+    appStorage.getHttp($scope, null);
   }
 
-// [fn:appStorage.updateLinkCard] - card 업데이트
-  appStorage.updateLinkCard = function(data) {
-    console.log("[appStorage.fn:updateLinkCard]");
 
-    var cardTemplate = document.querySelector('template').content;
-
-    if (!data){
-      data = initLinkData;
-    }
-
-    var seq      = data.seq;
-    var category = data.category;
-    var subSeq   = data.sub_seq;
-    var label    = data.label;
-    var pathname = data.pathname;
-    var search   = data.search;
-    var createdDate  = new Date(data.created);
-    var updatedDate  = new Date(data.updated);
-
-    console.log("[appStorage.fn:updateLinkCard>seq]", seq);
-    console.log("[appStorage.fn:updateLinkCard>createdDate]", createdDate);
-
-    // var card = appStorage.visibleCards[data.seq];
-    var card = cardTemplate.cloneNode(true);
-    card.querySelector('.card-header').textContent = data.category;
-    card.querySelector('.card-text').textContent = data.label;
-
-    var container = document.querySelector('.card-columns');
-    container.appendChild(card);
-    // if (!card) {
-    //   card.classList.remove('cardTemplate');
-    //   card.querySelector('.location').textContent = data.label;
-    //   card.removeAttribute('hidden');
-    //   app.container.appendChild(card);
-    //   app.visibleCards[data.key] = card;
-    // }
-
-  }
-
-  // [Fn:appStorage.updateLinkCardList] - link Card 업데이트  _190402
+  // [Fn:appStorage.updateLinkCardList()] - link Card 업데이트  _190402
   appStorage.updateLinkCardList = function(dataList) {
     console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
 
@@ -221,12 +172,67 @@ console.log("init appStorage", appStorage);
 
   };
 
-  // [Fn:appStorage.getLinkCardList] - Card List 가져오기 _190402
-  appStorage.getLinkCardList = function($scope){
-    console.log("[Fn:appStorage.updateLinkCardList()]");
-    $scope.id = appStorage.user.id;
-    $scope.sheetName = "links";
-    appStorage.getHttp($scope, null);
+  // [Fn:appStorage.updateLinkCard()] - Card 업데이트
+  appStorage.updateLinkCard = function(data) {
+    console.log("[Fn:appStorage.updateLinkCard()]");
+    var dataLastUpdated = new Date(data.updated);
+
+    var container = document.querySelector('.card-columns');
+
+    var card = appStorage.visibleCards[data.seq];
+    if (!card) {
+
+      var cardTemplate = document.querySelector('template').content;
+      var card = cardTemplate.cloneNode(true);
+
+      card.querySelector('.car-seq').textContent   = data.seq;
+      card.querySelector('.card-last-updated').textContent = dataLastUpdated;
+      card.querySelector('.last-updated-dt').textContent = formatDate(dataLastUpdated);
+
+      card.querySelector('.card-header').textContent = data.category;
+      card.querySelector('.card-text').textContent   = data.label;
+      container.appendChild(card);
+      appStorage.visibleCards[data.seq] = card;
+    }
+
+
+
+
+
+
+
+
+    // if (!data){
+    //   data = initLinkData;
+    // }
+    //
+    // var seq      = data.seq;
+    // var category = data.category;
+    // var subSeq   = data.sub_seq;
+    // var label    = data.label;
+    // var pathname = data.pathname;
+    // var search   = data.search;
+    // var createdDate  = new Date(data.created);
+    // var updatedDate  = new Date(data.updated);
+    //
+    // console.log("[appStorage.fn:updateLinkCard>seq]", seq);
+    // console.log("[appStorage.fn:updateLinkCard>createdDate]", createdDate);
+    //
+    // // var card = appStorage.visibleCards[data.seq];
+    // var card = cardTemplate.cloneNode(true);
+    // card.querySelector('.card-header').textContent = data.category;
+    // card.querySelector('.card-text').textContent = data.label;
+    //
+    // var container = document.querySelector('.card-columns');
+    // container.appendChild(card);
+    // if (!card) {
+    //   card.classList.remove('cardTemplate');
+    //   card.querySelector('.location').textContent = data.label;
+    //   card.removeAttribute('hidden');
+    //   app.container.appendChild(card);
+    //   app.visibleCards[data.key] = card;
+    // }
+
   }
 
 //------------------------------------------------------------------------------
@@ -388,6 +394,33 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
     console.log("[appStorage.saveToStorage>key:val]",key,val);
     appStorage[key] = val;
     localStorage[key] = JSON.stringify(val);
+  };
+
+  // 업데이트 시간 포맷 함수
+  function formatDate(curDate) {
+  	var today, resultDate, timegap;
+  	today = new Date();
+  	resultDate = new Date(curDate);
+  	timegap = (today - resultDate)/(60*60*1000);
+
+  	var curYear = resultDate.getFullYear();
+  	var curMonth = (resultDate.getMonth() + 1);
+  	var curDay = resultDate.getDate();
+
+  	// Time (minutes * seconds * millisecond)
+  	if (timegap <= 24) {
+  		if (Math.floor(timegap) == 0) {
+  			resultDate = 'Last updated ' + Math.floor(timegap * 24) + ' mins ago';
+  		}
+  		else {
+  			resultDate = 'Last updated ' + Math.floor(timegap) + ' hour ago';
+  		}
+  	}
+  	else {
+  		resultDate = curYear + '-' + curMonth + '-' + curDay;
+  	}
+
+  	return resultDate;
   };
 //------------------------------------------------------------------------------
   var initLinkData = {
