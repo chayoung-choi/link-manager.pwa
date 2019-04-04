@@ -3,12 +3,14 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.4", verCode:"20190403.01"},
+    appVer   : {verName: "0.1.6", verCode:"20190404.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : [],
     // isLoading: true,
     visibleCards: {},
+    cardTemplate: document.querySelector('.cardTemplate'),
+    linksContainer: document.querySelector('.card-columns'),
     // selectedCities: [],
     // spinner: document.querySelector('.loader'),
     // cardTemplate: document.querySelector('template').content,
@@ -174,29 +176,61 @@ console.log("init appStorage", appStorage);
 
   // [Fn:appStorage.updateLinkCard()] - Card 업데이트
   appStorage.updateLinkCard = function(data) {
-    console.log("[Fn:appStorage.updateLinkCard()]");
+    console.log("[Fn:appStorage.updateLinkCard()]", appStorage.visibleCards);
+    console.log("[Fn:appStorage.updateLinkCard()]", data);
     var dataLastUpdated = new Date(data.updated);
 
-    var container = document.querySelector('.card-columns');
 
+
+    // 신규 Card
     var card = appStorage.visibleCards[data.seq];
     if (!card) {
-
       var cardTemplate = document.querySelector('template').content;
-      var card = cardTemplate.cloneNode(true);
+      card = cardTemplate.cloneNode(true);
 
-      card.querySelector('.car-seq').textContent   = data.seq;
-      card.querySelector('.card-last-updated').textContent = dataLastUpdated;
-      card.querySelector('.last-updated-dt').textContent = formatDate(dataLastUpdated);
-
+      card.querySelector('.card-seq').textContent = data.seq;
+      card.querySelector('.card-sub-seq').textContent = data.sub_seq;
       card.querySelector('.card-header').textContent = data.category;
-      card.querySelector('.card-text').textContent   = data.label;
+      card.querySelector('.card-text').textContent = data.label;
+
+      card.querySelector('.card-last-updated').textContent = dataLastUpdated;
+      card.querySelector('.last-updated-dt').textContent   = formatDate(dataLastUpdated);
+
+      // console.log("[Fn:appStorage.updateLinkCard()>dataLastUpdated]", dataLastUpdated);
+console.log(appStorage);
+console.log("card", card.querySelector('.card-text'));
+// console.log("card", card.querySelector('.card-text').textContent);
+      // console.log("subCardList_"+data.seq, card.querySelector('li'));
       container.appendChild(card);
       appStorage.visibleCards[data.seq] = card;
     }
 
+    // card.querySelector('.card-text').textContent = "xxxxxxxxxxxxxx";
+    // console.log("card", card.querySelector('.card-text'));
+    // console.log("card", card.querySelector('.card-text').textContent);
+    // console.log("card", card);
+// console.log("subCardList_"+data.seq, card.querySelector('li'));
+// console.log("subCardList_"+data.seq, card.querySelector('.card-seq'));
+    // var subCardList = card.querySelectorAll('.list-group-item')[data.seq+1];
 
-
+// console.log("[Fn:appStorage.updateLinkCard()>#1]", appStorage.visibleCards);
+// console.log("[Fn:appStorage.updateLinkCard()>Card]", card);
+    // 기존 Card
+    var cardLastUpdatedElem = card.querySelector('.card-last-updated');
+    // console.log(cardLastUpdatedElem);
+    // var cardLastUpdated = cardLastUpdatedElem.textContent;
+    // if (cardLastUpdated) {
+    //   cardLastUpdated = new Date(cardLastUpdated);
+    //   // Bail if the card has more recent data then the data
+    //   if (dataLastUpdated.getTime() < cardLastUpdated.getTime()) {
+    //     return;
+    //   }
+    // }
+    // cardLastUpdatedElem.textContent = data.updated;
+    // card.querySelector('.card-last-updated').textContent = dataLastUpdated;
+    // card.querySelector('.last-updated-dt').textContent   = formatDate(dataLastUpdated);
+    // card.querySelector('.card-header').textContent = data.category;
+    // card.querySelector('.card-text').textContent   = data.label;
 
 
 
@@ -411,15 +445,12 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
   	if (timegap <= 24) {
   		if (Math.floor(timegap) == 0) {
   			resultDate = 'Last updated ' + Math.floor(timegap * 24) + ' mins ago';
-  		}
-  		else {
+  		} else {
   			resultDate = 'Last updated ' + Math.floor(timegap) + ' hour ago';
   		}
-  	}
-  	else {
+  	} else {
   		resultDate = curYear + '-' + curMonth + '-' + curDay;
   	}
-
   	return resultDate;
   };
 //------------------------------------------------------------------------------

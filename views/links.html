@@ -90,7 +90,9 @@
       </div>
       <div class="card bg-light shadow-sm">
         <div class="card-header">연말정산</div>
-        <div class="card-body">
+        <!-- <div class="card-body"> -->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-light">
           <p class="card-text">수수료명세서</p>
           <div class="btn-group w-100" role="group" aria-label="aria_target">
             <button type="button" class="btn btn-success">
@@ -111,37 +113,44 @@
               <a class="dropdown-item" href="#">WAS4</a>
             </div>
           </div>
-        </div>
+        </li>
+      </ul>
+        <!-- </div> -->
       </div>
     </div>
   </div>
 </div>
 <template>
   <div class="card bg-light shadow-sm">
-    <div class="car-seq" hidden></div>
-    <div class="card-last-updated" hidden></div>
+    <div class="card-seq" hidden></div>
     <div class="card-header">card-header</div>
-    <div class="card-body">
-      <p class="card-text">card-label</p>
-      <div class="btn-group w-100" role="group" aria-label="aria_target">
-        <button type="button" class="btn btn-success">
-          <div class="d-none d-sm-block d-md-none">L</div>
-          <div class="d-sm-none d-md-block">Local</div>
-        </button>
-        <button type="button" class="btn btn-primary">
-          <div class="d-none d-sm-block d-md-none">Q</div>
-          <div class="d-sm-none d-md-block">QA</div>
-        </button>
-        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          운영
-        </button>
-        <div class="dropdown-menu dropdown-menu-sm-right">
-          <a class="dropdown-item" href="#">WAS1</a>
-          <a class="dropdown-item" href="#">WAS2</a>
-          <a class="dropdown-item" href="#">WAS3</a>
-          <a class="dropdown-item" href="#">WAS4</a>
-        </div>
-      </div>
+    <div class="card-body-li">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item bg-light">
+          <div class="card-sub-seq" hidden></div>
+          <div class="card-last-updated" hidden></div>
+          <p class="card-text">card-label</p>
+          <div class="btn-group w-100" role="group" aria-label="aria_target">
+            <button type="button" class="btn btn-success">
+              <div class="d-none d-sm-block d-md-none">L</div>
+              <div class="d-sm-none d-md-block">Local</div>
+            </button>
+            <button type="button" class="btn btn-primary">
+              <div class="d-none d-sm-block d-md-none">Q</div>
+              <div class="d-sm-none d-md-block">QA</div>
+            </button>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              운영
+            </button>
+            <div class="dropdown-menu dropdown-menu-sm-right">
+              <a class="dropdown-item" href="#">WAS1</a>
+              <a class="dropdown-item" href="#">WAS2</a>
+              <a class="dropdown-item" href="#">WAS3</a>
+              <a class="dropdown-item" href="#">WAS4</a>
+            </div>
+          </div>
+        </li>
+      </ul>
     </div>
     <div class="card-footer">
       <small class="text-mute last-updated-dt">Last updated 3 mins ago</small>
