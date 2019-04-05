@@ -3,14 +3,14 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.6", verCode:"20190404.01"},
+    appVer   : {verName: "0.1.7", verCode:"20190405.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : [],
     // isLoading: true,
     visibleCards: {},
-    cardTemplate: document.querySelector('.cardTemplate'),
-    linksContainer: document.querySelector('.card-columns'),
+    linksContainer: null,
+    cardTemplate: null,
     // selectedCities: [],
     // spinner: document.querySelector('.loader'),
     // cardTemplate: document.querySelector('template').content,
@@ -176,11 +176,58 @@ console.log("init appStorage", appStorage);
 
   // [Fn:appStorage.updateLinkCard()] - Card 업데이트
   appStorage.updateLinkCard = function(data) {
-    console.log("[Fn:appStorage.updateLinkCard()]", appStorage.visibleCards);
     console.log("[Fn:appStorage.updateLinkCard()]", data);
     var dataLastUpdated = new Date(data.updated);
 
+    if (!appStorage.linksContainer){
+      console.log("#1-1 container 추가", data.seq+"-"+data.sub_seq);
+      appStorage.linksContainer = document.querySelector('.card-columns');
+      appStorage.cardTemplate = document.querySelector('template').content;
+    }
 
+    console.log("------------- "+ data.seq +"-" +data.sub_seq + " -------------");
+    var card = appStorage.visibleCards[data.seq];
+    if (!card){
+      console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
+      // var cardTemplate = document.querySelector('template').content;
+      card = appStorage.cardTemplate.cloneNode(true);
+
+      card.querySelector('.card-seq').textContent = data.seq;
+      card.querySelector('.card-header').textContent = data.category;
+      card.querySelector('.list-group').innerHTML = '';
+
+      console.log("card seq", card.querySelector('.card-seq').textContent);
+    }
+
+    var subCard = card.querySelector('.card-sub-seq-'+data.sub_seq);
+    console.log(card.querySelector('.card-sub-seq-'+data.sub_seq));
+    if (!subCard){
+      console.log("#3-1 카드 서브 신규 추가", data.seq+"-"+data.sub_seq);
+
+      var subTemplate = appStorage.cardTemplate.querySelector('.sub-template');
+      subCard = subTemplate.cloneNode(true);
+      subCard.classList.remove('sub-template');
+      subCard.removeAttribute('hidden');
+      subCard.classList.add('card-sub-seq-'+data.sub_seq);
+      subCard.querySelector('.card-text').textContent = data.label;
+
+      console.log(card);
+      console.log(card.querySelector('.list-group'));
+      console.log(subCard);
+      // card.querySelector('.list-group').appendChild(subCard);
+      appStorage.linksContainer.appendChild(card);
+      appStorage.visibleCards[data.seq] = card;
+    } else {
+      console.log("서브 추가");
+      // var a = subCard.querySelector('.card-text').textContent;
+      // subCard.querySelector('.card-text').textContent = a +" / "+ data.label;
+    }
+
+
+
+
+
+return;
 
     // 신규 Card
     var card = appStorage.visibleCards[data.seq];
@@ -191,27 +238,39 @@ console.log("init appStorage", appStorage);
       card.querySelector('.card-seq').textContent = data.seq;
       card.querySelector('.card-sub-seq').textContent = data.sub_seq;
       card.querySelector('.card-header').textContent = data.category;
-      card.querySelector('.card-text').textContent = data.label;
 
       card.querySelector('.card-last-updated').textContent = dataLastUpdated;
       card.querySelector('.last-updated-dt').textContent   = formatDate(dataLastUpdated);
 
-      // console.log("[Fn:appStorage.updateLinkCard()>dataLastUpdated]", dataLastUpdated);
-console.log(appStorage);
-console.log("card", card.querySelector('.card-text'));
-// console.log("card", card.querySelector('.card-text').textContent);
-      // console.log("subCardList_"+data.seq, card.querySelector('li'));
-      container.appendChild(card);
+console.log("card add", card);
+      appStorage.linksContainer.appendChild(card);
       appStorage.visibleCards[data.seq] = card;
     }
 
-    // card.querySelector('.card-text').textContent = "xxxxxxxxxxxxxx";
-    // console.log("card", card.querySelector('.card-text'));
-    // console.log("card", card.querySelector('.card-text').textContent);
-    // console.log("card", card);
-// console.log("subCardList_"+data.seq, card.querySelector('li'));
-// console.log("subCardList_"+data.seq, card.querySelector('.card-seq'));
-    // var subCardList = card.querySelectorAll('.list-group-item')[data.seq+1];
+    var subTemp = card.querySelector('.sub-template');
+    var subCard = card.querySelector('.card-sub-seq-'+data.sub_seq);
+    if (!subCard){
+      var cardSubTemplate = document.querySelector('.sub-template');
+      subCard = cardSubTemplate.cloneNode(true);
+      subCard.classList.remove('sub-template');
+      subCard.removeAttribute('hidden');
+      subCard.classList.add('card-sub-seq-'+data.sub_seq);
+      subCard.querySelector('.card-text').textContent = data.label;
+      console.log(subCard);
+      console.log("card", card);
+      var card1_li = appStorage.visibleCards[data.seq].querySelector('.list-group');
+      var li = card.querySelector('.list-group');
+      console.log("card1", card1_li);
+      console.log("li", li);
+      // li.appendChild(subCard);
+    }
+
+
+
+    // var subCard = appStorage.visibleCards[data.seq];
+    console.log('appStorage', appStorage);
+    console.log('card', appStorage.visibleCards['1']);
+
 
 // console.log("[Fn:appStorage.updateLinkCard()>#1]", appStorage.visibleCards);
 // console.log("[Fn:appStorage.updateLinkCard()>Card]", card);
@@ -231,42 +290,6 @@ console.log("card", card.querySelector('.card-text'));
     // card.querySelector('.last-updated-dt').textContent   = formatDate(dataLastUpdated);
     // card.querySelector('.card-header').textContent = data.category;
     // card.querySelector('.card-text').textContent   = data.label;
-
-
-
-
-
-    // if (!data){
-    //   data = initLinkData;
-    // }
-    //
-    // var seq      = data.seq;
-    // var category = data.category;
-    // var subSeq   = data.sub_seq;
-    // var label    = data.label;
-    // var pathname = data.pathname;
-    // var search   = data.search;
-    // var createdDate  = new Date(data.created);
-    // var updatedDate  = new Date(data.updated);
-    //
-    // console.log("[appStorage.fn:updateLinkCard>seq]", seq);
-    // console.log("[appStorage.fn:updateLinkCard>createdDate]", createdDate);
-    //
-    // // var card = appStorage.visibleCards[data.seq];
-    // var card = cardTemplate.cloneNode(true);
-    // card.querySelector('.card-header').textContent = data.category;
-    // card.querySelector('.card-text').textContent = data.label;
-    //
-    // var container = document.querySelector('.card-columns');
-    // container.appendChild(card);
-    // if (!card) {
-    //   card.classList.remove('cardTemplate');
-    //   card.querySelector('.location').textContent = data.label;
-    //   card.removeAttribute('hidden');
-    //   app.container.appendChild(card);
-    //   app.visibleCards[data.key] = card;
-    // }
-
   }
 
 //------------------------------------------------------------------------------

@@ -38,7 +38,9 @@ var filesToCache = [
   '/link-manager.pwa/scripts/app.js'
 ];
 
+
 self.addEventListener('install', function(e) {
+  // caches['appVer'] = '1.1.1';
   console.log('[ServiceWorker] Install');
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
