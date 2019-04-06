@@ -154,7 +154,7 @@ console.log("init appStorage", appStorage);
 
   // [Fn:appStorage.getLinkCardList()] - Card List 가져오기 _190402
   appStorage.getLinkCardList = function($scope){
-    console.log("[Fn:appStorage.updateLinkCardList()>$scope]", $scope);
+    // console.log("[Fn:appStorage.updateLinkCardList()]");
     $scope.id = appStorage.user.id;
     $scope.sheetName = "links";
     appStorage.getHttp($scope, null);
@@ -163,11 +163,11 @@ console.log("init appStorage", appStorage);
 
   // [Fn:appStorage.updateLinkCardList()] - link Card 업데이트  _190402
   appStorage.updateLinkCardList = function(dataList) {
-    console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
+    // console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
 
     // document.querySelector('.card-columns').remove(); // container 초기화
     for (var i=0; i<dataList.length; i++){
-      console.log("[Fn:appStorage.updateLinkCardList>dataList["+i+"]", dataList[i]);
+      // console.log("[Fn:appStorage.updateLinkCardList>dataList["+i+"]", dataList[i]);
       var seq = dataList[i].seq;
       appStorage.updateLinkCard(dataList[i]);
     }
@@ -176,19 +176,20 @@ console.log("init appStorage", appStorage);
 
   // [Fn:appStorage.updateLinkCard()] - Card 업데이트
   appStorage.updateLinkCard = function(data) {
-    console.log("[Fn:appStorage.updateLinkCard()]", data);
+console.log("[Fn:appStorage.updateLinkCard()]", data);
+console.log("#0 appStorage", appStorage);
     var dataLastUpdated = new Date(data.updated);
 
     if (!appStorage.linksContainer){
-      console.log("#1-1 container 추가", data.seq+"-"+data.sub_seq);
+console.log("#1-1 container 추가", data.seq+"-"+data.sub_seq);
       appStorage.linksContainer = document.querySelector('.card-columns');
       appStorage.cardTemplate = document.querySelector('template').content;
     }
 
-    console.log("------------- "+ data.seq +"-" +data.sub_seq + " -------------");
+console.log("------------- "+ data.seq +"-" +data.sub_seq + " -------------");
     var card = appStorage.visibleCards[data.seq];
     if (!card){
-      console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
+console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
       // var cardTemplate = document.querySelector('template').content;
       card = appStorage.cardTemplate.cloneNode(true);
 
@@ -196,13 +197,20 @@ console.log("init appStorage", appStorage);
       card.querySelector('.card-header').textContent = data.category;
       card.querySelector('.list-group').innerHTML = '';
 
-      console.log("card seq", card.querySelector('.card-seq').textContent);
+console.log("card seq", card.querySelector('.card-seq').textContent);
+    } else {
+
+console.log("----------------------x " + card.querySelector('.card-seq'));
+      // card =  card[0];
+
+      // card.querySelector('.card-header').textContent = 'xxxxxxxxxxxxxx';
+      // console.log(card.innerHTML);
     }
 
     var subCard = card.querySelector('.card-sub-seq-'+data.sub_seq);
-    console.log(card.querySelector('.card-sub-seq-'+data.sub_seq));
+// console.log(card.querySelector('.card-sub-seq-'+data.sub_seq));
     if (!subCard){
-      console.log("#3-1 카드 서브 신규 추가", data.seq+"-"+data.sub_seq);
+console.log("#3-1 카드 서브 신규 추가", data.seq+"-"+data.sub_seq);
 
       var subTemplate = appStorage.cardTemplate.querySelector('.sub-template');
       subCard = subTemplate.cloneNode(true);
@@ -211,11 +219,12 @@ console.log("init appStorage", appStorage);
       subCard.classList.add('card-sub-seq-'+data.sub_seq);
       subCard.querySelector('.card-text').textContent = data.label;
 
-      console.log(card);
-      console.log(card.querySelector('.list-group'));
-      console.log(subCard);
+console.log("card",card);
+console.log("querySelector",card.querySelector('.list-group'));
+console.log("subCard",subCard);
       // card.querySelector('.list-group').appendChild(subCard);
       appStorage.linksContainer.appendChild(card);
+      console.log("");
       appStorage.visibleCards[data.seq] = card;
     } else {
       console.log("서브 추가");
