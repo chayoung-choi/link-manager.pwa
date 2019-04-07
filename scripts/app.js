@@ -225,7 +225,7 @@ console.log("subCard",subCard);
       // card.querySelector('.list-group').appendChild(subCard);
       appStorage.linksContainer.appendChild(card);
       console.log("");
-      appStorage.visibleCards[data.seq] = card;
+      appStorage.visibleCards[data.seq] = data;
     } else {
       console.log("서브 추가");
       // var a = subCard.querySelector('.card-text').textContent;
