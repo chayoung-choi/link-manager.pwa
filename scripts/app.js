@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.7", verCode:"20190405.01"},
+    appVer   : {verName: "0.1.8", verCode:"20190408.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : [],
@@ -164,8 +164,11 @@ console.log("init appStorage", appStorage);
   // [Fn:appStorage.updateLinkCardList()] - link Card 업데이트  _190402
   appStorage.updateLinkCardList = function(dataList) {
     // console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
-
+// console.log("#0 appStorage", appStorage);
     // document.querySelector('.card-columns').remove(); // container 초기화
+    console.log("appStorage.linksContainer",appStorage.linksContainer);
+    console.log(" document.querySelector('.card-columns')", document.querySelector('.card-columns'));
+
     for (var i=0; i<dataList.length; i++){
       // console.log("[Fn:appStorage.updateLinkCardList>dataList["+i+"]", dataList[i]);
       var seq = dataList[i].seq;
@@ -177,8 +180,7 @@ console.log("init appStorage", appStorage);
   // [Fn:appStorage.updateLinkCard()] - Card 업데이트
   appStorage.updateLinkCard = function(data) {
 console.log("[Fn:appStorage.updateLinkCard()]", data);
-console.log("#0 appStorage", appStorage);
-    var dataLastUpdated = new Date(data.updated);
+    // var dataLastUpdated = new Date(data.updated);
 
     if (!appStorage.linksContainer){
 console.log("#1-1 container 추가", data.seq+"-"+data.sub_seq);
@@ -186,8 +188,106 @@ console.log("#1-1 container 추가", data.seq+"-"+data.sub_seq);
       appStorage.cardTemplate = document.querySelector('template').content;
     }
 
-console.log("------------- "+ data.seq +"-" +data.sub_seq + " -------------");
-    var card = appStorage.visibleCards[data.seq];
+console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- start");
+    // var cardData = appStorage.visibleCards[data.seq];
+
+    var card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
+    if (!card){
+console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
+      card = appStorage.cardTemplate.cloneNode(true);
+      card.querySelector('.card').classList.add('card-seq-'+data.seq);
+      card.querySelector('.card-seq').textContent = data.seq;
+      card.querySelector('.card-header').textContent = data.category;
+      card.querySelector('.list-group').innerHTML = '';
+      appStorage.linksContainer.appendChild(card);
+
+    }
+
+    var strSubSeq = '.card-seq-'+data.seq+' .card-sub-seq-'+data.sub_seq;
+    var subCard = appStorage.linksContainer.querySelector('.card-seq-'+data.seq+' .card-sub-seq-'+data.sub_seq);
+console.log("subCard #0", subCard);
+    if (!subCard){
+console.log("#2-2-1 서브카드 신규 추가", data.seq+"-"+data.sub_seq);
+      var subTemplate = appStorage.cardTemplate.querySelector('.sub-template');
+      subCard = subTemplate.cloneNode(true);
+      subCard.classList.remove('sub-template');
+      subCard.removeAttribute('hidden');
+      subCard.classList.add('card-sub-seq-'+data.sub_seq);
+      subCard.querySelector('.card-text').textContent = data.label;
+      subCard.querySelector('.card-last-updated').textContent = data.updated;
+console.log("card", card);
+console.log("subCard #1", subCard);
+console.log("card.querySelector('.list-group')", card.querySelector('.list-group'));
+      // var mCard = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
+
+      card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
+      card.querySelector('.list-group').appendChild(subCard);
+      //appStorage.linksContainer.querySelector('.card-sub-seq-'+data.sub_seq);
+
+      var sub_seq = data.sub_seq;
+      var subJSON = {sub_seq: data};
+console.log("subJSON[data.sub_seq]", subJSON);
+      appStorage.visibleCards[data.seq] = subJSON;
+    }
+
+    // appStorage.linksContainer.appendChild(card);
+    // console.log("");
+console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- end");
+    return;
+
+
+    if (!cardData){
+
+    } else {
+console.log("#2-2 카드 기존 수정", data.seq+"-"+data.sub_seq);
+
+      var cardSubData = cardData[data.sub_seq];
+      if (!cardSubData){
+
+
+      } else {
+console.log("#2-2-2 서브카드 기존 수정", data.seq+"-"+data.sub_seq);
+
+      }
+    }
+
+
+    // 동기화
+    // var cardCreated = new Date();
+    // var dataLastUpdated = new Date(data.updated);
+    // if (cardData){
+    //   var cardCreated = new Date(cardData.created);
+    //   if (dataLastUpdated.getTime() < cardCreated.getTime()){
+    //     return;
+    //   }
+    // }
+    // card.querySelector('.last-updated-dt').textContent = formatDate(dataLastUpdated);
+
+
+
+    if (!cardData){
+
+
+console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
+      card.querySelector('.card').classList.add('card-seq-'+data.seq);
+      card.querySelector('.card-seq').textContent = data.seq;
+      card.querySelector('.card-header').textContent = data.category;
+      card.querySelector('.list-group').innerHTML = '';
+    } else {
+console.log("#2-2 카드 기존 수정", data.seq+"-"+data.sub_seq);
+
+      var cardSubData = cardData[data.sub_seq];
+      if (!cardSubData){
+console.log("#2-2-1 서브카드 신규 추가", data.seq+"-"+data.sub_seq);
+
+      } else {
+console.log("#2-2-2 서브카드 기존 수정", data.seq+"-"+data.sub_seq);
+
+      }
+    }
+
+
+
     if (!card){
 console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
       // var cardTemplate = document.querySelector('template').content;
