@@ -3,10 +3,10 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.8", verCode:"20190408.01"},
+    appVer   : {verName: "0.1.10", verCode:"20190410.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
-    hostList : [],
+    hostList : {},
     // isLoading: true,
     visibleCards: {},
     linksContainer: null,
@@ -40,7 +40,7 @@
   app.config(function($routeProvider, $locationProvider) {
       var pathname = appStorage.appPath;
 
-console.log("init appStorage", appStorage);
+      console.log("[00]app.config>appStorage", appStorage);
       // $locationProvider.html5Mode(true);
       $routeProvider
         .when("/", {
@@ -59,33 +59,15 @@ console.log("init appStorage", appStorage);
 
   });
 
-  // app.all('/*', function (req, res) {
-  //   res.sendFile('index.html', { root:"/link-manager.pwa/views" });
-  // });
-
-  // app.use(function (req, res) {
-  //   res.sendFile('./link-manager.pwa/index.html');
-  // });
-
-  // app.run(function($rootScope){
-  //   $rootScope.$on('$routeChangeStart', function(e, curr, prev){
-  //     $rootScope.IsLoading = true;
-  //   });
-  //   $rootScope.$on('$routeChangeSuccess', function(e, curr, prev){
-  //     $rootScope.IsLoading = false;
-  //   });
-  // });
-
   // [Ctrl:initCtrl]
   app.controller("initCtrl", function($scope, $location, $timeout){
 
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
-    // $scope.autoSignInSwitch = appStorage.autoSignIn;
 
     // [Fn:initCtrl.signIn() - 로그인]
     $scope.signIn = function() {
-      console.log("[Fn:initCtrl.signIn()]");
+      console.log("[01]app.initCtrl>로그인 시도");
       if ($scope.autoSignInSwitch != true){
          $scope.autoSignInSwitch = "";
       }
@@ -94,7 +76,7 @@ console.log("init appStorage", appStorage);
 
     // [Fn:initCtrl.autoSignIn() - 자동로그인]
     $scope.autoSignIn = function() {
-      console.log("[Fn:initCtrl.autoSignIn()]", $scope.autoSignInSwitch, localStorage.autoSignIn);
+      console.log("[02]app.initCtrl>자동로그인 시도");
 
       if ( appStorage.autoSignIn == true ){
         // 로그인버튼 클릭 시 id input disabled
@@ -106,8 +88,6 @@ console.log("init appStorage", appStorage);
         $scope.username = appStorage.user.name;
 
         $timeout(function () {
-          console.log("2초 auto 로그인");
-          // $scope.theTime = new Date().toLocaleTimeString();
           if ( $scope.autoSignInSwitch ){
             appStorage.signIn($scope, $location);
           } else {
@@ -122,13 +102,13 @@ console.log("init appStorage", appStorage);
 
     // [Fn:initCtrl.signOut()
     $scope.signOut = function() {
-      console.log("[Fn:initCtrl.signOut()]");
+      console.log("[03] app.initCtrl>로그아웃");
       appStorage.clearStorage();
     };
 
     // [Fn:initCtrl.getLinkCardList() - Links 카드 가져오기]
     $scope.getLinkCardList = function() {
-      console.log("[Fn:initCtrl.getLinkCardList()]");
+      console.log("[04] app.initCtrl.getLinkCardList>카드 가져오기");
       appStorage.getLinkCardList($scope);
     };
   });
@@ -136,25 +116,18 @@ console.log("init appStorage", appStorage);
 
   // [Ctrl:signOutCtrl]
   app.controller("signOutCtrl", function ($scope) {
-    console.log("[Ctrl:signOutCtrl]");
     appStorage.clearStorage();
   });
 
   // [Fn:appStorage.clearStorage] - localStorage 초기화 _190403
   appStorage.clearStorage = function(){
+    console.log("[03-1] appStorage.clearStorage");
     localStorage.clear();
   }
 //------------------------------------------------------------------------------
-/*
-  * appStorage *
-  getLinkCardList() - 서버 통신
-  updateLinkList(dataList)
-  updateLinkCard(data)
-*/
 
   // [Fn:appStorage.getLinkCardList()] - Card List 가져오기 _190402
   appStorage.getLinkCardList = function($scope){
-    // console.log("[Fn:appStorage.updateLinkCardList()]");
     $scope.id = appStorage.user.id;
     $scope.sheetName = "links";
     appStorage.getHttp($scope, null);
@@ -163,51 +136,39 @@ console.log("init appStorage", appStorage);
 
   // [Fn:appStorage.updateLinkCardList()] - link Card 업데이트  _190402
   appStorage.updateLinkCardList = function(dataList) {
-    // console.log("[Fn:appStorage.updateLinkCardList>dataList]", dataList);
-// console.log("#0 appStorage", appStorage);
-    // document.querySelector('.card-columns').remove(); // container 초기화
-    console.log("appStorage.linksContainer",appStorage.linksContainer);
-    console.log(" document.querySelector('.card-columns')", document.querySelector('.card-columns'));
+    if (!appStorage.linksContainer){
+      appStorage.linksContainer = document.querySelector('.card-columns');
+      appStorage.cardTemplate = document.querySelector('template').content;
+    } else {
+      document.querySelector('.card-columns').replaceWith(appStorage.linksContainer);
+    }
 
     for (var i=0; i<dataList.length; i++){
-      // console.log("[Fn:appStorage.updateLinkCardList>dataList["+i+"]", dataList[i]);
       var seq = dataList[i].seq;
       appStorage.updateLinkCard(dataList[i]);
     }
-
   };
 
   // [Fn:appStorage.updateLinkCard()] - Card 업데이트
   appStorage.updateLinkCard = function(data) {
-console.log("[Fn:appStorage.updateLinkCard()]", data);
-    // var dataLastUpdated = new Date(data.updated);
-
-    if (!appStorage.linksContainer){
-console.log("#1-1 container 추가", data.seq+"-"+data.sub_seq);
-      appStorage.linksContainer = document.querySelector('.card-columns');
-      appStorage.cardTemplate = document.querySelector('template').content;
-    }
-
-console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- start");
-    // var cardData = appStorage.visibleCards[data.seq];
+    console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- start");
+    console.log("[04-0] appStorage.updateLinkCard>data", data);
 
     var card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
     if (!card){
-console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
+      console.log("[04-1] 카드 신규 추가");
       card = appStorage.cardTemplate.cloneNode(true);
       card.querySelector('.card').classList.add('card-seq-'+data.seq);
       card.querySelector('.card-seq').textContent = data.seq;
       card.querySelector('.card-header').textContent = data.category;
       card.querySelector('.list-group').innerHTML = '';
+      card.querySelector('.last-updated-dt').textContent = formatDate(data.updated);
       appStorage.linksContainer.appendChild(card);
-
     }
 
-    var strSubSeq = '.card-seq-'+data.seq+' .card-sub-seq-'+data.sub_seq;
     var subCard = appStorage.linksContainer.querySelector('.card-seq-'+data.seq+' .card-sub-seq-'+data.sub_seq);
-console.log("subCard #0", subCard);
     if (!subCard){
-console.log("#2-2-1 서브카드 신규 추가", data.seq+"-"+data.sub_seq);
+      console.log("[04-2] 서브카드 신규 추가");
       var subTemplate = appStorage.cardTemplate.querySelector('.sub-template');
       subCard = subTemplate.cloneNode(true);
       subCard.classList.remove('sub-template');
@@ -215,41 +176,28 @@ console.log("#2-2-1 서브카드 신규 추가", data.seq+"-"+data.sub_seq);
       subCard.classList.add('card-sub-seq-'+data.sub_seq);
       subCard.querySelector('.card-text').textContent = data.label;
       subCard.querySelector('.card-last-updated').textContent = data.updated;
-console.log("card", card);
-console.log("subCard #1", subCard);
-console.log("card.querySelector('.list-group')", card.querySelector('.list-group'));
-      // var mCard = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
+// console.log('subCard', subCard);
+// console.log('subCard', subCard.getElementsByName('type-l'));
+// console.log('subCard', subCard.nodeType);
+//       subCard.getElementsByName('type-l')
+//         .addEventListener('click', function(){
+//           // var url = appStorage.hostList
+//           var url = 'naver.com';
+//           window.open(url, '_blank');
+//       });
+
 
       card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
       card.querySelector('.list-group').appendChild(subCard);
-      //appStorage.linksContainer.querySelector('.card-sub-seq-'+data.sub_seq);
 
       var sub_seq = data.sub_seq;
       var subJSON = {sub_seq: data};
-console.log("subJSON[data.sub_seq]", subJSON);
       appStorage.visibleCards[data.seq] = subJSON;
     }
 
-    // appStorage.linksContainer.appendChild(card);
-    // console.log("");
-console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- end");
+    console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- end");
     return;
 
-
-    if (!cardData){
-
-    } else {
-console.log("#2-2 카드 기존 수정", data.seq+"-"+data.sub_seq);
-
-      var cardSubData = cardData[data.sub_seq];
-      if (!cardSubData){
-
-
-      } else {
-console.log("#2-2-2 서브카드 기존 수정", data.seq+"-"+data.sub_seq);
-
-      }
-    }
 
 
     // 동기화
@@ -265,26 +213,6 @@ console.log("#2-2-2 서브카드 기존 수정", data.seq+"-"+data.sub_seq);
 
 
 
-    if (!cardData){
-
-
-console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
-      card.querySelector('.card').classList.add('card-seq-'+data.seq);
-      card.querySelector('.card-seq').textContent = data.seq;
-      card.querySelector('.card-header').textContent = data.category;
-      card.querySelector('.list-group').innerHTML = '';
-    } else {
-console.log("#2-2 카드 기존 수정", data.seq+"-"+data.sub_seq);
-
-      var cardSubData = cardData[data.sub_seq];
-      if (!cardSubData){
-console.log("#2-2-1 서브카드 신규 추가", data.seq+"-"+data.sub_seq);
-
-      } else {
-console.log("#2-2-2 서브카드 기존 수정", data.seq+"-"+data.sub_seq);
-
-      }
-    }
 
 
 
@@ -318,13 +246,15 @@ console.log("#3-1 카드 서브 신규 추가", data.seq+"-"+data.sub_seq);
       subCard.removeAttribute('hidden');
       subCard.classList.add('card-sub-seq-'+data.sub_seq);
       subCard.querySelector('.card-text').textContent = data.label;
+      subCard.getElementsByClassName('type-l')
+        .addEventListener('click', function(){
+          // var url = appStorage.hostList
+          var url = 'naver.com';
+          window.open(url, '_blank');
+      });
 
-console.log("card",card);
-console.log("querySelector",card.querySelector('.list-group'));
-console.log("subCard",subCard);
-      // card.querySelector('.list-group').appendChild(subCard);
+      var evnt =
       appStorage.linksContainer.appendChild(card);
-      console.log("");
       appStorage.visibleCards[data.seq] = data;
     } else {
       console.log("서브 추가");
@@ -332,7 +262,9 @@ console.log("subCard",subCard);
       // subCard.querySelector('.card-text').textContent = a +" / "+ data.label;
     }
 
-
+  //   function openWin(url){
+  //     window.open(url, "_blank");
+  // }
 
 
 
@@ -365,13 +297,8 @@ console.log("card add", card);
       subCard.removeAttribute('hidden');
       subCard.classList.add('card-sub-seq-'+data.sub_seq);
       subCard.querySelector('.card-text').textContent = data.label;
-      console.log(subCard);
-      console.log("card", card);
       var card1_li = appStorage.visibleCards[data.seq].querySelector('.list-group');
       var li = card.querySelector('.list-group');
-      console.log("card1", card1_li);
-      console.log("li", li);
-      // li.appendChild(subCard);
     }
 
 
@@ -422,8 +349,6 @@ console.log("card add", card);
 
   // [Fn:appStorage.getHttp] - 서버에서 Http Get 통신 _190402
   appStorage.getHttp = function($scope, $location) {
-    console.log("[Fn:appStorage.getHttp]");
-
     var sheetName = $scope.sheetName;
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
@@ -472,8 +397,16 @@ console.log("card add", card);
               if ( results.length > 0 ){
                 console.log("통신 로그인");
                 var user = {"name":$scope.username, "id":$scope.id, "pw":$scope.pw};
+
+                var host = {};
+                var hostList = {};
+                for (var i=0; i<results.length; i++){
+                  var row = results[i];
+                  host[row.type] = row;
+                  hostList[row.server] = host;
+                }
                 appStorage.saveToStorage("user", user);
-                appStorage.saveToStorage("hostList", results);
+                appStorage.saveToStorage("hostList", hostList);
                 appStorage.saveToStorage("autoSignIn", $scope.autoSignInSwitch);
                 console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
 
@@ -493,13 +426,13 @@ console.log("card add", card);
 
         }
       } else {
-        // app.updateForecastCard(initialWeatherForecast);
-        console.log("[Fn:appStorage.getHttp>XMLHttpRequest>err]");
+
         switch (sheetName){
           case "host" :
-            // $("#signIn-btn")[0].disabled = false;
-            // $("#signIn-spinner").addClass("d-none");
-            // $("[name='username'")[0].disabled= false;
+
+            break;
+          case "links" :
+            // appStorage.updateLinkCardList(initLinkData);
             break;
         }
       }
@@ -509,51 +442,51 @@ console.log("card add", card);
   }
 
 
-  // [Fn:appStorage.getLinkList] - 서버에서 link data 가져오기
-  appStorage.getLinkList = function() {
-    console.log("[appStorage.fn:getLinkList]");
-
-    var id = appStorage.user.id;
-    var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
-
-    if ('caches' in window) {
-      caches.match(url).then(function(response) {
-        if (response) {
-          response.json().then(function updateFromCache(json) {
-            console.log("[appStorage.fn:getLinkList] #1 json", json);
-//             var results = json.query.results;
-// console.log("[appStorage.getLinkList] #2 results", results);
-            // results.key = key;
-            // results.label = label;
-            // results.created = json.query.created;
-            // app.updateForecastCard(results);
-          });
-        }
-      });
-    }
-    // Fetch the latest data.
-    var request = new XMLHttpRequest();
-    request.onreadystatechange = function() {
-      if (request.readyState === XMLHttpRequest.DONE) {
-        if (request.status === 200) {
-          var response = JSON.parse(request.response);
-          var results = response.list;
-console.log("[appStorage.fn:getLinkList] #3 results", results);
-          // console.log("[appStorage.fn:getLinkList]", response);
-          appStorage.updateLinkList(results);
-          // results.key = key;
-          // results.label = label;
-          // results.created = response.query.created;
-          // app.updateForecastCard(results);
-        }
-      } else {
-console.log("[appStorage.fn:getLinkList] #4 err", response);
-        // app.updateForecastCard(initialWeatherForecast);
-      }
-    };
-    request.open('GET', url);
-    request.send();
-  };
+//   // [Fn:appStorage.getLinkList] - 서버에서 link data 가져오기
+//   appStorage.getLinkList = function() {
+//     console.log("[appStorage.fn:getLinkList]");
+//
+//     var id = appStorage.user.id;
+//     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
+//
+//     if ('caches' in window) {
+//       caches.match(url).then(function(response) {
+//         if (response) {
+//           response.json().then(function updateFromCache(json) {
+//             console.log("[appStorage.fn:getLinkList] #1 json", json);
+// //             var results = json.query.results;
+// // console.log("[appStorage.getLinkList] #2 results", results);
+//             // results.key = key;
+//             // results.label = label;
+//             // results.created = json.query.created;
+//             // app.updateForecastCard(results);
+//           });
+//         }
+//       });
+//     }
+//     // Fetch the latest data.
+//     var request = new XMLHttpRequest();
+//     request.onreadystatechange = function() {
+//       if (request.readyState === XMLHttpRequest.DONE) {
+//         if (request.status === 200) {
+//           var response = JSON.parse(request.response);
+//           var results = response.list;
+// console.log("[appStorage.fn:getLinkList] #3 results", results);
+//           // console.log("[appStorage.fn:getLinkList]", response);
+//           appStorage.updateLinkList(results);
+//           // results.key = key;
+//           // results.label = label;
+//           // results.created = response.query.created;
+//           // app.updateForecastCard(results);
+//         }
+//       } else {
+// console.log("[appStorage.fn:getLinkList] #4 err", response);
+//         // app.updateForecastCard(initialWeatherForecast);
+//       }
+//     };
+//     request.open('GET', url);
+//     request.send();
+//   };
 
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
   appStorage.saveToStorage = function(key, val) {
@@ -580,27 +513,26 @@ console.log("[appStorage.fn:getLinkList] #4 err", response);
   		} else {
   			resultDate = 'Last updated ' + Math.floor(timegap) + ' hour ago';
   		}
-  	} else {
-  		resultDate = curYear + '-' + curMonth + '-' + curDay;
+    } else {
+  		resultDate = curMonth + '.' + curDay;
   	}
   	return resultDate;
   };
 //------------------------------------------------------------------------------
-  var initLinkData = {
-    seq: 1,
-    category: "관리시스템",
+  var initLinkData = [{
+    seq: 'init',
+    category: '네이버',
     sub_seq: 1,
-    label: "SMOSMGR20",
-    pathname: "SMOSMGR/",
-    search: "",
-    created: "2019-03-19T15:00:00.000Z",
-    updated: "2019-03-20T15:00:00.000Z"
-  }
+    label: '네이버 초기 카드',
+    pathname: 'www.naver.com',
+    search: '',
+    created: '2019-04-01T09:00:00.000Z',
+    updated: '2019-04-01T09:00:00.000Z'
+  }]
 //------------------------------------------------------------------------------
 
   appStorage.user = localStorage.user;
   if (appStorage.user){
-    console.log("appStorage set");
     appStorage.user = JSON.parse(appStorage.user);
     appStorage.hostList = JSON.parse(localStorage.hostList);
     appStorage.autoSignIn = JSON.parse(localStorage.autoSignIn);

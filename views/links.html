@@ -1,15 +1,22 @@
 <style type="text/css">
-  .card-columns {
-    @include media-breakpoint-only(md) {
+  /* Extra small devices (portrait phones, 576px 미만) - xs */
+  /* @media (max-width: 575px) {
+    .card-columns {
       column-count: 1;
     }
-    @include media-breakpoint-only(lg) {
+  } */
+  /* Small devices (landscape phones, 576px 이상) - sm */
+  /* @media (min-width: 576px) and (max-width: 767px) {
+    .card-columns {
+      column-count: 3;
+    }
+  } */
+  /* Medium devices (tablets, 768px 이상) - md */
+  /* @media (min-width: 768px) {
+    .card-columns {
       column-count: 4;
     }
-    @include media-breakpoint-only(xl) {
-      column-count: 5;
-    }
-  }
+  } */
 </style>
 <script>
   function openWin(url){
@@ -37,7 +44,8 @@
 <div class="container-fluid pt-3">
 <!-- 공통 코드 -->
   <div class="card-columns" ng-init="getLinkCardList()">
-    <div class="card bg-light shadow-sm">
+
+    <!-- <div class="card bg-light shadow-sm">
       <div class="card-header"><span name="category">관리시스템</span></div>
 
         <ul class="list-group list-group-flush">
@@ -90,7 +98,7 @@
       </div>
       <div class="card bg-light shadow-sm">
         <div class="card-header">연말정산</div>
-        <!-- <div class="card-body"> -->
+       <div class="card-body">
           <ul class="list-group list-group-flush">
             <li class="list-group-item bg-light">
           <p class="card-text">수수료명세서</p>
@@ -115,9 +123,8 @@
           </div>
         </li>
       </ul>
-        <!-- </div> -->
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 <template>
@@ -131,15 +138,16 @@
           <div class="card-last-updated" hidden></div>
           <p class="card-text">card-label</p>
           <div class="btn-group w-100" role="group" aria-label="aria_target">
-            <button type="button" class="btn btn-success">
+            <button type="button" class="btn btn-success" name="type-l">
               <div class="d-none d-sm-block d-md-none">L</div>
               <div class="d-sm-none d-md-block">Local</div>
             </button>
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" name="type-q">
               <div class="d-none d-sm-block d-md-none">Q</div>
               <div class="d-sm-none d-md-block">QA</div>
             </button>
-            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-danger dropdown-toggle"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" name="type-o">
               운영
             </button>
             <div class="dropdown-menu dropdown-menu-sm-right">
@@ -152,7 +160,7 @@
         </li>
       </ul>
     </div>
-    <div class="card-footer">
+    <div class="card-footer text-right">
       <small class="text-mute last-updated-dt">Last updated 3 mins ago</small>
     </div>
   </div>

@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var dataCacheName = 'linksData-v5';
-var cacheName = 'linkManagerPWA-4';
+var dataCacheName = 'linksData-v6';
+var cacheName = 'linkManagerPWA-6';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
