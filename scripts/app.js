@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.10", verCode:"20190410.01"},
+    appVer   : {verName: "0.1.11", verCode:"20190411.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -176,15 +176,23 @@
       subCard.classList.add('card-sub-seq-'+data.sub_seq);
       subCard.querySelector('.card-text').textContent = data.label;
       subCard.querySelector('.card-last-updated').textContent = data.updated;
-// console.log('subCard', subCard);
-// console.log('subCard', subCard.getElementsByName('type-l'));
-// console.log('subCard', subCard.nodeType);
-//       subCard.getElementsByName('type-l')
-//         .addEventListener('click', function(){
-//           // var url = appStorage.hostList
-//           var url = 'naver.com';
-//           window.open(url, '_blank');
-//       });
+
+      var server = appStorage.hostList;
+      console.log(server);
+      console.log(appStorage.hostList[data.server]);
+      console.log(appStorage.hostList[data.server]['L']);
+      // console.log(server);
+
+      // click event 등록
+      subCard.querySelector("button[name='type-l']")
+        .addEventListener('click', function(){
+
+          var server = appStorage.hostList[data.server];
+          console.log(server);
+          var url = appStorage.hostList
+          var url = 'https://www.naver.com';
+          window.open(url, '_blank');
+      });
 
 
       card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
@@ -398,12 +406,18 @@ console.log("card add", card);
                 console.log("통신 로그인");
                 var user = {"name":$scope.username, "id":$scope.id, "pw":$scope.pw};
 
-                var host = {};
                 var hostList = {};
+                console.log("#results",results);
                 for (var i=0; i<results.length; i++){
                   var row = results[i];
-                  host[row.type] = row;
-                  hostList[row.server] = host;
+                  var host = {};
+                  console.log("#row",row);
+
+                  var name = row.server;
+                  var type = row.type;
+                  hostList.name.type = row;
+                  console.log("#host",host);
+                  console.log("#hostList",hostList);
                 }
                 appStorage.saveToStorage("user", user);
                 appStorage.saveToStorage("hostList", hostList);
