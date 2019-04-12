@@ -413,9 +413,9 @@ console.log("card add", card);
                   var host = {};
                   console.log("#row",row);
 
-                  var name = row.server;
-                  var type = row.type;
-                  hostList.name.type = row;
+                  // var name = row.server;
+                  // var type = row.type;
+                  // hostList.name.type = row;
                   console.log("#host",host);
                   console.log("#hostList",hostList);
                 }
