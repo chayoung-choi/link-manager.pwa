@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.11", verCode:"20190411.01"},
+    appVer   : {verName: "0.1.12", verCode:"20190413.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -177,20 +177,36 @@
       subCard.querySelector('.card-text').textContent = data.label;
       subCard.querySelector('.card-last-updated').textContent = data.updated;
 
-      var server = appStorage.hostList;
+      var hostList = appStorage.hostList[data.server];
+
+      console.log(hostList);
+
+      var server = new Object();
+      for (var i=0; i<hostList.length; i++){
+        console.log("server[i].type", hostList[i].type +" / "+data.server);
+        var type = hostList[i].type;
+        server[type] = hostList[i];
+      }
+
       console.log(server);
-      console.log(appStorage.hostList[data.server]);
-      console.log(appStorage.hostList[data.server]['L']);
+      //console.log(appStorage.hostList[data.server]);
+      //console.log(appStorage.hostList[data.server]['L']);
       // console.log(server);
+
+      // for (var i=0; i<server.length; i++){
+      //   console.log("server[i].type", server[i].type +" / "+data.type);
+      //   if (server[i].type == data.type){
+      //
+      //     var url = server[i].origin + server[i].pathname;
+      //     window.open(url, '_blank');
+      //     break;
+      //   }
+      // }
 
       // click event 등록
       subCard.querySelector("button[name='type-l']")
         .addEventListener('click', function(){
-
-          var server = appStorage.hostList[data.server];
-          console.log(server);
-          var url = appStorage.hostList
-          var url = 'https://www.naver.com';
+          var url = server['L'].origin + server['L'].pathname;
           window.open(url, '_blank');
       });
 
@@ -407,22 +423,21 @@ console.log("card add", card);
                 var user = {"name":$scope.username, "id":$scope.id, "pw":$scope.pw};
 
                 var hostList = {};
-                console.log("#results",results);
                 for (var i=0; i<results.length; i++){
-                  var row = results[i];
-                  var host = {};
-                  console.log("#row",row);
+                  var server = results[i].server;
 
-                  // var name = row.server;
-                  // var type = row.type;
-                  // hostList.name.type = row;
-                  console.log("#host",host);
-                  console.log("#hostList",hostList);
+                  var arr = new Array();
+                  for (var j=0; j<results.length; j++){
+                    if (server == results[j].server){
+                      	arr.push(results[j]);
+                      }
+                  }
+                  hostList[server] = arr;
                 }
                 appStorage.saveToStorage("user", user);
                 appStorage.saveToStorage("hostList", hostList);
                 appStorage.saveToStorage("autoSignIn", $scope.autoSignInSwitch);
-                console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
+                //console.log("$scope.autoSignInSwitch", $scope.autoSignInSwitch);
 
                 $location.path("links");
                 $scope.$apply();
