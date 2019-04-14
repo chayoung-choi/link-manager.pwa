@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.12", verCode:"20190413.01"},
+    appVer   : {verName: "0.1.13", verCode:"20190414.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -179,37 +179,22 @@
 
       var hostList = appStorage.hostList[data.server];
 
-      console.log(hostList);
-
       var server = new Object();
       for (var i=0; i<hostList.length; i++){
-        console.log("server[i].type", hostList[i].type +" / "+data.server);
         var type = hostList[i].type;
         server[type] = hostList[i];
       }
 
-      console.log(server);
-      //console.log(appStorage.hostList[data.server]);
-      //console.log(appStorage.hostList[data.server]['L']);
-      // console.log(server);
-
-      // for (var i=0; i<server.length; i++){
-      //   console.log("server[i].type", server[i].type +" / "+data.type);
-      //   if (server[i].type == data.type){
-      //
-      //     var url = server[i].origin + server[i].pathname;
-      //     window.open(url, '_blank');
-      //     break;
-      //   }
-      // }
-
       // click event 등록
-      subCard.querySelector("button[name='type-l']")
-        .addEventListener('click', function(){
-          var url = server['L'].origin + server['L'].pathname;
-          window.open(url, '_blank');
-      });
+      var buttons = subCard.querySelectorAll("button");
 
+      for (var b=0; b<buttons.length; b++){
+        buttons[b].addEventListener('click', function(){
+            var type = $(this).data('type');
+            var url = server[type].origin + data.pathname + data.search;
+            window.open(url, '_blank');
+        });
+      }
 
       card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
       card.querySelector('.list-group').appendChild(subCard);
