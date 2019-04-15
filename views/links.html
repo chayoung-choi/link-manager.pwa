@@ -19,9 +19,7 @@
   } */
 </style>
 <script>
-  function openWin(url){
-    window.open(url, "_blank");
-}
+
 </script>
 
 <!-- // Extra small devices (portrait phones, 576px 미만) - xs
@@ -44,7 +42,6 @@
 <div class="container-fluid pt-3">
 <!-- 공통 코드 -->
   <div class="card-columns" ng-init="getLinkCardList()">
-
     <!-- <div class="card bg-light shadow-sm">
       <div class="card-header"><span name="category">관리시스템</span></div>
 
@@ -146,7 +143,23 @@
               <div class="d-none d-sm-block d-md-none">Q</div>
               <div class="d-sm-none d-md-block">QA</div>
             </button>
-            <button type="button" class="btn btn-danger dropdown-toggle"
+            <button type="button" class="btn btn-danger" data-type='O'>
+              <div class="d-none d-sm-block d-md-none">Q</div>
+              <div class="d-sm-none d-md-block">운영</div>
+            </button>
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-sm-right">
+                <a class="dropdown-item" href="#">WAS1</a>
+                <a class="dropdown-item" href="#">WAS2</a>
+                <a class="dropdown-item" href="#">WAS3</a>
+                <a class="dropdown-item" href="#">WAS4</a>
+              </div>
+            </div>
+            <!-- <button type="button" class="btn btn-danger dropdown-toggle"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-type='O'>
               운영
             </button>
@@ -155,7 +168,7 @@
               <a class="dropdown-item" href="#">WAS2</a>
               <a class="dropdown-item" href="#">WAS3</a>
               <a class="dropdown-item" href="#">WAS4</a>
-            </div>
+            </div> -->
           </div>
         </li>
       </ul>

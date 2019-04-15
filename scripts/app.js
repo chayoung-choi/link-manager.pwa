@@ -187,12 +187,13 @@
 
       // click event 등록
       var buttons = subCard.querySelectorAll("button");
-
       for (var b=0; b<buttons.length; b++){
         buttons[b].addEventListener('click', function(){
             var type = $(this).data('type');
-            var url = server[type].origin + data.pathname + data.search;
-            window.open(url, '_blank');
+            if (type){
+              var url = server[type].origin + data.pathname + data.search;
+              window.open(url, '_blank');
+            }
         });
       }
 
