@@ -206,9 +206,6 @@
     }
 
     console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- end");
-    return;
-
-
 
     // 동기화
     // var cardCreated = new Date();
@@ -221,121 +218,6 @@
     // }
     // card.querySelector('.last-updated-dt').textContent = formatDate(dataLastUpdated);
 
-
-
-
-
-
-    if (!card){
-console.log("#2-1 카드 신규 추가", data.seq+"-"+data.sub_seq);
-      // var cardTemplate = document.querySelector('template').content;
-      card = appStorage.cardTemplate.cloneNode(true);
-
-      card.querySelector('.card-seq').textContent = data.seq;
-      card.querySelector('.card-header').textContent = data.category;
-      card.querySelector('.list-group').innerHTML = '';
-
-console.log("card seq", card.querySelector('.card-seq').textContent);
-    } else {
-
-console.log("----------------------x " + card.querySelector('.card-seq'));
-      // card =  card[0];
-
-      // card.querySelector('.card-header').textContent = 'xxxxxxxxxxxxxx';
-      // console.log(card.innerHTML);
-    }
-
-    var subCard = card.querySelector('.card-sub-seq-'+data.sub_seq);
-// console.log(card.querySelector('.card-sub-seq-'+data.sub_seq));
-    if (!subCard){
-console.log("#3-1 카드 서브 신규 추가", data.seq+"-"+data.sub_seq);
-
-      var subTemplate = appStorage.cardTemplate.querySelector('.sub-template');
-      subCard = subTemplate.cloneNode(true);
-      subCard.classList.remove('sub-template');
-      subCard.removeAttribute('hidden');
-      subCard.classList.add('card-sub-seq-'+data.sub_seq);
-      subCard.querySelector('.card-text').textContent = data.label;
-      subCard.getElementsByClassName('type-l')
-        .addEventListener('click', function(){
-          // var url = appStorage.hostList
-          var url = 'naver.com';
-          window.open(url, '_blank');
-      });
-
-      var evnt =
-      appStorage.linksContainer.appendChild(card);
-      appStorage.visibleCards[data.seq] = data;
-    } else {
-      console.log("서브 추가");
-      // var a = subCard.querySelector('.card-text').textContent;
-      // subCard.querySelector('.card-text').textContent = a +" / "+ data.label;
-    }
-
-  //   function openWin(url){
-  //     window.open(url, "_blank");
-  // }
-
-
-
-return;
-
-    // 신규 Card
-    var card = appStorage.visibleCards[data.seq];
-    if (!card) {
-      var cardTemplate = document.querySelector('template').content;
-      card = cardTemplate.cloneNode(true);
-
-      card.querySelector('.card-seq').textContent = data.seq;
-      card.querySelector('.card-sub-seq').textContent = data.sub_seq;
-      card.querySelector('.card-header').textContent = data.category;
-
-      card.querySelector('.card-last-updated').textContent = dataLastUpdated;
-      card.querySelector('.last-updated-dt').textContent   = formatDate(dataLastUpdated);
-
-console.log("card add", card);
-      appStorage.linksContainer.appendChild(card);
-      appStorage.visibleCards[data.seq] = card;
-    }
-
-    var subTemp = card.querySelector('.sub-template');
-    var subCard = card.querySelector('.card-sub-seq-'+data.sub_seq);
-    if (!subCard){
-      var cardSubTemplate = document.querySelector('.sub-template');
-      subCard = cardSubTemplate.cloneNode(true);
-      subCard.classList.remove('sub-template');
-      subCard.removeAttribute('hidden');
-      subCard.classList.add('card-sub-seq-'+data.sub_seq);
-      subCard.querySelector('.card-text').textContent = data.label;
-      var card1_li = appStorage.visibleCards[data.seq].querySelector('.list-group');
-      var li = card.querySelector('.list-group');
-    }
-
-
-
-    // var subCard = appStorage.visibleCards[data.seq];
-    console.log('appStorage', appStorage);
-    console.log('card', appStorage.visibleCards['1']);
-
-
-// console.log("[Fn:appStorage.updateLinkCard()>#1]", appStorage.visibleCards);
-// console.log("[Fn:appStorage.updateLinkCard()>Card]", card);
-    // 기존 Card
-    var cardLastUpdatedElem = card.querySelector('.card-last-updated');
-    // console.log(cardLastUpdatedElem);
-    // var cardLastUpdated = cardLastUpdatedElem.textContent;
-    // if (cardLastUpdated) {
-    //   cardLastUpdated = new Date(cardLastUpdated);
-    //   // Bail if the card has more recent data then the data
-    //   if (dataLastUpdated.getTime() < cardLastUpdated.getTime()) {
-    //     return;
-    //   }
-    // }
-    // cardLastUpdatedElem.textContent = data.updated;
-    // card.querySelector('.card-last-updated').textContent = dataLastUpdated;
-    // card.querySelector('.last-updated-dt').textContent   = formatDate(dataLastUpdated);
-    // card.querySelector('.card-header').textContent = data.category;
-    // card.querySelector('.card-text').textContent   = data.label;
   }
 
 //------------------------------------------------------------------------------
@@ -456,53 +338,6 @@ console.log("card add", card);
     request.send();
   }
 
-
-//   // [Fn:appStorage.getLinkList] - 서버에서 link data 가져오기
-//   appStorage.getLinkList = function() {
-//     console.log("[appStorage.fn:getLinkList]");
-//
-//     var id = appStorage.user.id;
-//     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?sheet_name=links&id='+id;
-//
-//     if ('caches' in window) {
-//       caches.match(url).then(function(response) {
-//         if (response) {
-//           response.json().then(function updateFromCache(json) {
-//             console.log("[appStorage.fn:getLinkList] #1 json", json);
-// //             var results = json.query.results;
-// // console.log("[appStorage.getLinkList] #2 results", results);
-//             // results.key = key;
-//             // results.label = label;
-//             // results.created = json.query.created;
-//             // app.updateForecastCard(results);
-//           });
-//         }
-//       });
-//     }
-//     // Fetch the latest data.
-//     var request = new XMLHttpRequest();
-//     request.onreadystatechange = function() {
-//       if (request.readyState === XMLHttpRequest.DONE) {
-//         if (request.status === 200) {
-//           var response = JSON.parse(request.response);
-//           var results = response.list;
-// console.log("[appStorage.fn:getLinkList] #3 results", results);
-//           // console.log("[appStorage.fn:getLinkList]", response);
-//           appStorage.updateLinkList(results);
-//           // results.key = key;
-//           // results.label = label;
-//           // results.created = response.query.created;
-//           // app.updateForecastCard(results);
-//         }
-//       } else {
-// console.log("[appStorage.fn:getLinkList] #4 err", response);
-//         // app.updateForecastCard(initialWeatherForecast);
-//       }
-//     };
-//     request.open('GET', url);
-//     request.send();
-//   };
-
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
   appStorage.saveToStorage = function(key, val) {
     console.log("[appStorage.saveToStorage>key:val]",key,val);
@@ -516,7 +351,7 @@ console.log("card add", card);
   	today = new Date();
   	resultDate = new Date(curDate);
   	timegap = (today - resultDate)/(60*60*1000);
-
+    
   	var curYear = resultDate.getFullYear();
   	var curMonth = (resultDate.getMonth() + 1);
   	var curDay = resultDate.getDate();
@@ -524,12 +359,18 @@ console.log("card add", card);
   	// Time (minutes * seconds * millisecond)
   	if (timegap <= 24) {
   		if (Math.floor(timegap) == 0) {
-  			resultDate = 'Last updated ' + Math.floor(timegap * 24) + ' mins ago';
+  			resultDate = Math.floor(timegap * 24) + '분 전 업데이트';
   		} else {
-  			resultDate = 'Last updated ' + Math.floor(timegap) + ' hour ago';
+  			resultDate = Math.floor(timegap) + '시간 전 업데이트';
   		}
+    } else if (timegap > 24 && timegap <= 48){
+      resultDate = "어제 업데이트"
     } else {
-  		resultDate = curMonth + '.' + curDay;
+      if (curYear == today.getFullYear()) {
+        resultDate = curMonth + '월 ' + curDay + '일 업데이트';
+      } else {
+        resultDate = resultDate;
+      }
   	}
   	return resultDate;
   };
