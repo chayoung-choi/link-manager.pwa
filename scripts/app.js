@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.13", verCode:"20190414.01"},
+    appVer   : {verName: "0.1.14", verCode:"20190417.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -180,13 +180,20 @@
       var hostList = appStorage.hostList[data.server];
 
       var server = new Object();
+      var dropdown = subCard.querySelector('.dropdown-menu');
       for (var i=0; i<hostList.length; i++){
         var type = hostList[i].type;
         server[type] = hostList[i];
+
+        if ( type!='L' && type!='Q' && type!='O' ){
+          var item = $("<a class='dropdown-item btn-cstm-link' "
+                    + "data-type='"+type+"' href='#'>"+hostList[i].name+"</a>");
+          dropdown.appendChild(item[0]);
+        }
       }
 
       // click event 등록
-      var buttons = subCard.querySelectorAll("button");
+      var buttons = subCard.querySelectorAll(".btn-cstm-link");
       for (var b=0; b<buttons.length; b++){
         buttons[b].addEventListener('click', function(){
             var type = $(this).data('type');
@@ -351,7 +358,7 @@
   	today = new Date();
   	resultDate = new Date(curDate);
   	timegap = (today - resultDate)/(60*60*1000);
-    
+
   	var curYear = resultDate.getFullYear();
   	var curMonth = (resultDate.getMonth() + 1);
   	var curDay = resultDate.getDate();
