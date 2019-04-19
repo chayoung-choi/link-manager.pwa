@@ -127,7 +127,22 @@
 <template>
   <div class="card bg-light shadow-sm">
     <div class="card-seq" hidden></div>
-    <div class="card-header">card-header</div>
+    <div class="card-header clearfix">
+      <span class="card-header-text">card-header</span>
+      <div class="btn-group float-right">
+        <i class="material-icons btn btn-sm"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">more_vert</i>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">수정</a>
+          <a class="dropdown-item" href="#">삭제</a>
+          <!-- <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Separated link</a> -->
+        </div>
+      </div>
+      <!-- <button class="float-right"><i class="material-icons">more_vert</i></button> -->
+    </div>
     <div class="card-body-li">
       <ul class="list-group list-group-flush">
         <li class="list-group-item bg-light sub-template" hidden>
@@ -173,8 +188,9 @@
         </li>
       </ul>
     </div>
-    <div class="card-footer text-right">
-      <small class="text-mute last-updated-dt">Last updated 3 mins ago</small>
+    <div class="card-footer clearfix">
+      <span class="badge badge-pill badge-secondary float-left">smosmgr20</span>
+      <small class="text-mute last-updated-dt float-right">Last updated 3 mins ago</small>
     </div>
   </div>
 </template>

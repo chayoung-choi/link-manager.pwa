@@ -160,7 +160,7 @@
       card = appStorage.cardTemplate.cloneNode(true);
       card.querySelector('.card').classList.add('card-seq-'+data.seq);
       card.querySelector('.card-seq').textContent = data.seq;
-      card.querySelector('.card-header').textContent = data.category;
+      card.querySelector('.card-header-text').textContent = data.category;
       card.querySelector('.list-group').innerHTML = '';
       card.querySelector('.last-updated-dt').textContent = formatDate(data.updated);
       appStorage.linksContainer.appendChild(card);
