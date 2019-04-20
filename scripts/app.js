@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.14", verCode:"20190417.01"},
+    appVer   : {verName: "0.1.15", verCode:"20190420.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -187,7 +187,7 @@
 
         if ( type!='L' && type!='Q' && type!='O' ){
           var item = $("<a class='dropdown-item btn-cstm-link' "
-                    + "data-type='"+type+"' href='#'>"+hostList[i].name+"</a>");
+                    + "data-type='"+type+"' href='javascript:'>"+hostList[i].name+"</a>");
           dropdown.appendChild(item[0]);
         }
       }

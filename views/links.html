@@ -130,11 +130,14 @@
     <div class="card-header clearfix">
       <span class="card-header-text">card-header</span>
       <div class="btn-group float-right">
-        <i class="material-icons btn btn-sm"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">more_vert</i>
+        <button type="button" class="btn btn-xs p-0"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="material-icons p-0" style="font-size:24px; color:gray;">more_vert</i>
+        </button>
+
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">수정</a>
-          <a class="dropdown-item" href="#">삭제</a>
+          <a class="dropdown-item" href="javascript:alert('수정');">수정</a>
+          <a class="dropdown-item" href="javascript:confirm('삭제하시겠습니까?');">삭제</a>
           <!-- <a class="dropdown-item" href="#">Another action</a>
           <a class="dropdown-item" href="#">Something else here</a>
           <div class="dropdown-divider"></div>
