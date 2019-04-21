@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.15", verCode:"20190420.01"},
+    appVer   : {verName: "0.1.16", verCode:"20190421.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -163,6 +163,7 @@
       card.querySelector('.card-header-text').textContent = data.category;
       card.querySelector('.list-group').innerHTML = '';
       card.querySelector('.last-updated-dt').textContent = formatDate(data.updated);
+      card.querySelector('.card-footer .badge').textContent = data.server;
       appStorage.linksContainer.appendChild(card);
     }
 
