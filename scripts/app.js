@@ -111,8 +111,15 @@
       console.log("[04] app.initCtrl.getLinkCardList>카드 가져오기");
       appStorage.getLinkCardList($scope);
     };
-  });
 
+    // [Fn:initCtrl.insertLinkCard() - Link 카드 등록
+    $scope.insertLinkCard = function($scope) {
+
+      $('#addLinkModal').modal('hide');
+      alert("생성" + $scope.server);
+      console.log($scope.label);
+    };
+  });
 
   // [Ctrl:signOutCtrl]
   app.controller("signOutCtrl", function ($scope) {
