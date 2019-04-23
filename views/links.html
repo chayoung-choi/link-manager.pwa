@@ -134,6 +134,7 @@
 <!-- Modal -->
 <div class="modal fade" id="addLinkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
+    <form ng-controller="linkCardCtrl" ng-submit="insertLinkCard()">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Link Card 등록</h5>
@@ -142,18 +143,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
           <div class="form-group">
             <label for="category">Category Title</label>
-            <input type="text" class="form-" id="category" ng-mobel="category" placeholder="Category Title 입력">
+            <input type="text" class="form-" id="category" ng-model="category" placeholder="Category Title 입력">
           </div>
           <div class="form-group">
             <label for="label">설명</label>
-            <input type="text" class="form-control" id="label" ng-mobel="label" placeholder="설명 입력">
+            <input type="text" class="form-control" id="label" ng-model="label" placeholder="설명 입력">
           </div>
           <div class="form-group">
             <label for="server">server</label>
-            <select class="form-control" id="server" ng-mobel="server">
+            <select class="form-control" id="server" ng-model="server">
               <option>smosmgr20</option>
               <option>smos20</option>
               <option>card_mgr</option>
@@ -161,19 +161,19 @@
           </div>
           <div class="form-group">
             <label for="pathname">pathname</label>
-            <input type="text" class="form-control" id="pathname" ng-mobel="pathname" placeholder="/abc/abc.do">
+            <input type="text" class="form-control" id="pathname" ng-model="pathname" placeholder="/abc/abc.do">
           </div>
           <div class="form-group">
             <label for="search">search</label>
-            <input type="text" class="form-control" id="search" ng-mobel="search" placeholder="?param1=a&param2=b">
+            <input type="text" class="form-control" id="search" ng-model="search" placeholder="?param1=a&param2=b">
           </div>
-        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-        <button type="button" class="btn btn-primary" ng-click="insertLinkCard()">등록</button>
+        <button type="submit" class="btn btn-primary">등록</button>
       </div>
     </div>
+  </form>
   </div>
 </div>
 

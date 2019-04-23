@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.16", verCode:"20190421.01"},
+    appVer   : {verName: "0.1.17", verCode:"20190423.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -112,14 +112,24 @@
       appStorage.getLinkCardList($scope);
     };
 
-    // [Fn:initCtrl.insertLinkCard() - Link 카드 등록
-    $scope.insertLinkCard = function($scope) {
 
-      $('#addLinkModal').modal('hide');
-      alert("생성" + $scope.server);
-      console.log($scope.label);
-    };
+
   });
+
+  // [Ctrl:linkCardCtrl]
+  app.controller("linkCardCtrl", function ($scope) {
+    // [Fn:linkCardCtrl.insertLinkCard() - Link 카드 등록
+    $scope.insertLinkCard = function() {
+      $('#addLinkModal').modal('hide');
+      var newLink = {};
+      newLink.category = $scope.category;
+      newLink.label = $scope.label;
+      newLink.server = $scope.server;
+      newLink.pathname = $scope.pathname;
+      newLink.search = $scope.search;
+      console.log(newLink);
+    };
+  })
 
   // [Ctrl:signOutCtrl]
   app.controller("signOutCtrl", function ($scope) {
