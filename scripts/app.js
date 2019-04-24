@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.17", verCode:"20190423.01"},
+    appVer   : {verName: "0.1.18", verCode:"20190424.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -363,6 +363,10 @@
     request.send();
   }
 
+  // [Fn:appStorage.saveToServer] - 서버에서 Http Post 통신 _190424
+  appStorage.saveToServer = function($scope, $location) {
+    console.log("통신;");
+  }
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
   appStorage.saveToStorage = function(key, val) {
     console.log("[appStorage.saveToStorage>key:val]",key,val);
