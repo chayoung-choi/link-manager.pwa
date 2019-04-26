@@ -1,12 +1,13 @@
 	<script>
     $(document).ready(function(){
+			console.log("ready");
 			$(".nav-link").click(function(e){
+				console.log("click");
 				$(".nav-item").removeClass("active");
 				$(this).parent().addClass("active");
 			});
     });
 	</script>
-
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
 	<div class="btn-group p-0 m-0 navbar-brand d-none d-sm-block">
 		<a class="navbar-brand d-none d-sm-block" href="javascript:" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
