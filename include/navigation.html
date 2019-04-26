@@ -8,26 +8,33 @@
 	</script>
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
-  <a class="navbar-brand d-none d-sm-block" href="#/!">
-    <img src="/link-manager.pwa/resource/img/logo/logo_ccy_128-128.png" alt="Logo" style="width:50px;" class="rounded">
-  </a>
+	<div class="btn-group p-0 m-0 navbar-brand d-none d-sm-block">
+		<a class="navbar-brand d-none d-sm-block" href="javascript:" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	    <img src="/link-manager.pwa/resource/img/logo/logo_ccy_128-128.png" alt="Logo" style="width:50px;" class="rounded">
+	  </a>
+		<div class="dropdown-menu">
+			<a class="dropdown-item" href="#!" ng-click="signOut()">로그아웃</a>
+		</div>
+	</div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <div class="collapse navbar-collapse justify-content-center" id="navbarToggler">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
       <li class="nav-item active">
         <a class="nav-link" href="#!links">Links</a>
       </li>
+			<li class="nav-item">
+				<a class="nav-link" href="#!setting">Setting</a>
+			</li>
       <li class="nav-item">
         <a class="nav-link" href="#!deck">Test</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#!last">Last</a>
       </li>
-			<li class="nav-item">
-				<a class="nav-link" href="#/!" ng-click="signOut()">signOut</a>
+			<li class="nav-item d-block d-sm-none">
+				<a class="nav-link" href="#!" ng-click="signOut()">sign out</a>
 			</li>
     </ul>
     <!-- <form class="form-inline my-2 my-lg-0">

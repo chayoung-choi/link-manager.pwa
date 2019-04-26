@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.18", verCode:"20190424.01"},
+    appVer   : {verName: "0.1.19", verCode:"20190426.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -48,6 +48,9 @@
         })
         .when("/links", {
             templateUrl : pathname+"/views/links.html"
+        })
+        .when("/setting", {
+            templateUrl : pathname+"/views/setting.html"
         })
         .when("/deck", {
             templateUrl : pathname+"/views/deck.html"
