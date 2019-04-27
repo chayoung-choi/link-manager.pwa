@@ -114,9 +114,6 @@
       console.log("[04] app.initCtrl.getLinkCardList>카드 가져오기");
       appStorage.getLinkCardList($scope);
     };
-
-
-
   });
 
   // [Ctrl:linkCardCtrl]

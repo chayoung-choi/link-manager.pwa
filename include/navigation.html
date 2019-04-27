@@ -1,12 +1,11 @@
 	<script>
     $(document).ready(function(){
-			console.log("ready");
-			$(".nav-link").click(function(e){
-				console.log("click");
-				$(".nav-item").removeClass("active");
-				$(this).parent().addClass("active");
-			});
+			var hash = location.hash;
+			var active = hash.replace('/','');
+			$(".nav-item").removeClass("active");
+			$(".nav-link[href='"+active+"']").addClass('active');
     });
+
 	</script>
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
 	<div class="btn-group p-0 m-0 navbar-brand d-none d-sm-block">
@@ -22,14 +21,14 @@
   </button>
   <div class="collapse navbar-collapse justify-content-center" id="navbarToggler">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="#!links">Links</a>
       </li>
 			<li class="nav-item">
 				<a class="nav-link" href="#!setting">Setting</a>
 			</li>
       <li class="nav-item">
-        <a class="nav-link" href="#!deck">Test</a>
+        <a class="nav-link" href="#!deck">Deck</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#!last">Last</a>
