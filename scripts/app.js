@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.20", verCode:"20190429.01"},
+    appVer   : {verName: "0.1.20", verCode:"20190429.02"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -70,7 +70,7 @@
 
     // [Fn:initCtrl.signIn() - 로그인]
     $scope.signIn = function() {
-      console.log("[01]app.initCtrl>로그인 시도");
+      //console.log("[01]app.initCtrl>로그인 시도");
       if ($scope.autoSignInSwitch != true){
          $scope.autoSignInSwitch = "";
       }
@@ -105,13 +105,13 @@
 
     // [Fn:initCtrl.signOut()
     $scope.signOut = function() {
-      console.log("[03] app.initCtrl>로그아웃");
+      //console.log("[03] app.initCtrl>로그아웃");
       appStorage.clearStorage();
     };
 
     // [Fn:initCtrl.getLinkCardList() - Links 카드 가져오기]
     $scope.getLinkCardList = function() {
-      console.log("[04] app.initCtrl.getLinkCardList>카드 가져오기");
+      //console.log("[04] app.initCtrl.getLinkCardList>카드 가져오기");
       appStorage.getLinkCardList($scope);
     };
   });
@@ -168,8 +168,8 @@
 
   // [Fn:appStorage.updateLinkCard()] - Card 업데이트
   appStorage.updateLinkCard = function(data) {
-    console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- start");
-    console.log("[04-0] appStorage.updateLinkCard>data", data);
+    // console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- start");
+    // console.log("[04-0] appStorage.updateLinkCard>data", data);
 
     var card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
     if (!card){
@@ -186,7 +186,7 @@
 
     var subCard = appStorage.linksContainer.querySelector('.card-seq-'+data.seq+' .card-sub-seq-'+data.sub_seq);
     if (!subCard){
-      console.log("[04-2] 서브카드 신규 추가");
+      // console.log("[04-2] 서브카드 신규 추가");
       var subTemplate = appStorage.cardTemplate.querySelector('.sub-template');
       subCard = subTemplate.cloneNode(true);
       subCard.classList.remove('sub-template');
@@ -230,7 +230,7 @@
       appStorage.visibleCards[data.seq] = subJSON;
     }
 
-    console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- end");
+    // console.log("-------------------- "+ data.seq +"-" +data.sub_seq + " -------------------- end");
 
     // 동기화
     // var cardCreated = new Date();
