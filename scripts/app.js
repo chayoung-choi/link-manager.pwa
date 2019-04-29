@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.19", verCode:"20190426.01"},
+    appVer   : {verName: "0.1.20", verCode:"20190429.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
