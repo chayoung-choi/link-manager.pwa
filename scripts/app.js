@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.20", verCode:"20190429.02"},
+    appVer   : {verName: "0.1.21", verCode:"20190501.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -50,7 +50,8 @@
             templateUrl : pathname+"/views/links.html"
         })
         .when("/setting", {
-            templateUrl : pathname+"/views/setting.html"
+            templateUrl : pathname+"/views/setting.html",
+            controller  : "settingCtrl"
         })
         .when("/deck", {
             templateUrl : pathname+"/views/deck.html"
@@ -128,6 +129,17 @@
       newLink.pathname = $scope.pathname;
       newLink.search = $scope.search;
       console.log(newLink);
+    };
+  })
+
+  // [Ctrl:settingCtrl]
+  app.controller("settingCtrl", function ($scope) {
+
+    $scope.hostList = appStorage.hostList;
+
+    // [Fn:settingCtrl.getAppStorage() - appStorage 가져오기
+    $scope.getAppStorage = function() {
+
     };
   })
 

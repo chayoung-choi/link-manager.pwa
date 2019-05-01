@@ -32,10 +32,7 @@
         <div class="form-group row">
           <label for="selectServer" class="col-sm-2 col-form-label">server</label>
           <div class="col-sm-10">
-            <select class="custom-select mr-sm-2" id="selectServer">
-              <option value="smosmgr20">smosmgr20</option>
-              <option value="smos20">smos20</option>
-              <option value="new">신규 생성</option>
+            <select class="custom-select mr-sm-2" ng-model="selectServer" ng-options="x for (x, y) in hostList">
             </select>
           </div>
         </div>
@@ -50,23 +47,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">L</th>
-                <td>로컬</td>
-                <td>http:// </td>
-                <td>SMOSMGR</td>
-              </tr>
-              <tr>
-                <th scope="row">Q</th>
-                <td>개발</td>
-                <td>http:// </td>
-                <td>SMOSMGR</td>
-              </tr>
-              <tr>
-                <th scope="row">O</th>
-                <td>운영</td>
-                <td>http:// </td>
-                <td>SMOSMGR</td>
+              <tr ng-repeat="server in selectServer">
+                <th scope="row">{{server.type}}</th>
+                <td>{{server.name}}</td>
+                <td>{{server.origin}}</td>
+                <td>{{server.pathname}}</td>
               </tr>
             </tbody>
           </table>
