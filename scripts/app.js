@@ -119,6 +119,8 @@
 
   // [Ctrl:linkCardCtrl]
   app.controller("linkCardCtrl", function ($scope) {
+    $scope.hostList = appStorage.hostList;
+
     // [Fn:linkCardCtrl.insertLinkCard() - Link 카드 등록
     $scope.insertLinkCard = function() {
       $('#addLinkModal').modal('hide');
@@ -415,6 +417,11 @@
   	}
   	return resultDate;
   };
+
+  // 전체 앱 console log 관리
+  function appLogController(ctrlName, methodName, lvl){
+    console.log("INFO "+ctrlName+"."+methodName);
+  }
 //------------------------------------------------------------------------------
   var initLinkData = [{
     seq: 'init',
