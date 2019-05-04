@@ -3,19 +3,13 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.22", verCode:"20190502.00"},
+    appVer   : {verName: "0.1.23", verCode:"20190503.00"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
-    // isLoading: true,
     visibleCards: {},
     linksContainer: null,
     cardTemplate: null,
-    // selectedCities: [],
-    // spinner: document.querySelector('.loader'),
-    // cardTemplate: document.querySelector('template').content,
-    // container: document.querySelector('.main'),
-    // addDialog: document.querySelector('.dialog-container'),
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
   };
 //------------------------------------------------------------------------------
