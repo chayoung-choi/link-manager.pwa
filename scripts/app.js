@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.23", verCode:"20190503.00"},
+    appVer   : {verName: "0.1.24", verCode:"20190505.00"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -59,7 +59,6 @@
 
   // [Ctrl:initCtrl]
   app.controller("initCtrl", function($scope, $location, $timeout){
-
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
 
@@ -278,21 +277,21 @@
     var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
             + "sheet_name=" + sheetName + "&"
             + "id=" + $scope.id;
-    console.log("[Fn:appStorage.getHttp] #0 url", url);
+    // console.log("[Fn:appStorage.getHttp] #0 url", url);
 
     if ('caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
-          console.log("[Fn:appStorage.getHttp] #1 caches response", response);
+          // console.log("[Fn:appStorage.getHttp] #1 caches response", response);
           response.json().then(function updateFromCache(json) {
             var results = json.list;
-            console.log("[Fn:appStorage.getHttp] #1 caches results", results);
+            // console.log("[Fn:appStorage.getHttp] #1 caches results", results);
 
             switch (sheetName){
               case "host" :
                 if ( results.length > 0 ){
                 // if ( $scope.id == appStorage.user.id && $scope.pw == appStorage.user.pw ){
-                  console.log("캐시 로그인", $scope.autoSignInSwitch);
+                  // console.log("캐시 로그인", $scope.autoSignInSwitch);
                   appStorage.saveToStorage("autoSignIn", $scope.autoSignInSwitch);
                   $location.path("links");
                   $scope.$apply();
@@ -320,7 +319,7 @@
           switch (sheetName){
             case "host" :
               if ( results.length > 0 ){
-                console.log("통신 로그인");
+                // console.log("통신 로그인");
                 var user = {"name":$scope.username, "id":$scope.id, "pw":$scope.pw};
 
                 var hostList = {};
@@ -377,7 +376,7 @@
   }
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
   appStorage.saveToStorage = function(key, val) {
-    console.log("[appStorage.saveToStorage>key:val]",key,val);
+    // console.log("[appStorage.saveToStorage>key:val]",key,val);
     appStorage[key] = val;
     localStorage[key] = JSON.stringify(val);
   };
