@@ -62,6 +62,8 @@
     var appVer = appStorage.appVer;
     $scope.appVer = appVer;
 
+    printAppLog('initCtrl', '', 'appVer', appVer);
+
     // [Fn:initCtrl.signIn() - 로그인]
     $scope.signIn = function() {
       //console.log("[01]app.initCtrl>로그인 시도");
@@ -73,7 +75,7 @@
 
     // [Fn:initCtrl.autoSignIn() - 자동로그인]
     $scope.autoSignIn = function() {
-      console.log("[02]app.initCtrl>자동로그인 시도");
+      printAppLog('initCtrl', 'autoSignIn', '', "자동로그인 시도");
 
       if ( appStorage.autoSignIn == true ){
         // 로그인버튼 클릭 시 id input disabled
@@ -123,7 +125,7 @@
       newLink.server = $scope.server;
       newLink.pathname = $scope.pathname;
       newLink.search = $scope.search;
-      console.log(newLink);
+      printAppLog('linkCardCtrl', 'insertLinkCard', 'newLink', newLink);
     };
   })
 
@@ -145,7 +147,7 @@
 
   // [Fn:appStorage.clearStorage] - localStorage 초기화 _190403
   appStorage.clearStorage = function(){
-    console.log("[03-1] appStorage.clearStorage");
+    printAppLog('appStorage', 'clearStorage', '', "");
     localStorage.clear();
   }
 //------------------------------------------------------------------------------
@@ -180,7 +182,7 @@
 
     var card = appStorage.linksContainer.querySelector('.card-seq-'+data.seq);
     if (!card){
-      console.log("[04-1] 카드 신규 추가");
+      printAppLog('appStorage', 'updateLinkCard', '', "카드 신규 추가");
       card = appStorage.cardTemplate.cloneNode(true);
       card.querySelector('.card').classList.add('card-seq-'+data.seq);
       card.querySelector('.card-seq').textContent = data.seq;
@@ -257,7 +259,6 @@
 //------------------------------------------------------------------------------
   // [Fn:appStorage.signIn] - 로그인 _190402
   appStorage.signIn = function($scope, $location) {
-    console.log("[Fn:appStorage.signIn]");
 
     $("#signIn-btn")[0].disabled = true;
     $("#signIn-spinner").removeClass("d-none");
@@ -411,9 +412,23 @@
   	return resultDate;
   };
 
+  var logCnt = 0;
   // 전체 앱 console log 관리
-  function appLogController(ctrlName, methodName, lvl){
-    console.log("INFO "+ctrlName+"."+methodName);
+  function printAppLog(lvl1, lvl2, key, val){
+    var logCtrlMap = new Map();
+    logCtrlMap.set("initCtrl"     , true);
+    logCtrlMap.set("initCtrl.signIn"    , true);
+    logCtrlMap.set("initCtrl.autoSignIn", true);
+    logCtrlMap.set("linkCardCtrl" , true);
+    logCtrlMap.set("linkCardCtrl.insertLinkCard", true);
+    logCtrlMap.set("appStorage"   , true);
+    logCtrlMap.set("appStorage.clearStorage"    , true);
+
+    var path = lvl1 + (lvl2==""?"":"."+lvl2);
+    if (logCtrlMap.get(lvl1) && logCtrlMap.get(path)){
+      console.log("INFO#"+logCnt +" ["+path+" #"+key+"]", val);
+    }
+    logCnt++;
   }
 //------------------------------------------------------------------------------
   var initLinkData = [{
