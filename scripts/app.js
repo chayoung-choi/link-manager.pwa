@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.24", verCode:"20190505.00"},
+    appVer   : {verName: "0.1.25", verCode:"20190506.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -113,7 +113,7 @@
   });
 
   // [Ctrl:linkCardCtrl]
-  app.controller("linkCardCtrl", function ($scope) {
+  app.controller("linkCardCtrl", function ($scope, $http) {
     $scope.hostList = appStorage.hostList;
 
     // [Fn:linkCardCtrl.insertLinkCard() - Link 카드 등록
@@ -126,6 +126,25 @@
       newLink.pathname = $scope.pathname;
       newLink.search = $scope.search;
       printAppLog('linkCardCtrl', 'insertLinkCard', 'newLink', newLink);
+      var sheetName = "links";
+      var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
+              + "sheet_name=" + sheetName + "&"
+              + "id=" + $scope.id;
+
+      $http({
+        method : "POST",
+        url : url,
+        data : $.param(newLink),
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+      }).then(function mySuccess(response) {
+        // $scope.myWelcome = response.data;
+        console.log("성공");
+      }, function myError(response) {
+        // $scope.myWelcome = response.statusText;
+        console.log("실패");
+      });
     };
   })
 
