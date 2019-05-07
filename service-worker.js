@@ -12,17 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var dataCacheName = 'linksData-v8';
-var cacheName = 'linkManagerPWA-8';
+var dataCacheName = 'linksData-v9';
+var cacheName = 'linkManagerPWA-9';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
   // ----------- include
   '/link-manager.pwa/include/navigation.html',
   // ----------- views
-  '/link-manager.pwa/views/deck.html',
-  '/link-manager.pwa/views/links.html',
   '/link-manager.pwa/views/sign.html',
+  '/link-manager.pwa/views/links.html',
+  '/link-manager.pwa/views/setting.html',
+  '/link-manager.pwa/views/deck.html',
   // ----------- resource - img
   '/link-manager.pwa/favicon.ico',
   '/link-manager.pwa/resource/img/icons/verified_user.png',
@@ -40,7 +41,6 @@ var filesToCache = [
 
 
 self.addEventListener('install', function(e) {
-  // caches['appVer'] = '1.1.1';
   console.log('[ServiceWorker] Install');
   e.waitUntil(
     caches.open(cacheName).then(function(cache) {
@@ -68,7 +68,6 @@ self.addEventListener('activate', function(e) {
 self.addEventListener('fetch', function(e) {
   var dataUrl = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec';
   if (e.request.url.indexOf(dataUrl) > -1) {
-    console.log('service #1', e.request.url);
     e.respondWith(
       caches.open(dataCacheName).then(function(cache) {
         return fetch(e.request).then(function(response){
