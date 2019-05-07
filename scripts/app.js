@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.25", verCode:"20190506.01"},
+    appVer   : {verName: "0.1.26", verCode:"20190507.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -34,7 +34,7 @@
   app.config(function($routeProvider, $locationProvider) {
       var pathname = appStorage.appPath;
 
-      console.log("[00]app.config>appStorage", appStorage);
+      printAppLog('app', 'config', 'appStorage', appStorage);
       // $locationProvider.html5Mode(true);
       $routeProvider
         .when("/", {
@@ -120,6 +120,7 @@
     $scope.insertLinkCard = function() {
       $('#addLinkModal').modal('hide');
       var newLink = {};
+      newLink.key = appStorage.user.id;
       newLink.category = $scope.category;
       newLink.label = $scope.label;
       newLink.server = $scope.server;
@@ -369,6 +370,8 @@
               break;
 
             case "links" :
+              appStorage.saveToStorage("linkList", results);
+              printAppLog('appStorage','getHttp','linkList',results);
               appStorage.updateLinkCardList(results);
               break;
           }
@@ -435,15 +438,19 @@
   // 전체 앱 console log 관리
   function printAppLog(lvl1, lvl2, key, val){
     var logCtrlMap = new Map();
+    logCtrlMap.set("app"          , true);
+    logCtrlMap.set("app.config"   , true);
     logCtrlMap.set("initCtrl"     , true);
     logCtrlMap.set("initCtrl.signIn"    , true);
     logCtrlMap.set("initCtrl.autoSignIn", true);
     logCtrlMap.set("linkCardCtrl" , true);
     logCtrlMap.set("linkCardCtrl.insertLinkCard", true);
     logCtrlMap.set("appStorage"   , true);
+    logCtrlMap.set("appStorage.updateLinkCard"  , true);
     logCtrlMap.set("appStorage.clearStorage"    , true);
+    logCtrlMap.set("appStorage.getHttp"         , true);
 
-    var path = lvl1 + (lvl2==""?"":"."+lvl2);
+    var path = lvl1 + (lvl2 == "" ? "" : "."+lvl2);
     if (logCtrlMap.get(lvl1) && logCtrlMap.get(path)){
       console.log("INFO#"+logCnt +" ["+path+" #"+key+"]", val);
     }
@@ -467,6 +474,7 @@
     appStorage.user = JSON.parse(appStorage.user);
     appStorage.hostList = JSON.parse(localStorage.hostList);
     appStorage.autoSignIn = JSON.parse(localStorage.autoSignIn);
+    appStorage.linkList = JSON.parse(localStorage.linkList);
   }
 
   if ('serviceWorker' in navigator) {
