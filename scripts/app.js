@@ -3,7 +3,7 @@
 
   var appStorage = {
     appPath  : "/link-manager.pwa",
-    appVer   : {verName: "0.1.26", verCode:"20190507.01"},
+    appVer   : {verName: "0.1.27", verCode:"20190508.01"},
     user     : {id : "", name: "", pw: ""},
     autoSignIn : "",
     hostList : {},
@@ -119,13 +119,17 @@
     // [Fn:linkCardCtrl.insertLinkCard() - Link 카드 등록
     $scope.insertLinkCard = function() {
       $('#addLinkModal').modal('hide');
+      console.log($scope);
       var newLink = {};
       newLink.key = appStorage.user.id;
       newLink.category = $scope.category;
       newLink.label = $scope.label;
-      newLink.server = $scope.server;
+      newLink.server = $scope.selectServer[0].server;
       newLink.pathname = $scope.pathname;
       newLink.search = $scope.search;
+      newLink.seq = appStorage.getLinkMaxSeq('seq');
+      newLink.sub_seq = 1;
+
       printAppLog('linkCardCtrl', 'insertLinkCard', 'newLink', newLink);
       var sheetName = "links";
       var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
@@ -225,7 +229,6 @@
       subCard.querySelector('.card-last-updated').textContent = data.updated;
 
       var hostList = appStorage.hostList[data.server];
-
       var server = new Object();
       var dropdown = subCard.querySelector('.dropdown-menu');
       for (var i=0; i<hostList.length; i++){
@@ -393,16 +396,33 @@
     request.send();
   }
 
+  // [Fn:appStorage.getLinkMaxSeq] - Link Seq 가져오기 _190508
+  appStorage.getLinkMaxSeq = function(type){
+    // type = 'seq', 'sub_seq'
+    var linkList = appStorage.linkList;
+    var maxSeq = 1;
+    for (var i=0; i<linkList.length; i++){
+      if (type == 'seq'){
+        var linkSeq = linkList[i].seq;
+      } else if (type == 'sub_seq'){
+        var linkSeq = linkList[i].sub_seq;
+      }
+      maxSeq = (maxSeq < linkSeq ? linkSeq : maxSeq);
+    }
+    return (maxSeq+1);
+  }
+
   // [Fn:appStorage.saveToServer] - 서버에서 Http Post 통신 _190424
   appStorage.saveToServer = function($scope, $location) {
     console.log("통신;");
   }
+
   // [Fn:appStorage.saveLocalStorage] - 로컬저장소에 저장
   appStorage.saveToStorage = function(key, val) {
     // console.log("[appStorage.saveToStorage>key:val]",key,val);
     appStorage[key] = val;
     localStorage[key] = JSON.stringify(val);
-  };
+  }
 
   // 업데이트 시간 포맷 함수
   function formatDate(curDate) {
@@ -432,7 +452,7 @@
       }
   	}
   	return resultDate;
-  };
+  }
 
   var logCnt = 0;
   // 전체 앱 console log 관리
