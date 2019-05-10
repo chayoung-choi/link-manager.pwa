@@ -129,8 +129,11 @@
       newLink.search = $scope.search;
       newLink.seq = appStorage.getLinkMaxSeq('seq');
       newLink.sub_seq = 1;
+      newLink.updated = new Date();
 
       printAppLog('linkCardCtrl', 'insertLinkCard', 'newLink', newLink);
+      appStorage.updateLinkCard(newLink);
+
       var sheetName = "links";
       var url = "https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?"
               + "sheet_name=" + sheetName + "&"
