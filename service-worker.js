@@ -12,31 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var dataCacheName = 'linksData-v9';
-var cacheName = 'linkManagerPWA-9';
+var dataCacheName = 'linksData-v1';
+var cacheName = 'linkManagerPWA-v1';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
-  // ----------- include
-  '/link-manager.pwa/include/navigation.html',
-  // ----------- views
-  '/link-manager.pwa/views/sign.html',
-  '/link-manager.pwa/views/links.html',
-  '/link-manager.pwa/views/setting.html',
-  '/link-manager.pwa/views/deck.html',
-  // ----------- resource - img
-  '/link-manager.pwa/favicon.ico',
-  '/link-manager.pwa/resource/img/icons/verified_user.png',
-  '/link-manager.pwa/resource/img/logo/logo_ccy_128-128.png',
-  '/link-manager.pwa/resource/img/logo/logo_ccy_144-144.png',
-  '/link-manager.pwa/resource/img/logo/logo_ccy_152-152.png',
-  '/link-manager.pwa/resource/img/logo/logo_ccy_192-192.png',
-  '/link-manager.pwa/resource/img/logo/logo_ccy_256-256.png',
-  // ----------- resource - js
-  '/link-manager.pwa/resource/js/core.min.js',
-  '/link-manager.pwa/resource/js/sha256.min.js',
-  // ----------- app.js
-  '/link-manager.pwa/scripts/app.js'
 ];
 
 
