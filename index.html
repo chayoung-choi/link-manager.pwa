@@ -1,37 +1,57 @@
 <!DOCTYPE html>
-<html lang="kr" ng-app="myApp" ng-controller="initCtrl">
-<head>
-  <title>Link-Manager</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <base href="/link-manager.pwa/" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<html lang="en">
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-flat.css">
+<style>
+  body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+  body {font-size:16px;}
+  :root {
+    --cy-color-1: #5FCECf;
+  }
+  .cy-flat-color-mint {
+    color: #fff;
+    background-color: var( --cy-color-1 );
+	}
 
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-  
-  <script type="text/javascript" src="resource/js/core.min.js"></script>
-  <script type="text/javascript" src="resource/js/sha256.min.js"></script>
-  <link rel="manifest" href="/link-manager.pwa/manifest.json">
+</style>
+<body>
 
-  <link rel="shortcut icon" type="image/png" href="favicon.ico">
-  <!-- Add to home screen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="LM.PWA">
-  <link rel="apple-touch-icon" href="resource/img/logo/logo_ccy_128-128.png">
-  <!-- Windows용 타일 아이콘 -->
-  <meta name="msapplication-TileImage" content="resource/img/logo/logo_ccy_128-128.png">
-  <meta name="msapplication-TileColor" content="#4fb9a0">
-  <script>
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar cy-flat-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
+  <div class="w3-container">
+    <h3 class="w3-padding-16"><b>Link<br>Manager</b></h3>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Home</a>
+    <a href="#showcase" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Showcase</a>
+    <a href="#services" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Services</a>
+    <a href="#designers" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Designers</a>
+    <a href="#packages" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Packages</a>
+    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Contact</a>
+  </div>
+</nav>
 
-  </script>
-</head>
-<body class="bg-gray">
-  <script src="scripts/app.js"></script>
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large cy-flat-color-mint w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button cy-flat-color-mint w3-margin-right" onclick="w3_open()">☰</a>
+  <span>Link Manager</span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:290px;margin-right:40px">
+
+  <!-- Header -->
+  <div class="w3-container" style="margin-top:80px" id="showcase">
+
+  </div>
+
+
 </body>
 </html>
