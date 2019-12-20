@@ -1,0 +1,23 @@
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+:root {
+  --cy-color-mint: #5FCECf;
+  --cy-color-red: #D95A65;
+  --cy-color-yellow: #F6B13C;
+  --cy-color-green: #46C083;
+  --cy-color-blue: #00ADD4;
+}
+.cy-color-mint   { color: var( --cy-color-mint ); }
+.cy-color-red    { color: var( --cy-color-red ); }
+.cy-color-yellow { color: var( --cy-color-yellow ); }
+.cy-color-green  { color: var( --cy-color-green ); }
+.cy-color-blue   { color: var( --cy-color-blue ); }
+.cy-bg-color-mint   { color: #fff; background-color: var( --cy-color-mint ); }
+.cy-bg-color-red    { color: #fff; background-color: var( --cy-color-red ); }
+.cy-bg-color-yellow { color: #fff; background-color: var( --cy-color-yellow ); }
+.cy-bg-color-green  { color: #fff; background-color: var( --cy-color-green ); }
+.cy-bg-color-blue   { color: #fff; background-color: var( --cy-color-blue ); }
+.w3-bar {width: 100%;}
+
+.w30 {width:30%;}
+.w100 {width:100%;}
