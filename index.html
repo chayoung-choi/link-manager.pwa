@@ -1,25 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<title>Link Manager</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+  <title>Link Manager</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
 <body>
 
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
   <div class="w3-container">
-    <h3 class="w3-padding-16 w3-xxlarge"><b>Link<br>Manager</b></h3>
+      <h4 class=""><b>Link<br>Manager</b></h4>
   </div>
   <div class="w3-bar-block">
     <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">Home</a>
+    <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
     <a href="#menu1" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">관리시스템</a>
     <a href="#menu2" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">단말기 WebView</a>
     <a href="#menu3" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">동기화 서버</a>
     <a href="#menu4" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">기타</a>
+    <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
+    <a href="#menu5" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">MKTX JSON 분할</a>
+    <a href="#menu6" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">신규등록</a>
   </div>
 </nav>
 
@@ -49,11 +56,25 @@
     <div class="w3-row-padding">
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>관리시스템</h3>
+          <header class="w3-container w3-light-grey w3-cell-row pr-0">
+            <div class="w3-cell">
+              <h4>관리시스템</h4>
+            </div>
+            <div class="w3-cell w3-cell-middle w3-light-grey">
+              <div class="w3-dropdown-hover w3-right">
+                <button class="w3-button w3-light-grey"><i class="fa">&#xf013;</i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-border w3-card" style="right:0;min-width:100px;max-width:100px">
+                  <a href="#" class="w3-bar-item w3-button">수정</a>
+                  <a href="#" class="w3-bar-item w3-button">삭제</a>
+                </div>
+              </div>
+            </div>
           </header>
-          <div class="w3-container w3-padding">
-            <p class="w3-opacity">스마트MOS 관리시스템</p>
+          <div class="w3-container w3-padding w3-small">
+            <ul class="w3-ul">
+              <li><label>sp_zlogin_id</label><input class="w3-input w3-border" type="text" placeholder="sp_zlogin_id"></li>
+              <li><label>vtweg</label><input class="w3-input w3-border" type="text" placeholder="vtweg"></li>
+            </ul>
           </div>
           <div class="w3-bar w3-center w3-padding-small">
             <button class="w3-button w3-small w3-round-large cy-bg-color-green w30">Loal</button>
@@ -73,18 +94,31 @@
 
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>채점앱 다운로드</h3>
+          <header class="w3-container w3-light-grey w3-cell-row pr-0">
+            <div class="w3-cell">
+              <h4>채점앱 다운로드</h4>
+            </div>
+            <div class="w3-cell w3-cell-middle w3-light-grey">
+              <div class="w3-dropdown-hover w3-right">
+                <button class="w3-button w3-light-grey"><i class="fa">&#xf013;</i></button>
+                <div class="w3-dropdown-content w3-bar-block w3-border w3-card" style="right:0;min-width:100px;max-width:100px">
+                  <a href="#" class="w3-bar-item w3-button">수정</a>
+                  <a href="#" class="w3-bar-item w3-button">삭제</a>
+                </div>
+              </div>
+            </div>
           </header>
-          <div class="w3-container w3-padding">
-            <p class="w3-opacity">스마트MOS 관리시스템</p>
+          <div class="w3-container w3-padding w3-small card-params">
+            <button class="w3-button w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge">#<span>sp_zlogin_id</span></button>
+            <button class="w3-button w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge">#<span>vtweg</span></button>
+            <button class="w3-button w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge">#<span>teamCard</span></button>
           </div>
           <div class="w3-bar w3-center w3-padding-small">
-            <button class="w3-button w3-small w3-round-large cy-bg-color-green w30">Loal</button>
-            <button class="w3-button w3-small w3-round-large cy-bg-color-blue w30">QA</button>
+            <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green w30">Local</a>
+            <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue w30">QA</a>
             <div class="w3-dropdown-hover w30" style="float:none;">
-              <button class="w3-button w3-small w3-round-large cy-bg-color-red w100">Prod</button>
-              <div class="w3-dropdown-content w3-bar-block w3-border" style="min-width:100px;">
+              <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red w100">Prod</a>
+              <div class="w3-dropdown-content w3-bar-block w3-border w3-center" style="min-width:80px;max-width:80px;">
                 <a href="#" class="w3-bar-item w3-button w3-samll">WAS1</a>
                 <a href="#" class="w3-bar-item w3-button w3-samll">WAS2</a>
                 <a href="#" class="w3-bar-item w3-button w3-samll">WAS3</a>
@@ -106,11 +140,19 @@
     <div class="w3-row-padding">
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>신규회원등록 내역</h3>
+          <header class="w3-light-grey w3-bar">
+            <h4 class="w3-bar-item">신규회원등록 내역</h4>
+            <div class="w3-dropdown-hover w3-bar-item w3-right">
+              <button class="w3-button w3-right"><i class="fa">&#xf013;</i></button>
+              <div class="w3-dropdown-content w3-bar-block w3-card" style="min-width:80px;">
+                <a href="#" class="w3-bar-item w3-button">수정</a>
+                <a href="#" class="w3-bar-item w3-button">삭제</a>
+              </div>
+            </div>
           </header>
-          <div class="w3-container w3-padding-small">
-            <p class="w3-opacity">스마트MOS 관리시스템</p>
+          <div class="w3-container w3-padding w3-small">
+            <label>sp_zlogin_id</label><input class="w3-input w3-border" type="text" placeholder="sp_zlogin_id">
+            <label>vtweg</label><input class="w3-input w3-border" type="text" placeholder="vtweg">
           </div>
           <div class="w3-bar w3-center w3-padding-small">
             <button class="w3-button w3-small w3-round-large cy-bg-color-green w30">Loal</button>
@@ -130,31 +172,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>회원 클렌징 내역</h3>
-          </header>
-          <div class="w3-container w3-padding-small">
-            <p class="w3-opacity">스마트MOS 관리시스템</p>
-          </div>
-          <div class="w3-bar w3-center w3-padding-small">
-            <button class="w3-button w3-small w3-round-large cy-bg-color-green w30">Loal</button>
-            <button class="w3-button w3-small w3-round-large cy-bg-color-blue w30">QA</button>
-            <div class="w3-dropdown-hover w30" style="float:none;">
-              <button class="w3-button w3-small w3-round-large cy-bg-color-red w100">Prod</button>
-              <div class="w3-dropdown-content w3-bar-block w3-border" style="min-width:100px;">
-                <a href="#" class="w3-bar-item w3-button w3-samll">WAS1</a>
-                <a href="#" class="w3-bar-item w3-button w3-samll">WAS2</a>
-                <a href="#" class="w3-bar-item w3-button w3-samll">WAS3</a>
-                <a href="#" class="w3-bar-item w3-button w3-samll">WAS4</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>카드결제 내역</h3>
+            <h4>회원 클렌징 내역</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -178,7 +196,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>비회원 카드결제 내역</h3>
+            <h4>카드결제 내역</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -202,7 +220,31 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>긴급교재 신청</h3>
+            <h4>비회원 카드결제 내역</h4>
+          </header>
+          <div class="w3-container w3-padding-small">
+            <p class="w3-opacity">스마트MOS 관리시스템</p>
+          </div>
+          <div class="w3-bar w3-center w3-padding-small">
+            <button class="w3-button w3-small w3-round-large cy-bg-color-green w30">Loal</button>
+            <button class="w3-button w3-small w3-round-large cy-bg-color-blue w30">QA</button>
+            <div class="w3-dropdown-hover w30" style="float:none;">
+              <button class="w3-button w3-small w3-round-large cy-bg-color-red w100">Prod</button>
+              <div class="w3-dropdown-content w3-bar-block w3-border" style="min-width:100px;">
+                <a href="#" class="w3-bar-item w3-button w3-samll">WAS1</a>
+                <a href="#" class="w3-bar-item w3-button w3-samll">WAS2</a>
+                <a href="#" class="w3-bar-item w3-button w3-samll">WAS3</a>
+                <a href="#" class="w3-bar-item w3-button w3-samll">WAS4</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="w3-col m4 l3 w3-mobile w3-section">
+        <div class="w3-card">
+          <header class="w3-container w3-light-grey">
+            <h4>긴급교재 신청</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -226,7 +268,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>긴급부교재 신청</h3>
+            <h4>긴급부교재 신청</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -250,7 +292,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>수수료명세서</h3>
+            <h4>수수료명세서</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -274,7 +316,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>연말정산</h3>
+            <h4>연말정산</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -298,7 +340,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>지점주소</h3>
+            <h4>지점주소</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -322,7 +364,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>고객직접결제</h3>
+            <h4>고객직접결제</h4>
           </header>
           <div class="w3-container w3-padding-small">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -346,7 +388,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>교사 프로필</h3>
+            <h4>교사 프로필</h4>
           </header>
           <div class="w3-container w3-padding">
             <p class="w3-opacity">스마트MOS 관리시스템</p>
@@ -370,7 +412,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>고객직접퇴회</h3>
+            <h4>고객직접퇴회</h4>
           </header>
           <div class="w3-container w3-padding">
             <p class="w3-opacity">고객직접퇴회 내역</p>
@@ -403,7 +445,7 @@
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey">
-            <h3>동기화서버 API</h3>
+            <h4>동기화서버 API</h4>
           </header>
           <div class="w3-container w3-padding">
             <p class="w3-opacity"></p>
@@ -430,7 +472,7 @@
     <div class="w3-col m4 l3 w3-mobile w3-section" id="cardTemp">
       <div class="w3-card">
         <header class="w3-container w3-light-grey">
-          <h3>타이틀</h3>
+          <h4>타이틀</h4>
         </header>
         <div class="w3-container w3-padding">
           <p class="w3-opacity">메모 설명</p>
@@ -455,189 +497,35 @@
 
   <hr>
 
-  <div class="w3-container w3-section" id="menu22">
-    <h1 class="w3-xlarge cy-color-mint"><b>Services.</b></h1>
+  <div class="w3-container w3-section" id="menu4">
+    <h1 class="w3-xlarge cy-color-mint"><b>기타.</b></h1>
     <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
-    <div class="w3-row-padding">
-      <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>John Doe</h3>
-          </header>
-          <div class="w3-container">
-            <p>1 new friend request</p>
-            <hr>
-            <img src="img_avatar3.png" alt="Avatar" class="w3-left w3-circle">
-            <p>President/CEO at Mighty Schools...</p>
-          </div>
-          <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
-        </div>
-      </div>
-
-      <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>John Doe</h3>
-          </header>
-          <div class="w3-container">
-            <p>1 new friend request</p>
-            <hr>
-            <img src="img_avatar3.png" alt="Avatar" class="w3-left w3-circle">
-            <p>President/CEO at Mighty Schools...</p>
-          </div>
-          <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
-        </div>
-      </div>
-
-      <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>John Doe</h3>
-          </header>
-          <div class="w3-container">
-            <p>1 new friend request</p>
-            <hr>
-            <img src="img_avatar3.png" alt="Avatar" class="w3-left w3-circle">
-            <p>President/CEO at Mighty Schools...</p>
-          </div>
-          <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
-        </div>
-      </div>
-
-      <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
-          <header class="w3-container w3-light-grey">
-            <h3>John Doe</h3>
-          </header>
-          <div class="w3-container">
-            <p>1 new friend request</p>
-            <hr>
-            <img src="img_avatar3.png" alt="Avatar" class="w3-left w3-circle">
-            <p>President/CEO at Mighty Schools...</p>
-          </div>
-          <button class="w3-button w3-block w3-dark-grey">+ Connect</button>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- Designers -->
-  <div class="w3-container" id="menu33" style="margin-top:75px">
-    <h1 class="w3-xlarge cy-color-mint"><b>Designers.</b></h1>
-    <hr style="width:50px;border:5px solid #5FCECf" class="w3-round">
-    <p>The best team in the world.</p>
-    <p>We are lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-    dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor
-    incididunt ut labore et quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </p>
-    <p><b>Our designers are thoughtfully chosen</b>:</p>
+<hr>
+
+  <div class="w3-container w3-section" id="menu5">
+    <h1 class="w3-xlarge cy-color-mint"><b>MKTX JSON 분할.</b></h1>
+    <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
   </div>
 
-  <!-- The Team -->
-  <div class="w3-row-padding w3-grayscale">
-    <div class="w3-col m4 w3-margin-bottom">
-      <div class="w3-light-grey">
+<hr>
 
-        <div class="w3-container">
-          <h3>John Doe</h3>
-          <p class="w3-opacity">CEO & Founder</p>
-          <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-        </div>
-      </div>
-    </div>
-    <div class="w3-col m4 w3-margin-bottom">
-      <div class="w3-light-grey">
-
-        <div class="w3-container">
-          <h3>Jane Doe</h3>
-          <p class="w3-opacity">Designer</p>
-          <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-        </div>
-      </div>
-    </div>
-    <div class="w3-col m4 w3-margin-bottom">
-      <div class="w3-light-grey">
-
-        <div class="w3-container">
-          <h3>Mike Ross</h3>
-          <p class="w3-opacity">Architect</p>
-          <p>Phasellus eget enim eu lectus faucibus vestibulum. Suspendisse sodales pellentesque elementum.</p>
-        </div>
-      </div>
-    </div>
+  <div class="w3-container w3-section" id="menu6">
+    <h1 class="w3-xlarge cy-color-mint"><b>신규등록.</b></h1>
+    <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
   </div>
 
-  <!-- Packages / Pricing Tables -->
-  <div class="w3-container" id="menu4" style="margin-top:75px">
-    <h1 class="w3-xxxlarge cy-color-mint"><b>Packages.</b></h1>
-    <hr style="width:50px;border:5px solid red" class="w3-round">
-    <p>Some text our prices. Lorem ipsum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure</p>
+<hr>
+
+  <div class="w3-container w3-section" id="menu7">
+    <h1 class="w3-xlarge cy-color-mint"><b>설정.</b></h1>
+    <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
   </div>
-
-  <div class="w3-row-padding">
-    <div class="w3-half w3-margin-bottom">
-      <ul class="w3-ul w3-light-grey w3-center">
-        <li class="w3-dark-grey w3-xlarge w3-padding-32">Basic</li>
-        <li class="w3-padding-16">Floorplanning</li>
-        <li class="w3-padding-16">10 hours support</li>
-        <li class="w3-padding-16">Photography</li>
-        <li class="w3-padding-16">20% furniture discount</li>
-        <li class="w3-padding-16">Good deals</li>
-        <li class="w3-padding-16">
-          <h2>$ 199</h2>
-          <span class="w3-opacity">per room</span>
-        </li>
-        <li class="w3-light-grey w3-padding-24">
-          <button class="w3-button w3-white w3-padding-large w3-hover-black">Sign Up</button>
-        </li>
-      </ul>
-    </div>
-
-    <div class="w3-half">
-      <ul class="w3-ul w3-light-grey w3-center">
-        <li class="cy-bg-color-mint w3-xlarge w3-padding-32">Pro</li>
-        <li class="w3-padding-16">Floorplanning</li>
-        <li class="w3-padding-16">50 hours support</li>
-        <li class="w3-padding-16">Photography</li>
-        <li class="w3-padding-16">50% furniture discount</li>
-        <li class="w3-padding-16">GREAT deals</li>
-        <li class="w3-padding-16">
-          <h2>$ 249</h2>
-          <span class="w3-opacity">per room</span>
-        </li>
-        <li class="w3-light-grey w3-padding-24">
-          <button class="w3-button cy-bg-color-mint w3-padding-large w3-hover-black">Sign Up</button>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- Contact -->
-  <div class="w3-container" id="menu5" style="margin-top:75px">
-    <h1 class="w3-xxxlarge cy-color-mint"><b>Contact.</b></h1>
-    <hr style="width:50px;border:5px solid red" class="w3-round">
-    <p>Do you want us to style your home? Fill out the form and fill me in with the details :) We love meeting new people!</p>
-    <form action="/action_page.php" target="_blank">
-      <div class="w3-section">
-        <label>Name</label>
-        <input class="w3-input w3-border" type="text" name="Name" required>
-      </div>
-      <div class="w3-section">
-        <label>Email</label>
-        <input class="w3-input w3-border" type="text" name="Email" required>
-      </div>
-      <div class="w3-section">
-        <label>Message</label>
-        <input class="w3-input w3-border" type="text" name="Message" required>
-      </div>
-      <button type="submit" class="w3-button w3-block w3-padding-large cy-bg-color-mint w3-margin-bottom">Send Message</button>
-    </form>
-  </div>
-
 <!-- End page content -->
 </div>
 
-<!-- W3.CSS Container -->
+<!-- Footer Container -->
 <div class="w3-light-grey w3-container w3-padding-8" style="margin-top:2rem;padding:1rem">
   <img class="w3-right" src="images/logo/title_bm.png" alt="logo" style="width:20rem;">
 </div>
@@ -652,14 +540,6 @@ function w3_open() {
 function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
   document.getElementById("myOverlay").style.display = "none";
-}
-
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
 }
 </script>
 

@@ -17,7 +17,10 @@ body {font-size:16px;}
 .cy-bg-color-yellow { color: #fff; background-color: var( --cy-color-yellow ); }
 .cy-bg-color-green  { color: #fff; background-color: var( --cy-color-green ); }
 .cy-bg-color-blue   { color: #fff; background-color: var( --cy-color-blue ); }
-.w3-bar {width: 100%;}
 
-.w30 {width:30%;}
-.w100 {width:100%;}
+.w30 { width:30%;}
+.w100 { width:100%;}
+.pr-0 {padding-right: 0px;}
+.clearfix { overflow: auto; }
+
+.card-params button {margin-bottom: 2px;}
