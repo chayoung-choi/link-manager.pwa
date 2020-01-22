@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head>
   <title>Link Manager</title>
   <meta charset="UTF-8">
@@ -11,22 +11,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
-
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
   <div class="w3-container">
-      <h4 class=""><b>Link<br>Manager</b></h4>
+      <h4 class="w3-xlarge"><b>Link<br>Manager</b></h4>
   </div>
   <div class="w3-bar-block">
-    <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">Home</a>
+    <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">Home</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menu1" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">관리시스템</a>
-    <a href="#menu2" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">단말기 WebView</a>
-    <a href="#menu3" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">동기화 서버</a>
-    <a href="#menu4" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">기타</a>
+    <div id="viewSidebar"></div>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menu5" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">MKTX JSON 분할</a>
-    <a href="#menu6" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">신규등록</a>
+    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">설정</a>
+    <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
+    <input type="text" id="userKey" name="userKey" placeholder="user key.." value="smos">
   </div>
 </nav>
 
@@ -39,6 +36,56 @@
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
+<template id="sidebarTemplate">
+  <hr style="border:0.5px solid #fff; margin:5px;" class="w3-round w3-opacity sidebar-line">
+  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white sidebar-item">NAME</a>
+</template>
+
+<template id="mainSectionTemplate">
+  <div class="w3-container w3-section main-section" data-updated="" id="">
+    <h1 class="w3-xlarge cy-color-mint section-title"><b>Section Title.</b></h1>
+    <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
+    <div class="w3-row-padding link-content"></div>
+  </div>
+
+  <div class="w3-col m4 l3 w3-mobile w3-section link-card">
+    <div class="w3-card">
+      <header class="w3-container w3-light-grey w3-cell-row pr-0">
+        <div class="w3-cell">
+          <h4 class="card-title">채점앱 다운로드</h4>
+        </div>
+        <div class="w3-cell w3-cell-middle w3-light-grey">
+          <div class="w3-dropdown-hover w3-right">
+            <button class="w3-button w3-light-grey"><i class="fa w3-text-gray">&#xf013;</i></button>
+            <div class="w3-dropdown-content w3-bar-block w3-border w3-card" style="right:0;min-width:100px;max-width:100px">
+              <a href="#" class="w3-bar-item w3-button btn-update" onclick="alert('수정');">수정</a>
+              <a href="#" class="w3-bar-item w3-button btn-delete" onclick="alert('삭제');">삭제</a>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="w3-container w3-padding w3-small card-params">
+        <button class="w3-button w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge">#<span>sp_zlogin_id</span></button>
+        <button class="w3-button w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge">#<span>vtweg</span></button>
+        <button class="w3-button w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge">#<span>teamCard</span></button>
+      </div>
+      <div class="w3-bar w3-center w3-padding-small">
+        <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green w30" target="_blank">Local</a>
+        <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue w30" target="_blank">QA</a>
+        <div class="w3-dropdown-hover w30" style="float:none;">
+          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red w100" target="_blank">Prod</a>
+          <div class="w3-dropdown-content w3-bar-block w3-border w3-center" style="min-width:80px;max-width:80px;">
+            <a href="#" class="w3-bar-item w3-button w3-samll" target="_blank">WAS1</a>
+            <a href="#" class="w3-bar-item w3-button w3-samll" target="_blank">WAS2</a>
+            <a href="#" class="w3-bar-item w3-button w3-samll" target="_blank">WAS3</a>
+            <a href="#" class="w3-bar-item w3-button w3-samll" target="_blank">WAS4</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:290px;margin-right:40px;">
 
@@ -49,11 +96,13 @@
     <h1 class="w3-xxlarge"><b>Daekyo CNS SmartMOS</b></h1>
   </div>
 
+  <div id="linksSection">
+
   <!-- Header -->
   <div class="w3-container w3-section" id="menu1">
     <h1 class="w3-xlarge cy-color-mint"><b>관리시스템.</b></h1>
     <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
-    <div class="w3-row-padding">
+    <div class="w3-row-padding link-content">
       <div class="w3-col m4 l3 w3-mobile w3-section">
         <div class="w3-card">
           <header class="w3-container w3-light-grey w3-cell-row pr-0">
@@ -64,8 +113,8 @@
               <div class="w3-dropdown-hover w3-right">
                 <button class="w3-button w3-light-grey"><i class="fa">&#xf013;</i></button>
                 <div class="w3-dropdown-content w3-bar-block w3-border w3-card" style="right:0;min-width:100px;max-width:100px">
-                  <a href="#" class="w3-bar-item w3-button">수정</a>
-                  <a href="#" class="w3-bar-item w3-button">삭제</a>
+                  <a href="#" class="w3-bar-item w3-button btn-update">수정</a>
+                  <a href="#" class="w3-bar-item w3-button btn-delete">삭제</a>
                 </div>
               </div>
             </div>
@@ -93,17 +142,17 @@
       </div>
 
       <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
+        <div class="w3-card link-card">
           <header class="w3-container w3-light-grey w3-cell-row pr-0">
             <div class="w3-cell">
               <h4>채점앱 다운로드</h4>
             </div>
             <div class="w3-cell w3-cell-middle w3-light-grey">
               <div class="w3-dropdown-hover w3-right">
-                <button class="w3-button w3-light-grey"><i class="fa">&#xf013;</i></button>
+                <button class="w3-button w3-light-grey"><i class="fa w3-text-gray">&#xf013;</i></button>
                 <div class="w3-dropdown-content w3-bar-block w3-border w3-card" style="right:0;min-width:100px;max-width:100px">
-                  <a href="#" class="w3-bar-item w3-button">수정</a>
-                  <a href="#" class="w3-bar-item w3-button">삭제</a>
+                  <a href="#" class="w3-bar-item w3-button btn-update">수정</a>
+                  <a href="#" class="w3-bar-item w3-button btn-delete">삭제</a>
                 </div>
               </div>
             </div>
@@ -139,7 +188,7 @@
     <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
     <div class="w3-row-padding">
       <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
+        <div class="w3-card link-card">
           <header class="w3-light-grey w3-bar">
             <h4 class="w3-bar-item">신규회원등록 내역</h4>
             <div class="w3-dropdown-hover w3-bar-item w3-right">
@@ -170,7 +219,7 @@
         </div>
       </div>
       <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
+        <div class="w3-card link-card">
           <header class="w3-container w3-light-grey">
             <h4>회원 클렌징 내역</h4>
           </header>
@@ -194,7 +243,7 @@
       </div>
 
       <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
+        <div class="w3-card link-card">
           <header class="w3-container w3-light-grey">
             <h4>카드결제 내역</h4>
           </header>
@@ -218,7 +267,7 @@
       </div>
 
       <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
+        <div class="w3-card link-card">
           <header class="w3-container w3-light-grey">
             <h4>비회원 카드결제 내역</h4>
           </header>
@@ -242,7 +291,7 @@
       </div>
 
       <div class="w3-col m4 l3 w3-mobile w3-section">
-        <div class="w3-card">
+        <div class="w3-card link-card">
           <header class="w3-container w3-light-grey">
             <h4>긴급교재 신청</h4>
           </header>
@@ -494,8 +543,8 @@
     </div>
   </template>
 
-
-  <hr>
+</div>
+<hr>
 
   <div class="w3-container w3-section" id="menu4">
     <h1 class="w3-xlarge cy-color-mint"><b>기타.</b></h1>
@@ -530,6 +579,7 @@
   <img class="w3-right" src="images/logo/title_bm.png" alt="logo" style="width:20rem;">
 </div>
 
+<script src="scripts/app.js" async></script>
 <script>
 // Script to open and close sidebar
 function w3_open() {
