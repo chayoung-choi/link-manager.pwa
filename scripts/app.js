@@ -23,23 +23,20 @@
   var btnDelete = document.querySelectorAll(".btn-delete");
   var btnUpdate = document.querySelectorAll(".btn-update");
 
-// [Card -> update btn]
-  Array.from(btnUpdate).forEach((el) => {
-    el.addEventListener('click', function(){
-      alert("수정");
-    });
-  });
+// // [Card -> update btn]
+//   Array.from(btnUpdate).forEach((el) => {
+//     el.addEventListener('click', function(){
+//       alert("수정");
+//     });
+//   });
+//
+// // [Card -> delete btn]
+//   Array.from(btnDelete).forEach((el) => {
+//     el.addEventListener('click', function(){
+//       alert("삭제");
+//     });
+//   });
 
-// [Card -> delete btn]
-  Array.from(btnDelete).forEach((el) => {
-    el.addEventListener('click', function(){
-      alert("삭제");
-    });
-  });
-
-  // document.getElementById('menuHome').addEventListener('click', function(){
-  //   app.getServerDate('MENU');
-  // });
   $(function(){
     console.log('바로');
     app.getServerDate('HOST');
@@ -78,36 +75,67 @@ app.updateSidebar = function(data) {
   }
 }
 
-// #메인 lINKS CARD 설정
-app.updateLinkCards = function(data) {
-  document.getElementById('linksSection').innerHTML = '';
-  var mainSectionTemplate = document.getElementById('mainSectionTemplate');
-
-  // #1. section 설정
+// #View Link Card Section
+app.updateViewLinkCardSection = function(data){
+  document.getElementById('viewLinkCardSection').innerHTML = '';
   var menuList = app.menuData;
+
   for (var i=0; i<menuList.length; i++){
-    var clonContent = mainSectionTemplate.content.cloneNode(true);
-    var section = clonContent.querySelector('.main-section');
+    var clonContent = app.mainSectionTemplate.content.cloneNode(true);
+    var section = clonContent.querySelector('.section-box');
     var hr = document.createElement('hr');
     var menuCode = menuList[i].MENU_CODE;
 
     section.id = menuCode;
     section.querySelector('.section-title b').textContent = menuList[i].MENU_NAME+'.';
-    document.getElementById('linksSection').appendChild(section);
-    document.getElementById('linksSection').appendChild(hr);
-
-    // #2. card 설정
-    for (var j=0; j<linkList.length; j++){
-      var link = linkList[j];
-      if ( menuCode == link.MENU_CODE ){
-        var card = clonContent.querySelector('.link-card').cloneNode(true);
-        card.querySelector('.card-title').textContent = link.TITLE;
-        card.dataset.linkId = link.SEQ;
-        card.dataset.updated = link.UPDATED;
-        document.getElementById(link.MENU_CODE).querySelector('.link-content').appendChild(card);
-      }
-    }
+    document.getElementById('viewLinkCardSection').appendChild(section);
+    document.getElementById('viewLinkCardSection').appendChild(hr);
   }
+
+  app.updateLinkCardList(data);
+}
+
+// Link Card List Update
+app.updateLinkCardList = function(data){
+  Array.from(data).forEach((el) => {
+    app.updateLinkCard(el);
+  });
+}
+
+// Link Card Update
+app.updateLinkCard = function(data){
+  if (document.getElementById(data.MENU_CODE) == null) { return; }
+
+  var card = app.mainSectionTemplate.content.querySelector('.link-card').cloneNode(true);
+  card.querySelector('.card-title').textContent = data.TITLE;
+  card.dataset.linkId = data.SEQ;
+  card.dataset.updated = data.UPDATED;
+  card.querySelector('.btn-update').addEventListener('click', function(){
+    fn_updateCard();
+  });
+  card.querySelector('.btn-delete').addEventListener('click', function(){
+    fn_deleteCard();
+  });
+
+  // param hashtag icon
+  var clonParamTagIcon = app.mainSectionTemplate.content.querySelector('.param-tag');
+  var paramJson = gfn.stringParserJson(data.PARAMS, '&', '=');
+  for (var key in paramJson){
+    var paramTagIcon = clonParamTagIcon.cloneNode(true);
+    paramTagIcon.textContent = '#' + key;
+    paramTagIcon.dataset[key] = paramJson[key];
+    card.querySelector('.card-params').appendChild(paramTagIcon);
+  }
+
+  // link url L,Q,O,W~
+  Array.from(app.hostData[data.SERVER]).forEach((host) => {
+    var hostType = host.TYPE.toLowerCase();
+    var fullUrl = host.ORIGIN + data.PATHNAME + '?' + data.PARAMS;
+    card.querySelector('.host-type-' + hostType).href = fullUrl;
+  });
+
+
+  document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
 }
 
 /*****************************************************************************
@@ -140,8 +168,44 @@ function fn_hostParser(hostList) {
     }
     hostData[server] = arr;
   }
+  console.log('hostData', hostData);
   return hostData;
 }
+
+function fn_updateCard() {
+  alert("app.card upd");
+}
+function fn_deleteCard() {
+  alert("app.card del");
+}
+
+var gfn = {
+  nvl : function(str){
+    if (typeof str == "undefined" || str == null || str == "") {
+      str = "";
+    }
+    return str;
+  },
+  nvl2 : function(str, defaultVal){
+    if (gfn.nvl2(str) == "") {
+      str = defaultVal;
+    }
+    return str;
+  },
+  stringParserJson : function(str, separator, keySeparator) {
+    if (gfn.nvl(str) == ''){ return; }
+    var map = str.split(separator);
+    console.log(map);
+    var result = [];
+    Array.from(map).forEach((el) => {
+      var key = el.split(keySeparator)[0];
+      var val = el.split(keySeparator)[1];
+      result[key] = val;
+    });
+    console.log(result);
+    return result;
+  }
+};
 
 /*****************************************************************************
  *
@@ -184,7 +248,8 @@ app.getServerDate = function(sheetName) {
               app.menuData = results;
               break;
             case 'LINKS':
-              app.updateLinkCards(results);
+              // app.updateLinkCards(results);
+              app.updateViewLinkCardSection(results);
               break;
             case 'HOST':
               app.hostData = fn_hostParser(results);
