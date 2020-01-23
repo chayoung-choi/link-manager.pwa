@@ -285,9 +285,9 @@ app.getServerDate = function(sheetName) {
   // xhr.send(formData); // 폼 데이터 객체 전송
 
 
-  // if ('serviceWorker' in navigator) {
-  //   navigator.serviceWorker
-  //            .register('./service-worker.js')
-  //            .then(function() { console.log('Service Worker Registered'); });
-  // }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('./service-worker.js')
+             .then(function() { console.log('Service Worker Registered'); });
+  }
 })();
