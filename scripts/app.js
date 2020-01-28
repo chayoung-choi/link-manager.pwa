@@ -4,8 +4,8 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.1.2", verCode:"20200116.01"},
-    userInfo : {id: 'smos'},
+    appVer   : {verName: "0.1.3", verCode:"20200123.01"},
+    userInfo : {id: ''},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
@@ -16,9 +16,14 @@
    * Event listeners for UI elements
    *
    ****************************************************************************/
-  // document.getElementById('butRefresh').addEventListener('click', function() {
-  //
-  // });
+  document.getElementById('btnRefresh').addEventListener('click', function() {
+    // console.log(this.children[0].classList.add('w3-spin')) = 'w3-spin';
+    // console.log($(this));
+    this.children[0].classList.add('w3-spin');
+    app.getServerDate('HOST');
+    app.getServerDate('MENU');
+  });
+
   var linkCards = document.querySelectorAll(".link-card");
   var btnDelete = document.querySelectorAll(".btn-delete");
   var btnUpdate = document.querySelectorAll(".btn-update");
@@ -250,6 +255,7 @@ app.getServerDate = function(sheetName) {
             case 'LINKS':
               // app.updateLinkCards(results);
               app.updateViewLinkCardSection(results);
+              document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
               break;
             case 'HOST':
               app.hostData = fn_hostParser(results);
@@ -284,6 +290,26 @@ app.getServerDate = function(sheetName) {
   // xhr.open('POST', 'https://www.zerocho.com/api/post/formdata');
   // xhr.send(formData); // 폼 데이터 객체 전송
 
+  app.saveToStorage = function(key, val){
+    app[key] = val;
+    localStorage[key] = JSON.stringfy(val);
+  }
+/************************************************************************
+ * Code required to start the app
+ ************************************************************************/
+ app.userInfo = localStorage.userInfo;
+ if (app.selectedCities) {
+    app.userInfo = JSON.parse(app.userInfo);
+    // app.selectedCities.forEach(function(city) {
+    //   app.getForecast(city.key, city.label);
+    // });
+  } else {
+    // app.updateForecastCard(initialWeatherForecast);
+    // app.selectedCities = [
+    //   {key: initialWeatherForecast.key, label: initialWeatherForecast.label}
+    // ];
+    // app.saveSelectedCities();
+  }
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker
