@@ -18,7 +18,7 @@ var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
   '/link-manager.pwa/scripts/app.js',
-  '/link-manager.pwa/css/style.css',
+  '/link-manager.pwa/css/style.css'
 ];
 
 

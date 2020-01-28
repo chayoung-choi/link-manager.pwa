@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.1.3", verCode:"20200123.01"},
+    appVer   : {verName: "0.1.3", verCode:"20200128.01"},
     userInfo : {id: ''},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
@@ -43,9 +43,9 @@
 //   });
 
   $(function(){
-    console.log('바로');
-    app.getServerDate('HOST');
-    app.getServerDate('MENU');
+    // console.log('바로');
+    // app.getServerDate('HOST');
+    // app.getServerDate('MENU');
   });
 
 /*****************************************************************************
@@ -200,15 +200,16 @@ var gfn = {
   stringParserJson : function(str, separator, keySeparator) {
     if (gfn.nvl(str) == ''){ return; }
     var map = str.split(separator);
-    console.log(map);
     var result = [];
     Array.from(map).forEach((el) => {
       var key = el.split(keySeparator)[0];
       var val = el.split(keySeparator)[1];
       result[key] = val;
     });
-    console.log(result);
     return result;
+  },
+  console : function(msg, data) {
+    console.log('['+app.appVer.verName+']', msg, data);
   }
 };
 
@@ -217,8 +218,8 @@ var gfn = {
  * Methods for dealing with the model
  *
  ****************************************************************************/
-// #서버 GET 통신
-app.getServerDate = function(sheetName) {
+  // #서버 GET 통신
+  app.getServerDate = function(sheetName) {
     // var id = app.userInfo.id;
     var id = document.getElementById('userKey').value;
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?'
@@ -231,8 +232,9 @@ app.getServerDate = function(sheetName) {
         if (response) {
           response.json().then(function updateFromCache(json) {
             var results = json.list;
-            console.log('[app.getServerDate] 캐시 매핑', results);
-            // app.updateForecastCard(results);
+            // console.log('[app.getServerDate] 캐시 매핑', results);
+            gfn.console('[app.getServerDate.'+sheetName+'] 캐시 매핑', results);
+            app.processMappingData(sheetName, results);
           });
         }
       });
@@ -244,29 +246,12 @@ app.getServerDate = function(sheetName) {
         if (request.status === 200) {
           var response = JSON.parse(request.response);
           var results = response.list;
-          console.log('[app.getServerDate.'+sheetName+'] 서버 통신 성공', results);
-
-          switch (sheetName) {
-            case 'MENU':
-              app.updateSidebar(results);
-              app.getServerDate('LINKS');
-              app.menuData = results;
-              break;
-            case 'LINKS':
-              // app.updateLinkCards(results);
-              app.updateViewLinkCardSection(results);
-              document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
-              break;
-            case 'HOST':
-              app.hostData = fn_hostParser(results);
-              break;
-            default:
-
-          }
+          gfn.console('[app.getServerDate.'+sheetName+'] 서버 통신', results);
+          app.processMappingData(sheetName, results);
         }
       } else {
         // Return the initial weather forecast since no data is available.
-        console.log('[app.getServerDate] 서버 통신 실패');
+        gfn.console('[app.getServerDate.'+sheetName+'] 서버 통신 실패');
         // app.updateForecastCard(initialWeatherForecast);
       }
     };
@@ -274,6 +259,29 @@ app.getServerDate = function(sheetName) {
     request.send();
   }
 
+  // #서버(캐시) 데이터 매핑 프로세스
+  app.processMappingData = function(sheetName, data){
+    if (data.length <= 0) {
+      return;
+    }
+    switch (sheetName) {
+      case 'MENU':
+        app.updateSidebar(data);
+        app.getServerDate('LINKS');
+        app.saveToStorage('menuData', data);
+        break;
+      case 'LINKS':
+        app.updateViewLinkCardSection(data);
+        app.saveToStorage('linksData', data);
+        app.saveToStorage('userInfo', {'id': document.getElementById('userKey').value});
+        document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
+        break;
+      case 'HOST':
+        app.saveToStorage('hostData', fn_hostParser(data));
+        break;
+      default:
+    }
+  }
 
   // POST 통신
   // var xhr = new XMLHttpRequest();
@@ -292,23 +300,36 @@ app.getServerDate = function(sheetName) {
 
   app.saveToStorage = function(key, val){
     app[key] = val;
-    localStorage[key] = JSON.stringfy(val);
+    localStorage[key] = JSON.stringify(val);
   }
 /************************************************************************
  * Code required to start the app
  ************************************************************************/
- app.userInfo = localStorage.userInfo;
- if (app.selectedCities) {
-    app.userInfo = JSON.parse(app.userInfo);
-    // app.selectedCities.forEach(function(city) {
-    //   app.getForecast(city.key, city.label);
-    // });
+  app.userInfo = localStorage.userInfo;
+  gfn.console('init', localStorage.userInfo)
+  if (app.userInfo) {
+    // 1. User 정보
+    app.userInfo = JSON.parse(localStorage.userInfo);
+    document.getElementById('userKey').value = app.userInfo.id;
+
+    // 2. Host 정보
+    app.hostData = JSON.parse(localStorage.hostData);
+
+    // 3. Menu 정보
+    app.menuData = JSON.parse(localStorage.menuData);
+    app.updateSidebar(app.menuData);
+
+    // 4. Link 정보
+    app.linksData = JSON.parse(localStorage.linksData);
+    app.updateViewLinkCardSection(app.linksData);
   } else {
-    // app.updateForecastCard(initialWeatherForecast);
-    // app.selectedCities = [
-    //   {key: initialWeatherForecast.key, label: initialWeatherForecast.label}
-    // ];
-    // app.saveSelectedCities();
+    console.log("localStorage not available");
+  // app.updateForecastCard(initialWeatherForecast);
+  // app.selectedCities = [
+  //   {key: initialWeatherForecast.key, label: initialWeatherForecast.label}
+  // ];
+  // app.saveSelectedCities();
+
   }
 
   if ('serviceWorker' in navigator) {
