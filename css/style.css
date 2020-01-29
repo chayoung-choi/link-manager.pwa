@@ -20,7 +20,6 @@ body {font-size:16px;}
 
 .w30 { width:30%;}
 .w100 { width:100%;}
-.pr-0 {padding-right: 0px;}
 .clearfix { overflow: auto; }
 
 .card-params button {margin-bottom: 2px;}
@@ -45,3 +44,16 @@ input[type=text], select {
   border-radius: 4px;
   box-sizing: border-box;
 }
+#menuSetting .w3-card:hover {cursor: pointer;}
+/* #menuSetting .w3-card:hover {cursor: pointer;background-color: #f1f1f1;}
+#menuSetting .w3-card:hover.not(.w3-hover-opacity-off) */
+#menuSetting .w3-card i.fa-angle-right {color: #7b818d; padding-left: 8px;}
+
+/* #menuSetting .w3-ul .li-header {background-color:#f4f5f9;color:#7b818d;}
+#menuSetting .w3-ul {border: 1px solid #eee;}
+#menuSetting .w3-ul li {border-bottom: 1px solid #eee;}
+#menuSetting .w3-ul li:last-child {border-bottom: none;}
+#menuSetting .w3-ul button {padding:0px;}
+#menuSetting .w3-ul label {padding-left:24px;cursor:pointer;}
+#menuSetting .w3-ul li:hover {cursor: pointer;background-color: #f1f1f1;}
+#menuSetting .w3-ul i.fa-angle-right {color: #7b818d; padding-left: 8px;} */

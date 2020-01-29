@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.1.3", verCode:"20200128.01"},
+    appVer   : {verName: "0.1.4", verCode:"20200129.01"},
     userInfo : {id: ''},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
@@ -22,6 +22,15 @@
     this.children[0].classList.add('w3-spin');
     app.getServerDate('HOST');
     app.getServerDate('MENU');
+  });
+
+  document.getElementById('navFooterAppVer').textContent = 'APP VER '+app.appVer.verName;
+  document.getElementById('btnReset').addEventListener('click', function() {
+    if (confirm('캐시 데이터를 초기화하시겠습니까?')){
+      localStorage.clear();
+      alert('초기화 완료');
+      location.reload();
+    }
   });
 
   var linkCards = document.querySelectorAll(".link-card");

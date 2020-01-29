@@ -30,8 +30,17 @@
 <body>
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
-  <div class="w3-container">
+  <!-- <div class="w3-container">
+
       <h4 class="w3-xlarge"><b>Link<br>Manager</b></h4>
+  </div> -->
+  <div class="w3-cell-row">
+    <div class="w3-cell w3-cell-middle">
+      <img class="w3-right" src="images/logo/icon-outline.png" alt="logo" style="width:70px;">
+    </div>
+    <div class="w3-cell w3-padding-small">
+      <h4 class="w3-xlarge"><b>Link<br>Manager</b></h4>
+    </div>
   </div>
   <div class="w3-bar-block">
     <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">Home</a>
@@ -53,16 +62,21 @@
     <!-- <input type="text" id="userKey" name="userKey"  placeholder="user key.." value="">
     <button class="w3-button w3-light-grey w3-round w3-samll"><i class="fa fa-refresh w3-text-gray"></i></button> -->
   </div>
+  <div class="w3-display-bottommiddle w100 nav-footer w3-padding w3-medium w3-center" style="background:#41b6b7;">
+    <span id="navFooterAppVer"></span>
+  </div>
 </nav>
 
 <!-- Top menu on small screens -->
 <header class="w3-container w3-top w3-hide-large cy-bg-color-mint w3-xlarge w3-padding">
-  <a href="javascript:void(0)" class="w3-button cy-bg-color-mint w3-margin-right" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+  <a href="javascript:void(0)" class="w3-button cy-bg-color-mint" onclick="w3_open()">
+    <i class="fa fa-bars"></i>
+  </a>
   <span>Link Manager</span>
 </header>
 
 <!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 
 <!-- !PAGE CONTENT! -->
 <div class="w3-main" style="margin-left:290px;margin-right:40px;">
@@ -78,7 +92,7 @@
   <section id="viewLinkCardSection">
     <div class="w3-container w3-section" id="menu1">
       <h1 class="w3-xlarge cy-color-mint"><b>관리시스템.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
       <div class="w3-row-padding link-content">
       </div>
     </div>
@@ -89,25 +103,74 @@
   <section id="viewUtilitySection">
     <div class="w3-container w3-section" id="mktxJsonSplit">
       <h1 class="w3-xlarge cy-color-mint"><b>MKTX JSON 분할.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
     </div>
     <hr>
     <div class="w3-container w3-section" id="menuNewReg">
       <h1 class="w3-xlarge cy-color-mint"><b>신규등록.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
     </div>
     <hr>
     <div class="w3-container w3-section" id="menuSetting">
       <h1 class="w3-xlarge cy-color-mint"><b>설정.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
+      <div class="w3-row-padding">
+        <div class="w3-col l4 m6 s12 w3-margin-bottom">
+          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+            계정 정보
+            <label class="w3-right">
+              <span id="menuSettingUserId" class="cy-color-mint user-id"><span>
+              <i class="fa fa-angle-right"></i>
+            </label>
+          </div>
+        </div>
+        <div class="w3-col l4 m6 s12 w3-margin-bottom">
+          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+            서버 정보
+            <label class="w3-right">
+              <i class="fa fa-angle-right"></i>
+            </label>
+          </div>
+        </div>
+        <div class="w3-col l4 m6 s12 w3-margin-bottom">
+          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+            메뉴 설정
+            <label class="w3-right">
+              <i class="fa fa-angle-right"></i>
+            </label>
+          </div>
+        </div>
+        <div class="w3-col s12">
+          <div class="w3-card w3-round w3-padding w3-padding-16 w3-center cy-bg-color-red w3-hover-opacity" id="btnReset">
+            초기화
+          </div>
+        </div>
+      </div>
+
+      <!-- <ul class="w3-ul w3-margin-bottom w3-card w3-round">
+        <li class="li-header">
+          <i class="fa fa-user" style="padding-right:8px;"></i><b>내 정보</b>
+        </li>
+        <li>계정 정보
+          <label class="w3-right">
+            <span id="menuSettingUserId" class="cy-color-mint user-id"><span>
+            <i class="fa fa-angle-right"></i>
+          </label>
+        </li>
+        <li>서버 정보
+          <label class="w3-right">
+            <i class="fa fa-angle-right"></i>
+          </label>
+        </li>
+      </ul> -->
     </div>
   </section>
 </div>
 <!-- End page content -->
 
 <!-- Footer Container -->
-<footer class="w3-light-grey w3-container w3-padding-8" style="margin-top:2rem;padding:1rem">
-  <img class="w3-right" src="images/logo/title_bm.png" alt="logo" style="width:20rem;">
+<footer class="w3-light-grey w3-container w3-padding-16 w3-margin-top">
+  <img class="w3-right" src="images/logo/title_bm.png" alt="logo" style="width:240px;">
 </footer>
 
 <script src="scripts/app.js" async></script>
@@ -139,7 +202,7 @@ function w3_close() {
   <!-- Link Card template START -->
   <div class="w3-col m4 l3 w3-mobile w3-section link-card">
     <div class="w3-card">
-      <header class="w3-container w3-light-grey w3-cell-row pr-0">
+      <header class="w3-container w3-light-grey w3-cell-row" style="padding-right: 0px;">
         <div class="w3-cell">
           <h4 class="card-title">Card Title</h4>
         </div>
