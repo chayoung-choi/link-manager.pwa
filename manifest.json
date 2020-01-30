@@ -35,5 +35,5 @@
   "start_url": "/link-manager.pwa/",
   "display": "standalone",
   "background_color": "#3c3c3c",
-  "theme_color": "#4fb9a0"
+  "theme_color": "#2f6766"
 }

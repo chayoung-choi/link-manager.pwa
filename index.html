@@ -28,6 +28,7 @@
   <meta name="theme-color" content="#5FCECf">
 </head>
 <body>
+<div id="body" style="display:none;">
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
   <!-- <div class="w3-container">
@@ -51,18 +52,17 @@
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
     <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">설정</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <div class="w3-cell-row">
+    <!-- <div class="w3-cell-row">
       <div class="w3-cell w3-padding-small">
         <input type="text" id="userKey" name="userKey"  placeholder="user key.." value="">
       </div>
       <div class="w3-cell">
         <button class="w3-button w3-light-grey w3-round" id="btnRefresh"><i class="fa fa-refresh w3-text-gray"></i></button>
       </div>
-    </div>
-    <!-- <input type="text" id="userKey" name="userKey"  placeholder="user key.." value="">
-    <button class="w3-button w3-light-grey w3-round w3-samll"><i class="fa fa-refresh w3-text-gray"></i></button> -->
+    </div> -->
   </div>
-  <div class="w3-display-bottommiddle w100 nav-footer w3-padding w3-medium w3-center" style="background:#41b6b7;">
+  <!-- <div class="w3-display-bottommiddle w100 nav-footer w3-padding w3-medium w3-center" style="background:#41b6b7;"> -->
+    <div class="w100 nav-footer w3-padding w3-medium w3-center" style="background:#2f6766;">
     <span id="navFooterAppVer"></span>
   </div>
 </nav>
@@ -85,7 +85,7 @@
   <div class="w3-hide-large w3-padding-32"></div>
 
   <div class="w3-container" id="home">
-    <h1 class="w3-xxlarge"><b>Daekyo CNS SmartMOS</b></h1>
+    <h1 class="" style="font-size:5vw;"><b>Daekyo CNS SmartMOS</b></h1>
   </div>
 
   <!-- Content START ---->
@@ -134,6 +134,14 @@
         </div>
         <div class="w3-col l4 m6 s12 w3-margin-bottom">
           <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+            <button onclick="document.getElementById('modalLogin').style.display='block'" class="w3-button w3-green w3-large">Login</button>
+            <label class="w3-right">
+              <i class="fa fa-angle-right"></i>
+            </label>
+          </div>
+        </div>
+        <div class="w3-col l4 m6 s12 w3-margin-bottom">
+          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
             메뉴 설정
             <label class="w3-right">
               <i class="fa fa-angle-right"></i>
@@ -166,12 +174,63 @@
     </div>
   </section>
 </div>
-<!-- End page content -->
-
 <!-- Footer Container -->
 <footer class="w3-light-grey w3-container w3-padding-16 w3-margin-top">
   <img class="w3-right" src="images/logo/title_bm.png" alt="logo" style="width:240px;">
 </footer>
+</div>
+<!-- End page content -->
+<div id="loading" class="w3-modal">
+  <div style="margin: auto;">
+    <div id="loading" class="sk-circle">
+      <div class="sk-circle1 sk-child"></div>
+      <div class="sk-circle2 sk-child"></div>
+      <div class="sk-circle3 sk-child"></div>
+      <div class="sk-circle4 sk-child"></div>
+      <div class="sk-circle5 sk-child"></div>
+      <div class="sk-circle6 sk-child"></div>
+      <div class="sk-circle7 sk-child"></div>
+      <div class="sk-circle8 sk-child"></div>
+      <div class="sk-circle9 sk-child"></div>
+      <div class="sk-circle10 sk-child"></div>
+      <div class="sk-circle11 sk-child"></div>
+      <div class="sk-circle12 sk-child"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Login-Form START -->
+<div id="modalLogin" class="w3-modal w3-light-gray">
+  <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:600px;">
+    <div class="w3-center">
+      <img class="w3-circle w3-margin-top" src="images/logo/icon-outline.png" alt="avatar" style="width:30%;">
+    </div>
+    <div class="w3-container" name="formLogin">
+      <div class="w3-section flex-container">
+        <div class="icon"><i class="w3-xlarge fa fa-user"></i></div>
+        <div class="" style="flex-grow: 8;">
+          <input class="input-field" id="userId" name="userId" type="text" placeholder="Username" maxlength="20" required>
+        </div>
+      </div>
+      <div class="w3-section flex-container">
+        <div class="icon"><i class="w3-xlarge fa fa-key"></i></div>
+        <div class="" style="flex-grow: 8">
+          <input class="input-field" id="userPw" name="userPw" type="password" placeholder="Password" maxlength="20" required>
+        </div>
+      </div>
+      <div class="w3-section">
+        <button class="w3-button w3-block w3-section w3-padding cy-bg-color-mint w3-round" id="btnLogin">Login</button>
+        <input class="w3-check" type="checkbox" checked="checked"> Remember me
+      </div>
+    </div>
+    <div class="w3-container w3-border-top w3-padding-16 w3-light-grey" style="border-radius: 0 0 8px 8px;">
+      <!-- <button onclick="document.getElementById('modalLogin').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+      <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span> -->
+    </div>
+  </div>
+</div>
+<!-- Modal Login-Form END -->
 
 <script src="scripts/app.js" async></script>
 <script>
@@ -185,6 +244,13 @@ function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
   document.getElementById("myOverlay").style.display = "none";
 }
+
+$(document).ready(function(){
+  var maxH = 0;
+  $(".card-params").each(function(){
+    $(this).height();
+  });
+});
 </script>
 
 <template id="sidebarTemplate">
@@ -216,12 +282,12 @@ function w3_close() {
           </div>
         </div>
       </header>
-      <div class="card-content" style="">
+      <div class="card-content">
         <div class="w3-container w3-padding w3-small card-params"></div>
-        <footer class="w3-bar w3-center w3-container w3-padding-small">
+        <div class="w3-bar w3-center w3-container w3-padding-small ">
           <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green w30 host-type-l" target="_blank">Local</a>
           <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue w30 host-type-q" target="_blank">QA</a>
-          <div class="w3-dropdown-hover w30" style="float:none;">
+          <div class="w3-dropdown-hover w30">
             <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red w100 host-type-o" target="_blank">Prod</a>
             <div class="w3-dropdown-content w3-bar-block w3-border w3-center" style="min-width:80px;max-width:80px;">
               <a href="#" class="w3-bar-item w3-button w3-samll host-type-w1" target="_blank">WAS1</a>
@@ -230,7 +296,7 @@ function w3_close() {
               <a href="#" class="w3-bar-item w3-button w3-samll host-type-w4" target="_blank">WAS4</a>
             </div>
           </div>
-        </footer>
+        </div>
       </div>
     </div>
   </div>

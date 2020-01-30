@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.1.6", verCode:"20200130.01"},
+    appVer   : {verName: "0.1.8", verCode:"20200130.03"},
     userInfo : {id: ''},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
@@ -16,13 +16,13 @@
    * Event listeners for UI elements
    *
    ****************************************************************************/
-  document.getElementById('btnRefresh').addEventListener('click', function() {
-    // console.log(this.children[0].classList.add('w3-spin')) = 'w3-spin';
-    // console.log($(this));
-    this.children[0].classList.add('w3-spin');
-    app.getServerDate('HOST');
-    app.getServerDate('MENU');
-  });
+  // document.getElementById('btnRefresh').addEventListener('click', function() {
+  //   // console.log(this.children[0].classList.add('w3-spin')) = 'w3-spin';
+  //   // console.log($(this));
+  //   this.children[0].classList.add('w3-spin');
+  //   app.getServerDate('HOST');
+  //   app.getServerDate('MENU');
+  // });
 
   document.getElementById('navFooterAppVer').textContent = 'APP VER '+app.appVer.verName;
   document.getElementById('btnReset').addEventListener('click', function() {
@@ -33,6 +33,33 @@
     }
   });
 
+  document.getElementById('btnLogin').addEventListener('click', function() {
+    processLogin();
+  });
+  $(".input-field").on('keydown', function(){
+    if (event.keyCode == 13) {
+      processLogin();
+    }
+  });
+
+  async function processLogin(){
+    $('#loading').show();
+    var id = document.getElementById('userId').value;
+    var pw = document.getElementById('userPw').value;
+
+    if (id == 'smos' && pw == '1234'){
+      $('#modalLogin').hide();
+      $('#body').show();
+      var userInfo = {'id': id, 'userKey': id};
+      app.userInfo = userInfo;
+      app.saveToStorage('userInfo', userInfo);
+      await app.getServerDate('HOST');
+      await app.getServerDate('MENU');
+    } else {
+      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+    }
+    $('#loading').hide();
+  }
   var linkCards = document.querySelectorAll(".link-card");
   var btnDelete = document.querySelectorAll(".btn-delete");
   var btnUpdate = document.querySelectorAll(".btn-update");
@@ -230,7 +257,7 @@ var gfn = {
   // #서버 GET 통신
   app.getServerDate = function(sheetName) {
     // var id = app.userInfo.id;
-    var id = document.getElementById('userKey').value;
+    var id = app.userInfo.userKey;
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?'
         + 'id=' + id + '&'
         + 'sheet_name=' + sheetName;
@@ -241,7 +268,6 @@ var gfn = {
         if (response) {
           response.json().then(function updateFromCache(json) {
             var results = json.list;
-            // console.log('[app.getServerDate] 캐시 매핑', results);
             gfn.console('[app.getServerDate.'+sheetName+'] 캐시 매핑', results);
             app.processMappingData(sheetName, results);
           });
@@ -282,7 +308,7 @@ var gfn = {
       case 'LINKS':
         app.updateViewLinkCardSection(data);
         app.saveToStorage('linksData', data);
-        app.saveToStorage('userInfo', {'id': document.getElementById('userKey').value});
+        app.saveToStorage('userInfo', {'id': app.userInfo.userKey});
         document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
         break;
       case 'HOST':
@@ -315,30 +341,28 @@ var gfn = {
  * Code required to start the app
  ************************************************************************/
   app.userInfo = localStorage.userInfo;
-  gfn.console('init', localStorage.userInfo)
+  gfn.console('init', localStorage.userInfo);
   if (app.userInfo) {
+    gfn.console('init', localStorage.userInfo);
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);
-    document.getElementById('userKey').value = app.userInfo.id;
+    // document.getElementById('userKey').value = app.userInfo.id;
 
     // 2. Host 정보
     app.hostData = JSON.parse(localStorage.hostData);
-
+gfn.console('init', localStorage.userInfo);
     // 3. Menu 정보
     app.menuData = JSON.parse(localStorage.menuData);
     app.updateSidebar(app.menuData);
-
+gfn.console('init', localStorage.userInfo);
     // 4. Link 정보
     app.linksData = JSON.parse(localStorage.linksData);
     app.updateViewLinkCardSection(app.linksData);
   } else {
     console.log("localStorage not available");
-  // app.updateForecastCard(initialWeatherForecast);
-  // app.selectedCities = [
-  //   {key: initialWeatherForecast.key, label: initialWeatherForecast.label}
-  // ];
-  // app.saveSelectedCities();
-
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('body').style.display = 'none';
+    document.getElementById('modalLogin').style.display = 'block';
   }
 
   if ('serviceWorker' in navigator) {
