@@ -93,7 +93,7 @@
     <div class="w3-container w3-section" id="menu1">
       <h1 class="w3-xlarge cy-color-mint"><b>관리시스템.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
-      <div class="w3-row-padding link-content">
+      <div class="w3-row-padding link-content" style="display:flex; flex-wrap:wrap;">
       </div>
     </div>
     <hr>
@@ -196,12 +196,12 @@ function w3_close() {
   <div class="w3-container w3-section section-box" data-updated="" id="">
     <h1 class="w3-xlarge cy-color-mint section-title"><b>Section Title.</b></h1>
     <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
-    <div class="w3-row-padding link-content"></div>
+    <div class="w3-row-padding link-content" style="display:flex; flex-wrap:wrap; align-content:stretch; align-items:stretch;"></div>
   </div>
 
   <!-- Link Card template START -->
-  <div class="w3-col m4 l3 w3-mobile w3-section link-card">
-    <div class="w3-card">
+  <div class="w3-col m4 l3 w3-mobile w3-section link-card w3-display-container">
+    <div class="w3-card" style="min-height:100%;">
       <header class="w3-container w3-light-grey w3-cell-row" style="padding-right: 0px;">
         <div class="w3-cell">
           <h4 class="card-title">Card Title</h4>
@@ -216,19 +216,21 @@ function w3_close() {
           </div>
         </div>
       </header>
-      <div class="w3-container w3-padding w3-small card-params"></div>
-      <div class="w3-bar w3-center w3-padding-small">
-        <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green w30 host-type-l" target="_blank">Local</a>
-        <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue w30 host-type-q" target="_blank">QA</a>
-        <div class="w3-dropdown-hover w30" style="float:none;">
-          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red w100 host-type-o" target="_blank">Prod</a>
-          <div class="w3-dropdown-content w3-bar-block w3-border w3-center" style="min-width:80px;max-width:80px;">
-            <a href="#" class="w3-bar-item w3-button w3-samll host-type-w1" target="_blank">WAS1</a>
-            <a href="#" class="w3-bar-item w3-button w3-samll host-type-w2" target="_blank">WAS2</a>
-            <a href="#" class="w3-bar-item w3-button w3-samll host-type-w3" target="_blank">WAS3</a>
-            <a href="#" class="w3-bar-item w3-button w3-samll host-type-w4" target="_blank">WAS4</a>
+      <div class="card-content" style="">
+        <div class="w3-container w3-padding w3-small card-params"></div>
+        <footer class="w3-bar w3-center w3-container w3-padding-small">
+          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green w30 host-type-l" target="_blank">Local</a>
+          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue w30 host-type-q" target="_blank">QA</a>
+          <div class="w3-dropdown-hover w30" style="float:none;">
+            <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red w100 host-type-o" target="_blank">Prod</a>
+            <div class="w3-dropdown-content w3-bar-block w3-border w3-center" style="min-width:80px;max-width:80px;">
+              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w1" target="_blank">WAS1</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w2" target="_blank">WAS2</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w3" target="_blank">WAS3</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w4" target="_blank">WAS4</a>
+            </div>
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   </div>
