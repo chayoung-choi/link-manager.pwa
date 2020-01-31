@@ -4,8 +4,8 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.1.8", verCode:"20200130.03"},
-    userInfo : {id: ''},
+    appVer   : {verName: "0.2.0", verCode:"20200131.02"},
+    userInfo : {id: '', autoLogin: false},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
@@ -25,11 +25,12 @@
   // });
 
   document.getElementById('navFooterAppVer').textContent = 'APP VER '+app.appVer.verName;
+
   document.getElementById('btnReset').addEventListener('click', function() {
     if (confirm('캐시 데이터를 초기화하시겠습니까?')){
       localStorage.clear();
       alert('초기화 완료');
-      location.reload();
+      fn_availableBody(false);
     }
   });
 
@@ -43,15 +44,15 @@
   });
 
   async function processLogin(){
+    gfn.console('processLogin', 'processLogin');
     $('#loading').show();
     var id = document.getElementById('userId').value;
     var pw = document.getElementById('userPw').value;
 
     if (id == 'smos' && pw == '1234'){
-      $('#modalLogin').hide();
-      $('#body').show();
-      var userInfo = {'id': id, 'userKey': id};
-      app.userInfo = userInfo;
+      fn_availableBody(true);
+      var autoLogin = document.getElementById('autoLogin').checked;
+      var userInfo = {'id': id, 'userKey': id, 'autoLogin': autoLogin};
       app.saveToStorage('userInfo', userInfo);
       await app.getServerDate('HOST');
       await app.getServerDate('MENU');
@@ -220,6 +221,19 @@ function fn_deleteCard() {
   alert("app.card del");
 }
 
+// 로그인 화면 활성화
+function fn_availableBody(b){
+  if (b){
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('body').style.display = 'block';
+    document.getElementById('modalLogin').style.display = 'none';
+  } else {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('body').style.display = 'none';
+    document.getElementById('modalLogin').style.display = 'block';
+  }
+}
+
 var gfn = {
   nvl : function(str){
     if (typeof str == "undefined" || str == null || str == "") {
@@ -308,8 +322,7 @@ var gfn = {
       case 'LINKS':
         app.updateViewLinkCardSection(data);
         app.saveToStorage('linksData', data);
-        app.saveToStorage('userInfo', {'id': app.userInfo.userKey});
-        document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
+        // document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
         break;
       case 'HOST':
         app.saveToStorage('hostData', fn_hostParser(data));
@@ -341,28 +354,34 @@ var gfn = {
  * Code required to start the app
  ************************************************************************/
   app.userInfo = localStorage.userInfo;
-  gfn.console('init', localStorage.userInfo);
+  gfn.console('init', app.userInfo);
   if (app.userInfo) {
-    gfn.console('init', localStorage.userInfo);
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);
-    // document.getElementById('userKey').value = app.userInfo.id;
+    if (!app.userInfo.id) {
+      gfn.console('init', 'no id');
+      fn_availableBody(false);
+      return;
+    }
+    gfn.console('init', localStorage.userInfo);
+
+    if (app.userInfo.autoLogin){
+      fn_availableBody(true);
+    }
 
     // 2. Host 정보
     app.hostData = JSON.parse(localStorage.hostData);
-gfn.console('init', localStorage.userInfo);
+
     // 3. Menu 정보
     app.menuData = JSON.parse(localStorage.menuData);
     app.updateSidebar(app.menuData);
-gfn.console('init', localStorage.userInfo);
+
     // 4. Link 정보
     app.linksData = JSON.parse(localStorage.linksData);
     app.updateViewLinkCardSection(app.linksData);
   } else {
     console.log("localStorage not available");
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('body').style.display = 'none';
-    document.getElementById('modalLogin').style.display = 'block';
+    fn_availableBody(false);
   }
 
   if ('serviceWorker' in navigator) {
