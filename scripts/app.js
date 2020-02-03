@@ -4,8 +4,9 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.2.0", verCode:"20200131.02"},
+    appVer   : {verName: "0.2.2", verCode:"20200203.01"},
     userInfo : {id: '', autoLogin: false},
+    lastSyncDt : '0',
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
@@ -358,7 +359,7 @@ var gfn = {
   if (app.userInfo) {
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);
-    if (!app.userInfo.id) {
+    if (!app.userInfo.id || !app.userInfo.autoLogin) {
       gfn.console('init', 'no id');
       fn_availableBody(false);
       return;

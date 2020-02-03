@@ -20,6 +20,7 @@ body {font-size:16px;}
 
 .w30 { width:30%;}
 .w100 { width:100%;}
+.p0 { padding: 0; }
 .clearfix { overflow: auto; }
 
 .card-params button {margin-bottom: 2px;}
@@ -202,3 +203,5 @@ body {font-size:16px;}
 .flex-container {
   display: flex;
 }
+
+/* #boxProfile td { padding: 0; } */

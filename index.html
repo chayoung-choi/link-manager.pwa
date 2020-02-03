@@ -28,20 +28,28 @@
   <meta name="theme-color" content="#5FCECf">
 </head>
 <body>
-<div id="body" style="display:none;">
+<div>
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
-  <!-- <div class="w3-container">
-
-      <h4 class="w3-xlarge"><b>Link<br>Manager</b></h4>
-  </div> -->
   <div class="w3-cell-row">
     <div class="w3-cell w3-cell-middle">
       <img class="w3-right" src="images/logo/icon-outline.png" alt="logo" style="width:70px;">
     </div>
-    <div class="w3-cell w3-padding-small">
-      <h4 class="w3-xlarge"><b>Link<br>Manager</b></h4>
-    </div>
+    <table class="w3-table w3-small" id="boxProfile">
+      <tr>
+        <td class="w3-large" colspan="2" style="padding-bottom: 0">
+          <button class="w3-button w3-white w3-border w3-round-xxlarge" style="padding: 0 16px;">test</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="w3-tiny" style="font-weight:normal;">마지막 동기화<br><span>2020.02.01 12:00</span></td>
+        <td>
+          <button class="w3-button w3-border w3-border-white w3-round w3-small" style="padding:4px 8px;" id="btnRefresh">
+            <i class="fa fa-refresh w3-text-white"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
   </div>
   <div class="w3-bar-block">
     <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">Home</a>

@@ -12,12 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var cacheName = 'linkManagerPWA-v4';
-var dataCacheName = 'linksData-v3';
+var cacheName = 'linkManagerPWA-v7';
+var dataCacheName = 'linksData-v7';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
   '/link-manager.pwa/scripts/app.js',
+  '/link-manager.pwa/images/logo/icon-outline.png',
+  '/link-manager.pwa/images/logo/apple-icon-57x57.png',
+  '/link-manager.pwa/images/logo/apple-icon-60x60.png',
+  '/link-manager.pwa/images/logo/apple-icon-72x72.png',
+  '/link-manager.pwa/images/logo/apple-icon-76x76.png',
+  '/link-manager.pwa/images/logo/android-icon-192x192.png',
+  '/link-manager.pwa/images/logo/ms-icon-144x144.png',
   '/link-manager.pwa/css/style.css'
 ];
 
