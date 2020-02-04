@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <link rel="apple-touch-icon" sizes="57x57" href="images/logo/apple-icon-57x57.png">
@@ -29,20 +30,30 @@
 </head>
 <body>
 <div>
+
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar"><br>
+<nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold;" id="mySidebar">
+  <br>
   <div class="w3-cell-row">
     <div class="w3-cell w3-cell-middle">
-      <img class="w3-right" src="images/logo/icon-outline.png" alt="logo" style="width:70px;">
+      <img class="" src="images/logo/icon-outline.png" alt="logo" style="width:70px;">
     </div>
-    <table class="w3-table w3-small" id="boxProfile">
+    <table class="w3-cell w3-table w3-small" id="boxProfile">
+      <colgroup>
+        <col width="*"/>
+				<col width="10%"/>
+      </colgroup>
       <tr>
-        <td class="w3-large" colspan="2" style="padding-bottom: 0">
-          <button class="w3-button w3-white w3-border w3-round-xxlarge" style="padding: 0 16px;">test</button>
+        <td class="w3-large" colspan="2" style="padding-left:4px; padding-bottom: 0;">
+          <button class="w3-button w3-white w3-border w3-round-xxlarge" id="btnUserKey" style="padding: 0 16px;">test</button>
+          <div class="input-box">
+            <input class="input-type-1 w3-border w3-round-xxlarge w3-hide" id="userKey" value="test" placeholder="user key.." maxlength="20">
+            <span class="icon"><i class="material-icons">check_circle</i></span>
+          </div>
         </td>
       </tr>
       <tr>
-        <td class="w3-tiny" style="font-weight:normal;">마지막 동기화<br><span>2020.02.01 12:00</span></td>
+        <td class="w3-tiny" style="padding-left:4px; font-weight:normal;">마지막 동기화<br><span id="lastSyncDt">-</span></td>
         <td>
           <button class="w3-button w3-border w3-border-white w3-round w3-small" style="padding:4px 8px;" id="btnRefresh">
             <i class="fa fa-refresh w3-text-white"></i>
@@ -98,13 +109,16 @@
 
   <!-- Content START ---->
   <section id="viewLinkCardSection">
-    <div class="w3-container w3-section" id="menu1">
+    <div class="w3-container w3-section" style="width:8rem; height:8rem; margin: 0 auto;">
+      <div class="loader6">Loading...</div>
+    </div>
+    <!-- <div class="w3-container w3-section" id="menu1">
       <h1 class="w3-xlarge cy-color-mint"><b>관리시스템.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
       <div class="w3-row-padding link-content" style="display:flex; flex-wrap:wrap;">
       </div>
     </div>
-    <hr>
+    <hr> -->
   </section>
   <!-- Content END ---->
 
@@ -140,14 +154,14 @@
             </label>
           </div>
         </div>
-        <div class="w3-col l4 m6 s12 w3-margin-bottom">
+        <!-- <div class="w3-col l4 m6 s12 w3-margin-bottom">
           <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
             <button onclick="document.getElementById('modalLogin').style.display='block'" class="w3-button w3-green w3-large">Login</button>
             <label class="w3-right">
               <i class="fa fa-angle-right"></i>
             </label>
           </div>
-        </div>
+        </div> -->
         <div class="w3-col l4 m6 s12 w3-margin-bottom">
           <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
             메뉴 설정
@@ -188,7 +202,7 @@
 </footer>
 </div>
 <!-- End page content -->
-<div id="loading" class="w3-modal">
+<div id="loading" class="w3-modal" style="display: none;">
   <div style="margin: auto;">
     <div id="loading" class="sk-circle">
       <div class="sk-circle1 sk-child"></div>
@@ -209,7 +223,7 @@
 
 
 <!-- Modal Login-Form START -->
-<div id="modalLogin" class="w3-modal w3-light-gray">
+<div id="modalLogin" class="w3-modal w3-light-gray" style="none;">
   <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:600px;">
     <div class="w3-center">
       <img class="w3-circle w3-margin-top" src="images/logo/icon-outline.png" alt="avatar" style="width:30%;">

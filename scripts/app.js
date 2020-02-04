@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: "0.2.2", verCode:"20200203.01"},
+    appVer   : {verName: '0.2.3', verCode:'20200204.02'},
     userInfo : {id: '', autoLogin: false},
     lastSyncDt : '0',
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -26,6 +26,33 @@
   // });
 
   document.getElementById('navFooterAppVer').textContent = 'APP VER '+app.appVer.verName;
+
+  // #사이드바 > userKey button 클릭 시
+  document.getElementById('btnUserKey').addEventListener('click', function() {
+    document.getElementById('userKey').classList.remove('w3-hide');
+    document.getElementById('btnUserKey').classList.add('w3-hide');
+  });
+
+  // #사이드바 > userKey 수정 시
+  document.getElementById('userKey').addEventListener('change', function() {
+    var elUserKey = document.getElementById('userKey');
+    var elBtnUserKey = document.getElementById('btnUserKey');
+
+    if (confirm('user-key 변경 시 동기화를 진행합니다.')){
+      elBtnUserKey.textContent = elUserKey.value;
+      document.getElementById('btnUserKey').classList.add('w3-hide');
+      app.updateSyncData();
+    } else {
+      elUserKey.value = elBtnUserKey.textContent;
+    }
+    elUserKey.classList.add('w3-hide');
+    elBtnUserKey.classList.remove('w3-hide');
+  });
+  document.getElementById('userKey').addEventListener('input', function() {
+    console.log($(this));
+    if (event.keyCode == 13) {
+    }
+  });
 
   document.getElementById('btnReset').addEventListener('click', function() {
     if (confirm('캐시 데이터를 초기화하시겠습니까?')){
@@ -138,14 +165,14 @@ app.updateViewLinkCardSection = function(data){
   app.updateLinkCardList(data);
 }
 
-// Link Card List Update
+// #Link Card List Update
 app.updateLinkCardList = function(data){
   Array.from(data).forEach((el) => {
     app.updateLinkCard(el);
   });
 }
 
-// Link Card Update
+// #Link Card Update
 app.updateLinkCard = function(data){
   if (document.getElementById(data.MENU_CODE) == null) { return; }
 
@@ -179,6 +206,15 @@ app.updateLinkCard = function(data){
 
 
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
+}
+
+// #전체 동기화 진행
+app.updateSyncData = function(){
+  document.getElementById('btnRefresh').children[0].classList.add('w3-spin');
+  var date = new Date();
+  app.saveToStorage('lastSyncDt', date);
+  document.getElementById('lastSyncDt').textContent = gfn.formatDate(date);
+  document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
 }
 
 /*****************************************************************************
@@ -258,6 +294,37 @@ var gfn = {
       result[key] = val;
     });
     return result;
+  },
+  lpadZero : function(val, len, separator){
+    var result = new String(val);
+    var valLen = result.length;
+    for (var i=valLen; i<len; i++){
+      result = separator + '' + result;
+    }
+    return result;
+  },
+  zero2 : function(val){
+    return gfn.lpadZero(val, 2, '0');
+  },
+  formatDate : function(date, format){
+    if (format == null){
+      var hh = date.getHours();
+      if (hh > 12){ hh = '오후 ' + (hh-12);
+      } else if (hh == 12){ hh = '오후 ' + hh;
+      } else { hh = '오전 ' + hh; }
+
+      return (date.getMonth()+1)+'월 '+ date.getDate()+'일 '
+              + hh+':'+gfn.zero2(date.getMinutes());
+    } else if (format.toLowerCase() == 'yyyymmdd24hhmiss'){
+      return date.getFullYear()+gfn.zero2((date.getMonth()+1))+gfn.zero2(date.getDate())
+              +gfn.zero2(date.getHours())+gfn.zero2(date.getMinutes())+gfn.zero2(date.getSeconds());
+    } else if (format.toLowerCase() == 'yyyy.mm.dd 24hh:mi:ss'){
+      return date.getFullYear()+'.'+gfn.zero2((date.getMonth()+1))+'.'+gfn.zero2(date.getDate())
+              +' '+gfn.zero2(date.getHours())+':'+gfn.zero2(date.getMinutes())+':'+gfn.zero2(date.getSeconds());
+    } else if (format.toLowerCase() == 'yyyy.mm.dd 24hh:mi'){
+      return date.getFullYear()+'.'+gfn.zero2((date.getMonth()+1))+'.'+gfn.zero2(date.getDate())
+              +' '+gfn.zero2(date.getHours())+':'+gfn.zero2(date.getMinutes());
+    }
   },
   console : function(msg, data) {
     console.log('['+app.appVer.verName+']', msg, data);
@@ -361,14 +428,14 @@ var gfn = {
     app.userInfo = JSON.parse(localStorage.userInfo);
     if (!app.userInfo.id || !app.userInfo.autoLogin) {
       gfn.console('init', 'no id');
-      fn_availableBody(false);
+      // fn_availableBody(false);
       return;
     }
     gfn.console('init', localStorage.userInfo);
 
-    if (app.userInfo.autoLogin){
-      fn_availableBody(true);
-    }
+    // if (app.userInfo.autoLogin){
+    //   fn_availableBody(true);
+    // }
 
     // 2. Host 정보
     app.hostData = JSON.parse(localStorage.hostData);
@@ -380,9 +447,15 @@ var gfn = {
     // 4. Link 정보
     app.linksData = JSON.parse(localStorage.linksData);
     app.updateViewLinkCardSection(app.linksData);
+
+    // 5. 동기화 시간
+    app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
+    document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   } else {
     console.log("localStorage not available");
-    fn_availableBody(false);
+    // fn_availableBody(false);
+    app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
+    document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   }
 
   if ('serviceWorker' in navigator) {
