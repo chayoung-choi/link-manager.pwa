@@ -4,9 +4,10 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.2.3', verCode:'20200204.02'},
+    appVer   : {verName: '0.2.4', verCode:'20200205.01'},
     userInfo : {id: '', autoLogin: false},
     lastSyncDt : '0',
+    syncConfig : {hostSync: false, menuSync: false, linksSync: false},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
@@ -17,59 +18,59 @@
    * Event listeners for UI elements
    *
    ****************************************************************************/
-  // document.getElementById('btnRefresh').addEventListener('click', function() {
-  //   // console.log(this.children[0].classList.add('w3-spin')) = 'w3-spin';
-  //   // console.log($(this));
-  //   this.children[0].classList.add('w3-spin');
-  //   app.getServerDate('HOST');
-  //   app.getServerDate('MENU');
-  // });
-
   document.getElementById('navFooterAppVer').textContent = 'APP VER '+app.appVer.verName;
 
   // #사이드바 > userKey button 클릭 시
   document.getElementById('btnUserKey').addEventListener('click', function() {
-    document.getElementById('userKey').classList.remove('w3-hide');
+    document.getElementById('boxUserKey').classList.remove('w3-hide');
     document.getElementById('btnUserKey').classList.add('w3-hide');
   });
 
   // #사이드바 > userKey 수정 시
-  document.getElementById('userKey').addEventListener('change', function() {
-    var elUserKey = document.getElementById('userKey');
+  document.getElementById('userKey').addEventListener('change', function(){
+    changeUserKey();
+  });
+  document.querySelector('#boxUserKey .icon').addEventListener('click', function(){
+    changeUserKey();
+  });
+  function changeUserKey(){
     var elBtnUserKey = document.getElementById('btnUserKey');
+    var elBoxUserKey = document.getElementById('boxUserKey');
+    var elUserKey = document.getElementById('userKey');
 
-    if (confirm('user-key 변경 시 동기화를 진행합니다.')){
-      elBtnUserKey.textContent = elUserKey.value;
-      document.getElementById('btnUserKey').classList.add('w3-hide');
-      app.updateSyncData();
-    } else {
-      elUserKey.value = elBtnUserKey.textContent;
+    if ( elUserKey.value != elBtnUserKey.textContent ){
+      if (confirm('user-key 변경 시 동기화를 진행합니다.')){
+        elBtnUserKey.textContent = elUserKey.value;
+        elBtnUserKey.classList.add('w3-hide');
+        app.startSyncFromServer();
+      } else {
+        elUserKey.value = elBtnUserKey.textContent;
+      }
     }
-    elUserKey.classList.add('w3-hide');
+    elBoxUserKey.classList.add('w3-hide');
     elBtnUserKey.classList.remove('w3-hide');
-  });
-  document.getElementById('userKey').addEventListener('input', function() {
-    console.log($(this));
-    if (event.keyCode == 13) {
-    }
+  }
+
+  document.getElementById('btnSyncStart').addEventListener('click', function() {
+    app.startSyncFromServer();
   });
 
-  document.getElementById('btnReset').addEventListener('click', function() {
-    if (confirm('캐시 데이터를 초기화하시겠습니까?')){
-      localStorage.clear();
-      alert('초기화 완료');
-      fn_availableBody(false);
-    }
-  });
-
-  document.getElementById('btnLogin').addEventListener('click', function() {
-    processLogin();
-  });
-  $(".input-field").on('keydown', function(){
-    if (event.keyCode == 13) {
-      processLogin();
-    }
-  });
+  // document.getElementById('btnReset').addEventListener('click', function() {
+  //   if (confirm('캐시 데이터를 초기화하시겠습니까?')){
+  //     localStorage.clear();
+  //     alert('초기화 완료');
+  //     // fn_availableBody(false);
+  //   }
+  // });
+  //
+  // document.getElementById('btnLogin').addEventListener('click', function() {
+  //   processLogin();
+  // });
+  // $(".input-field").on('keydown', function(){
+  //   if (event.keyCode == 13) {
+  //     processLogin();
+  //   }
+  // });
 
   async function processLogin(){
     gfn.console('processLogin', 'processLogin');
@@ -204,17 +205,105 @@ app.updateLinkCard = function(data){
     card.querySelector('.host-type-' + hostType).href = fullUrl;
   });
 
-
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
 }
 
 // #전체 동기화 진행
-app.updateSyncData = function(){
-  document.getElementById('btnRefresh').children[0].classList.add('w3-spin');
-  var date = new Date();
-  app.saveToStorage('lastSyncDt', date);
-  document.getElementById('lastSyncDt').textContent = gfn.formatDate(date);
-  document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
+app.startSyncFromServer = function(){
+  document.getElementById('btnSyncStart').children[0].classList.add('w3-spin');
+  for (var key in app.syncConfig) {
+    app.syncConfig[key] = false;
+  }
+
+  var id = document.getElementById('userKey').value;
+  var userInfo = {'id': id, 'userKey': id};
+  app.saveToStorage('userInfo', userInfo);
+
+  app.getServerDate('MENU', true);
+  app.getServerDate('HOST', true);
+
+  var LIMIT_TIME = 30000;
+  var curTime = 0;
+  var timer1 = setInterval(function(){
+    if (app.syncConfig.hostSync && app.syncConfig.menuSync){
+      clearInterval(timer1);
+      app.getServerDate('LINKS', true);
+    } else if (curTime >= LIMIT_TIME){
+      clearInterval(timer1);
+      clearInterval(timerSync);
+      alert('동기화를 실패하였습니다.');
+    }
+    curTime += 500;
+  }, 500);
+
+  var timerSync = setInterval(function(){
+    if (app.syncConfig.hostSync && app.syncConfig.menuSync && app.syncConfig.linksSync){
+      var date = new Date();
+      app.saveToStorage('lastSyncDt', date);
+      document.getElementById('lastSyncDt').textContent = gfn.formatDate(date);
+      document.getElementById('btnSyncStart').children[0].classList.remove('w3-spin');
+      clearInterval(timerSync);
+    }
+  }, 1000);
+}
+
+function asyncFunction1() {
+  return new Promise(function (resolve) {
+    setTimeout(function() {
+      console.log(1)
+      resolve()
+    }, 1000)
+  })
+}
+function asyncFunction2() {
+  return new Promise(function (resolve) {
+    setTimeout(function() {
+      console.log(2)
+      resolve()
+    }, 1000)
+  })
+}
+function asyncFunction3() {
+  return new Promise(function (resolve) {
+    setTimeout(function() {
+      console.log(3)
+      resolve()
+    }, 2000)
+  })
+}
+function asyncFunction4() {
+  return new Promise(function (resolve) {
+    setTimeout(function() {
+      resolve('AAA')
+    }, 3000)
+  })
+}
+function asyncFunction5() {
+  return new Promise(function (resolve) {
+    while (!app.syncDate.hostData) {
+      sleep(1000);
+    }
+    resolve();
+  })
+}
+async function async1() {
+  const result = await asyncFunction4()
+  // await 키워드로 다른 promise를 반환하는 함수의 실행 결과값을 변수에 담을 수 있습니다.
+  console.log(result) // 111
+}
+
+async function async2() {
+  let result;
+  try {
+    result = await asyncFunction4();
+  } catch (error) { // await에서 발생한 에러는 모두 아래 catch 블록에 걸립니다.
+    console.log(error);
+  }
+  if (result === 'AAA') { // if문 분기도 일반 동기함수처럼 작성 가능합니다.
+      alert(result);
+    }
+  console.log(result);
+  return result;
 }
 
 /*****************************************************************************
@@ -247,7 +336,6 @@ function fn_hostParser(hostList) {
     }
     hostData[server] = arr;
   }
-  console.log('hostData', hostData);
   return hostData;
 }
 
@@ -337,7 +425,7 @@ var gfn = {
  *
  ****************************************************************************/
   // #서버 GET 통신
-  app.getServerDate = function(sheetName) {
+  app.getServerDate = function(sheetName, onlyServer) {
     // var id = app.userInfo.id;
     var id = app.userInfo.userKey;
     var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?'
@@ -345,7 +433,7 @@ var gfn = {
         + 'sheet_name=' + sheetName;
 
     // 캐싱 데이터 매핑
-    if ('caches' in window) {
+    if (onlyServer != true && 'caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
           response.json().then(function updateFromCache(json) {
@@ -366,9 +454,9 @@ var gfn = {
           gfn.console('[app.getServerDate.'+sheetName+'] 서버 통신', results);
           app.processMappingData(sheetName, results);
         }
-      } else {
+      // } else {
         // Return the initial weather forecast since no data is available.
-        gfn.console('[app.getServerDate.'+sheetName+'] 서버 통신 실패');
+        // gfn.console('[app.getServerDate.'+sheetName+'] 서버 통신 실패');
         // app.updateForecastCard(initialWeatherForecast);
       }
     };
@@ -379,24 +467,24 @@ var gfn = {
   // #서버(캐시) 데이터 매핑 프로세스
   app.processMappingData = function(sheetName, data){
     if (data.length <= 0) {
+      app.syncConfig[sheetName.toLowerCase()+'Sync'] = true;
       return;
     }
     switch (sheetName) {
       case 'MENU':
         app.updateSidebar(data);
-        app.getServerDate('LINKS');
         app.saveToStorage('menuData', data);
         break;
       case 'LINKS':
         app.updateViewLinkCardSection(data);
         app.saveToStorage('linksData', data);
-        // document.getElementById('btnRefresh').children[0].classList.remove('w3-spin');
         break;
       case 'HOST':
         app.saveToStorage('hostData', fn_hostParser(data));
         break;
       default:
     }
+    app.syncConfig[sheetName.toLowerCase()+'Sync'] = true;
   }
 
   // POST 통신
@@ -422,7 +510,7 @@ var gfn = {
  * Code required to start the app
  ************************************************************************/
   app.userInfo = localStorage.userInfo;
-  gfn.console('init', app.userInfo);
+  gfn.console('init', app.appVer.verCode);
   if (app.userInfo) {
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);

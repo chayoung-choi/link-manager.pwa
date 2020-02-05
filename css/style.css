@@ -6,17 +6,20 @@ body {font-size:16px;}
   --cy-color-yellow: #F6B13C;
   --cy-color-green: #46C083;
   --cy-color-blue: #00ADD4;
+  --cy-color-dark-mint: #2f6766;
 }
 .cy-color-mint   { color: var( --cy-color-mint ); }
 .cy-color-red    { color: var( --cy-color-red ); }
 .cy-color-yellow { color: var( --cy-color-yellow ); }
 .cy-color-green  { color: var( --cy-color-green ); }
 .cy-color-blue   { color: var( --cy-color-blue ); }
+.cy-color-dark-mint { color: var( --cy-color-dark-mint ); }
 .cy-bg-color-mint   { color: #fff; background-color: var( --cy-color-mint ); }
 .cy-bg-color-red    { color: #fff; background-color: var( --cy-color-red ); }
 .cy-bg-color-yellow { color: #fff; background-color: var( --cy-color-yellow ); }
 .cy-bg-color-green  { color: #fff; background-color: var( --cy-color-green ); }
 .cy-bg-color-blue   { color: #fff; background-color: var( --cy-color-blue ); }
+.cy-bg-color-dark-mint   { color: #fff; background-color: var( --cy-color-dark-mint ); }
 
 .w30 { width:30%;}
 .w100 { width:100%;}
@@ -191,6 +194,11 @@ body {font-size:16px;}
   align-items: center;
   width: 10%;
 }
+.flex-container {
+  display: flex;
+}
+
+
 .input-field {
   width: 100%;
   padding: 10px;
@@ -199,9 +207,6 @@ body {font-size:16px;}
 }
 .input-field:focus {
   border: 2px solid var( --cy-color-mint );
-}
-.flex-container {
-  display: flex;
 }
 .input-type-1 {
   width: 100%;
@@ -215,11 +220,15 @@ body {font-size:16px;}
 }
 .input-box .icon {
   position: absolute;
-  top: 50%;
-  margin-left: 17px;
-  margin-top: 17px;
-  z-index: 1;
+  top: 0;
+  right: 12px;
+  cursor: pointer;
+  background: none;
+  color: var( --cy-color-mint );
 }
+.input-box .icon:hover { color: var( --cy-color-dark-mint ); }
+
+
 .loader6 {
   color: var( --cy-color-mint );
   font-size: 3rem;
