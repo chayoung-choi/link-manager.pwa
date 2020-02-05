@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var cacheName = 'linkManagerPWA-v7';
-var dataCacheName = 'linksData-v7';
+var cacheName = 'linkManagerPWA-v9';
+var dataCacheName = 'linksData-v1';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
@@ -44,7 +44,7 @@ self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(keyList) {
       return Promise.all(keyList.map(function(key) {
-        if (key !== cacheName && key !== dataCacheName) {
+        if (key !== cacheName) {
           console.log('[ServiceWorker] Removing old cache', key);
           return caches.delete(key);
         }

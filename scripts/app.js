@@ -4,8 +4,8 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.2.4', verCode:'20200205.01'},
-    userInfo : {id: '', autoLogin: false},
+    appVer   : {verName: '0.2.6', verCode:'20200205.03'},
+    userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -54,23 +54,6 @@
   document.getElementById('btnSyncStart').addEventListener('click', function() {
     app.startSyncFromServer();
   });
-
-  // document.getElementById('btnReset').addEventListener('click', function() {
-  //   if (confirm('캐시 데이터를 초기화하시겠습니까?')){
-  //     localStorage.clear();
-  //     alert('초기화 완료');
-  //     // fn_availableBody(false);
-  //   }
-  // });
-  //
-  // document.getElementById('btnLogin').addEventListener('click', function() {
-  //   processLogin();
-  // });
-  // $(".input-field").on('keydown', function(){
-  //   if (event.keyCode == 13) {
-  //     processLogin();
-  //   }
-  // });
 
   async function processLogin(){
     gfn.console('processLogin', 'processLogin');
@@ -383,6 +366,11 @@ var gfn = {
     });
     return result;
   },
+  localStorageParserJson : function(data){
+    if (gfn.nvl(data) != ''){
+      return JSON.parse(localStorage.hostData);
+    }
+  },
   lpadZero : function(val, len, separator){
     var result = new String(val);
     var valLen = result.length;
@@ -514,36 +502,38 @@ var gfn = {
   if (app.userInfo) {
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);
-    if (!app.userInfo.id || !app.userInfo.autoLogin) {
+    if (!app.userInfo.id) {
       gfn.console('init', 'no id');
-      // fn_availableBody(false);
       return;
     }
     gfn.console('init', localStorage.userInfo);
 
-    // if (app.userInfo.autoLogin){
-    //   fn_availableBody(true);
-    // }
-
     // 2. Host 정보
-    app.hostData = JSON.parse(localStorage.hostData);
+    if (localStorage.hostData){
+      app.hostData = JSON.parse(localStorage.hostData);
+    }
 
     // 3. Menu 정보
-    app.menuData = JSON.parse(localStorage.menuData);
-    app.updateSidebar(app.menuData);
+    if (localStorage.menuData){
+      app.menuData = JSON.parse(localStorage.menuData);
+      app.updateSidebar(app.menuData);
+    }
 
     // 4. Link 정보
-    app.linksData = JSON.parse(localStorage.linksData);
-    app.updateViewLinkCardSection(app.linksData);
+    if (localStorage.linksData){
+      app.linksData = JSON.parse(localStorage.linksData);
+      app.updateViewLinkCardSection(app.linksData);
+    }
 
     // 5. 동기화 시간
     app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
+    console.log('lastSyncDt', new Date(app.lastSyncDt));
     document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   } else {
     console.log("localStorage not available");
     // fn_availableBody(false);
-    app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
-    document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
+    // app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
+    // document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   }
 
   if ('serviceWorker' in navigator) {
