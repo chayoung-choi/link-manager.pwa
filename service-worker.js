@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var cacheName = 'linkManagerPWA-v9';
+var _version = 'v10';
 var dataCacheName = 'linksData-v1';
 var filesToCache = [
   '/link-manager.pwa/',
@@ -28,24 +28,29 @@ var filesToCache = [
   '/link-manager.pwa/css/style.css'
 ];
 
+const log = msg => {
+  console.log(`[ServiceWorker ${_version}] ${msg}`);
+}
 
 self.addEventListener('install', function(e) {
-  console.log('[ServiceWorker] Install');
+  // console.log('[ServiceWorker] Install');
+  log('INSTALL');
   e.waitUntil(
-    caches.open(cacheName).then(function(cache) {
-      console.log('[ServiceWorker] Caching app shell');
+    caches.open(_version).then(function(cache) {
+      log('Caching app shell');
       return cache.addAll(filesToCache);
     })
   );
 });
 
 self.addEventListener('activate', function(e) {
-  console.log('[ServiceWorker] Activate');
+  // console.log('[ServiceWorker] Activate');
+  log('Activate');
   e.waitUntil(
     caches.keys().then(function(keyList) {
       return Promise.all(keyList.map(function(key) {
-        if (key !== cacheName) {
-          console.log('[ServiceWorker] Removing old cache', key);
+        if (key !== _version) {
+          log('Removing old cache ' + key);
           return caches.delete(key);
         }
       }));

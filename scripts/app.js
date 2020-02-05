@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.2.6', verCode:'20200205.03'},
+    appVer   : {verName: '0.2.7', verCode:'20200205.04'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
