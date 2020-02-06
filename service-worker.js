@@ -13,7 +13,7 @@
 // limitations under the License.
 
 var _version = 'v10';
-var dataCacheName = 'linksData-v1';
+var dataCacheName = 'linksData-v10';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
