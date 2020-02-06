@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var _version = 'v10';
-var dataCacheName = 'linksData-v10';
+var _appVersion = 'LM_v14';
+var _dataCache = 'LM_data-v14';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
@@ -29,7 +29,7 @@ var filesToCache = [
 ];
 
 const log = msg => {
-  console.log(`[ServiceWorker ${_version}] ${msg}`);
+  console.log(`[ServiceWorker ${_appVersion}] ${msg}`);
 }
 
 self.addEventListener('install', function(e) {
@@ -63,7 +63,7 @@ self.addEventListener('fetch', function(e) {
   var dataUrl = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec';
   if (e.request.url.indexOf(dataUrl) > -1) {
     e.respondWith(
-      caches.open(dataCacheName).then(function(cache) {
+      caches.open(_dataCache).then(function(cache) {
         return fetch(e.request).then(function(response){
           cache.put(e.request.url, response.clone());
           return response;

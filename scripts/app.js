@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.2.8', verCode:'20200206.01'},
+    appVer   : {verName: '0.3.2', verCode:'20200206.07'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -194,6 +194,8 @@ app.updateLinkCard = function(data){
 // #전체 동기화 진행
 app.startSyncFromServer = function(){
   document.getElementById('btnSyncStart').children[0].classList.add('w3-spin');
+  document.getElementById('loading').classList.add('w3-show');
+
   for (var key in app.syncConfig) {
     app.syncConfig[key] = false;
   }
@@ -212,9 +214,11 @@ app.startSyncFromServer = function(){
       clearInterval(timer1);
       app.getServerDate('LINKS', true);
     } else if (curTime >= LIMIT_TIME){
-      clearInterval(timer1);
-      clearInterval(timerSync);
+      document.getElementById('btnSyncStart').children[0].classList.remove('w3-spin');
+      document.getElementById('loading').classList.remove('w3-show');
       alert('동기화를 실패하였습니다.');
+      clearInterval(timerSync);
+      clearInterval(timer1);
     }
     curTime += 500;
   }, 500);
@@ -225,6 +229,7 @@ app.startSyncFromServer = function(){
       app.saveToStorage('lastSyncDt', date);
       document.getElementById('lastSyncDt').textContent = gfn.formatDate(date);
       document.getElementById('btnSyncStart').children[0].classList.remove('w3-spin');
+      document.getElementById('loading').classList.remove('w3-show');
       clearInterval(timerSync);
     }
   }, 1000);

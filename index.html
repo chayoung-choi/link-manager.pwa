@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <link rel="apple-touch-icon" sizes="57x57" href="images/logo/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="images/logo/apple-icon-60x60.png">
@@ -131,6 +132,68 @@
     <div class="w3-container w3-section" id="menuNewReg">
       <h1 class="w3-xlarge cy-color-mint"><b>신규등록.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
+      <div class="w3-container">
+        <div class="w3-card">
+          <header class="w3-container w3-padding cy-bg-color-mint mb-3">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-label cy-color-mint"><b>Link Title</b></span>
+              </div>
+              <input type="text" class="form-control" name="pathname">
+            </div>
+          </header>
+          <div class="w3-container">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-label cy-color-mint">Full URL</span>
+              </div>
+              <input type="text" class="form-control" name="pathname">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-label cy-color-mint">Full URL</span>
+              </div>
+              <input type="text" class="form-control" name="pathname">
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-label cy-color-mint">Server</span>
+              </div>
+              <select class="w3-select form-control" name="server">
+                <option value="" disabled selected>Choose your option</option>
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+              </select>
+            </div>
+
+            <label class="cy-color-mint"><b>Server</b></label>
+            <select class="w3-select w3-border" name="server">
+              <option value="" disabled selected>Choose your option</option>
+              <option value="1">Option 1</option>
+              <option value="2">Option 2</option>
+              <option value="3">Option 3</option>
+            </select>
+
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-label cy-color-mint">pathname</span>
+              </div>
+              <input type="text" class="form-control" name="pathname">
+            </div>
+
+
+            <label class="cy-color-mint"><b>FULL URL</b></label>
+            <input class="w3-input w3-border" type="text">
+          </div>
+
+          <footer class="w3-container w3-blue">
+            <h5>Footer</h5>
+          </footer>
+        </div>
+      </div>
     </div>
     <hr>
     <div class="w3-container w3-section" id="menuSetting">
