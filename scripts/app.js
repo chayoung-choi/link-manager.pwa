@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.3.4', verCode:'20200207.02'},
+    appVer   : {verName: '0.3.5', verCode:'20200207.04'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -51,6 +51,10 @@
     elBtnUserKey.classList.remove('w3-hide');
   }
 
+  document.getElementById('btnNewRegLink').addEventListener('click', function() {
+    app.setServerData('LINKS');
+  });
+
   document.getElementById('btnSyncStart').addEventListener('click', function() {
     app.startSyncFromServer();
   });
@@ -62,7 +66,99 @@
     }
   });
 
+  // document.querySelector('button.add-param-list').addEventListener('click', function(){
+  //   console.log($(this));
+  //   var item = $(this).parents('li.list-group-item').clone(true);
+  //   item.find('.form-control').each(function(idx, el){
+  //     el.value = '';
+  //   });
+  //   item.appendTo($(this).parents('ul.list-group'));
+  //   $(this).addClass('btn-danger');
+  //   $(this).addClass('del-param-list');
+  //   $(this).removeClass('btn-info');
+  //   $(this).removeClass('add-param-list');
+  //   $(this).text('-');
+  // });
 
+  $("button.add-param-list").click(function(){
+    console.log(this);
+    var item = $(this).parents('li.list-group-item').clone(true);
+    item.find('.form-control').each(function(idx, el){
+      el.value = '';
+    });
+    item.appendTo($(this).parents('ul.list-group'));
+    // $(this).addClass('btn-danger');
+    // $(this).addClass('del-param-list');
+    // $(this).removeClass('btn-info');
+    // $(this).removeClass('add-param-list');
+    // $(this).text('-');
+  })
+
+  $('[name="form-params"] [aria-label="param-value"]').change(function(){
+    if ( $(this).parents('li.list-group-item').next().length > 0 ){
+      return;
+    }
+    var item = $(this).parents('li.list-group-item').clone(true);
+    item.find('.form-control').each(function(idx, el){
+      el.value = '';
+      el.readOnly = false;
+    });
+    item.appendTo($(this).parents('ul.list-group'));
+  });
+
+  $('[name="form-params"] .form-control[readonly]').dblclick(function(){
+    $(this).prop('readonly', false);
+  });
+
+  $('[name="form-params"] button.del-param-list').click(function(){
+    if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
+      var item = $(this).parents('li.list-group-item').clone(true);
+      item.find('.form-control').each(function(idx, el){
+        el.value = '';
+        el.readOnly = false;
+      });
+      item.appendTo($(this).parents('ul.list-group'));
+    }
+    $(this).parents('li.list-group-item').remove();
+  });
+
+  $('#newRegLink .form-control').change(function(){
+    console.log('change');
+  });
+
+  $('#newRegLink .form-control').keydown(function(){
+    console.log('keypress');
+    fn_regexUrl();
+  });
+
+  function fn_regexUrl(){
+    var data = {url: 'https://abcd.domain.com:8080/first?a=1hash', attr: []};
+
+    const prop = ["fullpath", "protocol", "username", "password", "host", "port", "pathname", "querystring", "fragment"].map(v => {
+      return {
+        key: v,
+        value: '',
+      }
+    });
+
+    // const regex = /^((\w+):)?\/\/((\w+)?(:(\w+))?@)?([^\/\?:]+)(:(\d+))?(\/?([^\/\?#][^\?#]*)?)?(\?([^#]+))?(#(\w*))?/g;
+    const regex = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+    const res = data.url.match(regex);
+    console.log('res', res);
+    if (res.length) {
+        const position = [2, 4, 6, 7, 9, 11, 13];
+        const arr = [];
+        for (let i = 0, len = position.length; i < len; i++) {
+          arr.push(res[position[i]]);
+        }
+        console.log(arr);
+        prop.map((v,i)=>{
+        	v.value = arr[i];
+          return v;
+        });
+    }
+    console.log(prop);
+  }
   async function processLogin(){
     gfn.console('processLogin', 'processLogin');
     $('#loading').show();
@@ -103,7 +199,7 @@
     // console.log('바로');
     // app.getServerDate('HOST');
     // app.getServerDate('MENU');
-    alert(app.appVer.verCode);
+    // alert(app.appVer.verCode);
   });
 
 /*****************************************************************************
@@ -356,6 +452,9 @@ function fn_availableBody(b){
   }
 }
 
+function fn_addParamListBox(){
+  console.log(this);
+}
 var gfn = {
   nvl : function(str){
     if (typeof str == "undefined" || str == null || str == "") {
@@ -420,7 +519,6 @@ var gfn = {
     console.log('['+app.appVer.verName+']', msg, data);
   }
 };
-
 /*****************************************************************************
  *
  * Methods for dealing with the model
@@ -490,19 +588,31 @@ var gfn = {
   }
 
   // POST 통신
-  // var xhr = new XMLHttpRequest();
-  // var formData = new FormData();
-  // formData.append('name', 'zerocho');
-  // formData.append('birth', 1994);
-  // xhr.onload = function() {
-  //   if (xhr.status === 200 || xhr.status === 201) {
-  //     console.log(xhr.responseText);
-  //   } else {
-  //     console.error(xhr.responseText);
-  //   }
-  // };
-  // xhr.open('POST', 'https://www.zerocho.com/api/post/formdata');
-  // xhr.send(formData); // 폼 데이터 객체 전송
+  app.setServerData = function(sheetName){
+    var id = app.userInfo.userKey;
+    var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?';
+        // + 'id=' + id + '&'
+        // + 'sheet_name=' + sheetName;
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData();
+    formData.append('sheet_name', 'LINKS');
+    formData.append('KEY', id);
+    formData.append('TITLE', 'test' + new Date());
+    formData.append('MENU_CODE', 'menu-test');
+    formData.append('SERVER', 'server-test');
+    formData.append('PATHNAME', 'test');
+    formData.append('PARAMS', 'test');
+    formData.append('rowid', '10');
+    xhr.onload = function() {
+      if (xhr.status === 200 || xhr.status === 201) {
+        console.log(xhr.responseText);
+      } else {
+        console.error(xhr.responseText);
+      }
+    };
+    xhr.open('POST', url);
+    xhr.send(formData); // 폼 데이터 객체 전송
+  }
 
   app.saveToStorage = function(key, val){
     app[key] = val;
