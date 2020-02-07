@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var _appVersion = 'LM_v14';
-var _dataCache = 'LM_data-v14';
+var _appVersion = 'LM_v15';
+var _dataCache = 'LM_data-v15';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
@@ -36,7 +36,7 @@ self.addEventListener('install', function(e) {
   // console.log('[ServiceWorker] Install');
   log('INSTALL');
   e.waitUntil(
-    caches.open(_version).then(function(cache) {
+    caches.open(_appVersion).then(function(cache) {
       log('Caching app shell');
       return cache.addAll(filesToCache);
     })
@@ -49,7 +49,7 @@ self.addEventListener('activate', function(e) {
   e.waitUntil(
     caches.keys().then(function(keyList) {
       return Promise.all(keyList.map(function(key) {
-        if (key !== _version) {
+        if (key !== _appVersion) {
           log('Removing old cache ' + key);
           return caches.delete(key);
         }

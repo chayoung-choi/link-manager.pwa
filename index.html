@@ -64,13 +64,13 @@
     </table>
   </div>
   <div class="w3-bar-block">
-    <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">Home</a>
+    <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">Home</a>
     <div id="viewSidebar"></div>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">MKTX JSON 분할</a>
-    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">신규등록</a>
+    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">MKTX JSON 분할</a>
+    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">신규등록</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white">설정</a>
+    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">설정</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
     <!-- <div class="w3-cell-row">
       <div class="w3-cell w3-padding-small">
@@ -104,7 +104,7 @@
   <!-- Push down content on small screens -->
   <div class="w3-hide-large w3-padding-32"></div>
 
-  <div class="w3-container" id="home">
+  <div class="w3-container mt-3" id="home">
     <h1 class="" style="font-size:5vw;"><b>Daekyo CNS SmartMOS</b></h1>
   </div>
 
@@ -126,12 +126,12 @@
   <section id="viewUtilitySection">
     <div class="w3-container w3-section" id="mktxJsonSplit">
       <h1 class="w3-xlarge cy-color-mint"><b>MKTX JSON 분할.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
     </div>
     <hr>
     <div class="w3-container w3-section" id="menuNewReg">
       <h1 class="w3-xlarge cy-color-mint"><b>신규등록.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
       <div class="w3-container">
         <div class="w3-card">
           <header class="w3-container w3-padding cy-bg-color-mint mb-3">
@@ -198,7 +198,7 @@
     <hr>
     <div class="w3-container w3-section" id="menuSetting">
       <h1 class="w3-xlarge cy-color-mint"><b>설정.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
+      <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
       <div class="w3-row-padding">
         <div class="w3-col l4 m6 s12 w3-margin-bottom">
           <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
@@ -265,7 +265,7 @@
 </footer>
 </div>
 <!-- End page content -->
-<div id="loading" class="w3-modal" style="display: none;">
+<div id="loading" class="w3-modal w3-hide">
   <div style="margin: auto;">
     <div id="loading" class="sk-circle">
       <div class="sk-circle1 sk-child"></div>
@@ -286,7 +286,7 @@
 
 
 <!-- Modal Login-Form START -->
-<div id="modalLogin" class="w3-modal w3-light-gray" style="none;">
+<div id="modalLogin" class="w3-modal w3-light-gray w3-hide">
   <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:600px;">
     <div class="w3-center">
       <img class="w3-circle w3-margin-top" src="images/logo/icon-outline.png" alt="avatar" style="width:30%;">
@@ -340,13 +340,13 @@ $(document).ready(function(){
 
 <template id="sidebarTemplate">
   <hr style="border:0.5px solid #fff; margin:5px;" class="w3-round w3-opacity sidebar-line">
-  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white sidebar-item">NAME</a>
+  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white sidebar-item text-decoration-none">NAME</a>
 </template>
 
 <template id="mainSectionTemplate">
   <div class="w3-container w3-section section-box" data-updated="" id="">
     <h1 class="w3-xlarge cy-color-mint section-title"><b>Section Title.</b></h1>
-    <hr style="width:50px;border:3px solid #5FCECf; margin-top:-5px;" class="w3-round">
+    <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
     <div class="w3-row-padding link-content" style="display:flex; flex-wrap:wrap; align-content:stretch; align-items:stretch;"></div>
   </div>
 
@@ -355,30 +355,30 @@ $(document).ready(function(){
     <div class="w3-card" style="min-height:100%;">
       <header class="w3-container w3-light-grey w3-cell-row" style="padding-right: 0px;">
         <div class="w3-cell">
-          <h4 class="card-title">Card Title</h4>
+          <h5 class="card-title mt-2">Card Title</h5>
         </div>
         <div class="w3-cell w3-cell-middle w3-light-grey">
           <div class="w3-dropdown-hover w3-right">
             <button class="w3-button w3-light-grey"><i class="fa w3-text-gray">&#xf013;</i></button>
             <div class="w3-dropdown-content w3-bar-block w3-border w3-card" style="right:0;min-width:100px;max-width:100px">
-              <a href="#" class="w3-bar-item w3-button btn-update" onclick="">수정</a>
-              <a href="#" class="w3-bar-item w3-button btn-delete" onclick="">삭제</a>
+              <a href="#" class="w3-bar-item w3-button btn-update text-decoration-none" onclick="">수정</a>
+              <a href="#" class="w3-bar-item w3-button btn-delete text-decoration-none" onclick="">삭제</a>
             </div>
           </div>
         </div>
       </header>
       <div class="card-content">
         <div class="w3-container w3-padding w3-small card-params"></div>
-        <div class="w3-bar w3-center w3-container w3-padding-small ">
-          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green w30 host-type-l" target="_blank">Local</a>
-          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue w30 host-type-q" target="_blank">QA</a>
-          <div class="w3-dropdown-hover w30">
-            <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red w100 host-type-o" target="_blank">Prod</a>
+        <div class="w3-bar w3-center w3-container w3-padding-small">
+          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green text-decoration-none w30 host-type-l" target="_blank">Local</a>
+          <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue text-decoration-none w30 host-type-q" target="_blank">QA</a>
+          <div class="w3-dropdown-hover w30" style="float:none;">
+            <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-red text-decoration-none w100 host-type-o" target="_blank">Prod</a>
             <div class="w3-dropdown-content w3-bar-block w3-border w3-center" style="min-width:80px;max-width:80px;">
-              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w1" target="_blank">WAS1</a>
-              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w2" target="_blank">WAS2</a>
-              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w3" target="_blank">WAS3</a>
-              <a href="#" class="w3-bar-item w3-button w3-samll host-type-w4" target="_blank">WAS4</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll text-decoration-none host-type-w1" target="_blank">WAS1</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll text-decoration-none host-type-w2" target="_blank">WAS2</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll text-decoration-none host-type-w3" target="_blank">WAS3</a>
+              <a href="#" class="w3-bar-item w3-button w3-samll text-decoration-none host-type-w4" target="_blank">WAS4</a>
             </div>
           </div>
         </div>

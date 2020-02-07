@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.3.2', verCode:'20200206.07'},
+    appVer   : {verName: '0.3.3', verCode:'20200207.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -95,6 +95,7 @@
     // console.log('바로');
     // app.getServerDate('HOST');
     // app.getServerDate('MENU');
+    alert(app.appVer.verCode);
   });
 
 /*****************************************************************************
