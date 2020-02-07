@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var _appVersion = 'LM_v15';
-var _dataCache = 'LM_data-v15';
+var _appVersion = 'LM_v16';
+var _dataCache = 'LM_data-v16';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
@@ -39,6 +39,17 @@ self.addEventListener('install', function(e) {
     caches.open(_appVersion).then(function(cache) {
       log('Caching app shell');
       return cache.addAll(filesToCache);
+    })
+  );
+
+  e.waitUntil(
+    caches.keys().then(function(keyList) {
+      return Promise.all(keyList.map(function(key) {
+        if (key !== _appVersion) {
+          log('Removing old cache ' + key);
+          return caches.delete(key);
+        }
+      }));
     })
   );
 });

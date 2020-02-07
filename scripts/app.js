@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.3.3', verCode:'20200207.01'},
+    appVer   : {verName: '0.3.4', verCode:'20200207.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -54,6 +54,14 @@
   document.getElementById('btnSyncStart').addEventListener('click', function() {
     app.startSyncFromServer();
   });
+
+  document.getElementById('btnReset').addEventListener('click', function() {
+    if (confirm('캐시 데이터를 초기화합니다.')){
+      localStorage.clear();
+      location.reload();
+    }
+  });
+
 
   async function processLogin(){
     gfn.console('processLogin', 'processLogin');
