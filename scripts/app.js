@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.3.5', verCode:'20200207.04'},
+    appVer   : {verName: '0.3.6', verCode:'20200210.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -51,6 +51,13 @@
     elBtnUserKey.classList.remove('w3-hide');
   }
 
+  document.getElementById('btnNewRegReset').addEventListener('click', function() {
+    var formControlEl = document.querySelectorAll('#menuNewRegLink .form-control');
+      Array.from(formControlEl).forEach((el) => {
+        el.value = '';
+      });
+  });
+
   document.getElementById('btnNewRegLink').addEventListener('click', function() {
     app.setServerData('LINKS');
   });
@@ -66,32 +73,12 @@
     }
   });
 
-  // document.querySelector('button.add-param-list').addEventListener('click', function(){
-  //   console.log($(this));
-  //   var item = $(this).parents('li.list-group-item').clone(true);
-  //   item.find('.form-control').each(function(idx, el){
-  //     el.value = '';
-  //   });
-  //   item.appendTo($(this).parents('ul.list-group'));
-  //   $(this).addClass('btn-danger');
-  //   $(this).addClass('del-param-list');
-  //   $(this).removeClass('btn-info');
-  //   $(this).removeClass('add-param-list');
-  //   $(this).text('-');
-  // });
-
   $("button.add-param-list").click(function(){
-    console.log(this);
     var item = $(this).parents('li.list-group-item').clone(true);
     item.find('.form-control').each(function(idx, el){
       el.value = '';
     });
     item.appendTo($(this).parents('ul.list-group'));
-    // $(this).addClass('btn-danger');
-    // $(this).addClass('del-param-list');
-    // $(this).removeClass('btn-info');
-    // $(this).removeClass('add-param-list');
-    // $(this).text('-');
   })
 
   $('[name="form-params"] [aria-label="param-value"]').change(function(){
@@ -122,11 +109,11 @@
     $(this).parents('li.list-group-item').remove();
   });
 
-  $('#newRegLink .form-control').change(function(){
+  $('#menuNewRegLink .form-control').change(function(){
     console.log('change');
   });
 
-  $('#newRegLink .form-control').keydown(function(){
+  $('#menuNewRegLink .form-control').keydown(function(){
     console.log('keypress');
     fn_regexUrl();
   });
@@ -181,20 +168,6 @@
   var btnDelete = document.querySelectorAll(".btn-delete");
   var btnUpdate = document.querySelectorAll(".btn-update");
 
-// // [Card -> update btn]
-//   Array.from(btnUpdate).forEach((el) => {
-//     el.addEventListener('click', function(){
-//       alert("수정");
-//     });
-//   });
-//
-// // [Card -> delete btn]
-//   Array.from(btnDelete).forEach((el) => {
-//     el.addEventListener('click', function(){
-//       alert("삭제");
-//     });
-//   });
-
   $(function(){
     // console.log('바로');
     // app.getServerDate('HOST');
@@ -207,7 +180,6 @@
  * Methods to update/refresh the UI
  *
  ****************************************************************************/
-
 // #사이드바 메뉴 리스트 설정
 app.updateSidebar = function(data) {
   data = data.sort(fn_menuSort);
@@ -296,6 +268,27 @@ app.updateLinkCard = function(data){
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
 }
 
+// #신규등록 Box의 Server정보 업데이트
+app.updateServerListInForm = function(data){
+  var selectBox = document.querySelector('#menuNewRegLink [name="server"]');
+  $('#menuNewRegLink [name="server"] option:gt(0)').remove();
+  $('#menuNewRegLink [name="server"]').val('');
+  for (var key in data){
+    var op = new Option(key, key);
+    selectBox.options.add(op);
+  }
+}
+
+// #신규등록 Box의 메뉴정보 업데이트
+app.updateMenuListInForm = function(data){
+  var selectBox = document.querySelector('#menuNewRegLink [name="menu"]');
+  $('#menuNewRegLink [name="menu"] option:gt(0)').remove();
+  $('#menuNewRegLink [name="menu"]').val('');
+  for (var i=0; i<data.length; i++){
+    var op = new Option(data[i].MENU_NAME, data[i].MENU_CODE);
+    selectBox.options.add(op);
+  }
+}
 // #전체 동기화 진행
 app.startSyncFromServer = function(){
   document.getElementById('btnSyncStart').children[0].classList.add('w3-spin');
@@ -452,9 +445,6 @@ function fn_availableBody(b){
   }
 }
 
-function fn_addParamListBox(){
-  console.log(this);
-}
 var gfn = {
   nvl : function(str){
     if (typeof str == "undefined" || str == null || str == "") {
@@ -574,6 +564,7 @@ var gfn = {
       case 'MENU':
         app.updateSidebar(data);
         app.saveToStorage('menuData', data);
+        app.updateMenuListInForm(app.menuData);
         break;
       case 'LINKS':
         app.updateViewLinkCardSection(data);
@@ -581,6 +572,7 @@ var gfn = {
         break;
       case 'HOST':
         app.saveToStorage('hostData', fn_hostParser(data));
+        app.updateServerListInForm(app.hostData);
         break;
       default:
     }
@@ -635,12 +627,14 @@ var gfn = {
     // 2. Host 정보
     if (localStorage.hostData){
       app.hostData = JSON.parse(localStorage.hostData);
+      app.updateServerListInForm(app.hostData);
     }
 
     // 3. Menu 정보
     if (localStorage.menuData){
       app.menuData = JSON.parse(localStorage.menuData);
       app.updateSidebar(app.menuData);
+      app.updateMenuListInForm(app.menuData);
     }
 
     // 4. Link 정보

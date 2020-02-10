@@ -67,28 +67,19 @@
     <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">Home</a>
     <div id="viewSidebar"></div>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">MKTX JSON 분할</a>
-    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">신규등록</a>
+    <a href="#menuMktxJsonSplit" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">MKTX JSON 분할</a>
+    <a href="#menuNewRegLink" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">신규등록</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
     <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">설정</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <!-- <div class="w3-cell-row">
-      <div class="w3-cell w3-padding-small">
-        <input type="text" id="userKey" name="userKey"  placeholder="user key.." value="">
-      </div>
-      <div class="w3-cell">
-        <button class="w3-button w3-light-grey w3-round" id="btnRefresh"><i class="fa fa-refresh w3-text-gray"></i></button>
-      </div>
-    </div> -->
   </div>
-  <!-- <div class="w3-display-bottommiddle w100 nav-footer w3-padding w3-medium w3-center" style="background:#41b6b7;"> -->
     <div class="w100 nav-footer w3-padding w3-medium w3-center" style="background:#2f6766;">
     <span id="navFooterAppVer"></span>
   </div>
 </nav>
 
 <!-- Top menu on small screens -->
-<header class="w3-container w3-top w3-hide-large cy-bg-color-mint w3-xlarge w3-padding">
+<header class="w3-container w3-top w3-hide-large cy-bg-color-mint w3-xlarge w3-padding" style="z-index:9;">
   <a href="javascript:void(0)" class="w3-button cy-bg-color-mint" onclick="w3_open()">
     <i class="fa fa-bars"></i>
   </a>
@@ -124,12 +115,13 @@
   <!-- Content END ---->
 
   <section id="viewUtilitySection">
-    <div class="w3-container w3-section" id="mktxJsonSplit">
+    <div class="w3-container w3-section" id="menuMktxJsonSplit">
       <h1 class="w3-xlarge cy-color-mint"><b>MKTX JSON 분할.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
     </div>
     <hr>
-    <div class="w3-container w3-section" id="newRegLink">
+
+    <div id="menuNewRegLink" class="w3-container w3-section">
       <h1 class="w3-xlarge cy-color-mint"><b>신규등록.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
       <div class="w3-container">
@@ -212,10 +204,9 @@
                 </ul>
               </div>
             </div>
-          </div>
 
           <footer class="w3-container border-top mt-3 p-3 w3-center">
-            <button type="button" class="btn btn-secondary">취소</button>
+            <button type="button" class="btn btn-secondary" id="btnNewRegReset">취소</button>
             <button type="button" class="btn btn-info" id="btnNewRegLink">등록</button>
           </footer>
         </div>
@@ -266,7 +257,7 @@
 </footer>
 </div>
 <!-- End page content -->
-<div id="loading" class="w3-modal w3-hide">
+<div id="loading" class="w3-modal w3-hide" style="z-index: 100;">
   <div style="margin: auto;">
     <div id="loading" class="sk-circle">
       <div class="sk-circle1 sk-child"></div>
