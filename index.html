@@ -125,31 +125,29 @@
       <h1 class="w3-xlarge cy-color-mint"><b>신규등록.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
       <div class="w3-container">
+        <form name="formNewRegLink">
         <div class="w3-card">
           <header class="w3-container w3-padding cy-bg-color-mint mb-3">
-            <div class="input-group">
-              <div class="input-group-prepend" style="width:15%;">
+            <div class="input-group my-3">
+              <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100"><b>Link Title</b></span>
               </div>
-              <input type="text" class="form-control" name="pathname">
+              <input type="text" class="form-control w-100" name="linktitle" required>
             </div>
-          </header>
-          <div class="w3-container">
             <div class="input-group mb-3">
-              <div class="input-group-prepend" style="width:15%;">
+              <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">Full URL</span>
               </div>
-              <input type="text" class="form-control" name="pathname">
+              <input type="text" class="form-control" name="fullpath">
             </div>
-
+          </header>
+          <div class="w3-container card-body">
             <div class="input-group mb-3">
-              <div class="input-group-prepend" style="width:15%;">
+              <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">Server</span>
               </div>
-              <select class="w3-select form-control" name="server">
+              <select class="w3-select form-control" name="host" required>
                 <option value="" disabled selected>Choose your Server</option>
-                <option value="smos20">smos20</option>
-                <option value="smosmgr20">smosmgr20</option>
               </select>
               <div class="input-group-append">
                 <button class="btn btn-info" style="width:35px;" type="button" id="btnAddServer"><b>+</b></button>
@@ -157,13 +155,11 @@
             </div>
 
             <div class="input-group mb-3">
-              <div class="input-group-prepend" style="width:15%;">
+              <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">메뉴</span>
               </div>
-              <select class="w3-select form-control" name="menu">
+              <select class="w3-select form-control" name="menu" required>
                 <option value="" disabled selected>Choose your Menu</option>
-                <option value="menu1">menu1</option>
-                <option value="menu2">menu2</option>
               </select>
               <div class="input-group-append">
                 <button class="btn btn-info" style="width:35px;" type="button" id="btnAddMenu"><b>+</b></button>
@@ -171,31 +167,22 @@
             </div>
 
             <div class="input-group mb-3">
-              <div class="input-group-prepend" style="width:15%;">
+              <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">Pathname</span>
               </div>
-              <input type="text" class="form-control" name="pathname">
+              <input type="text" class="form-control" name="pathname" required>
             </div>
 
             <div class="input-group" name="form-params">
-              <div class="input-group-prepend" style="width:15%;">
+              <div class="input-group-prepend flex-fill" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">Params</span>
               </div>
               <div class="flex-fill" style="width: 80%;">
                 <ul class="list-group">
                   <li class="list-group-item">
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="name" value="param-name" aria-label="param-name" aria-describedby="button-del" readonly>
-                      <input type="text" class="form-control" placeholder="value" value="param-value" aria-label="param-value" aria-describedby="button-del" readonly>
-                      <div class="input-group-append">
-                        <button class="btn btn-danger del-param-list" style="width:35px;" type="button"><b>-</b></button>
-                      </div>
-                    </div>
-                  </li>
-                  <li class="list-group-item">
-                    <div class="input-group">
-                      <input type="text" class="form-control" placeholder="name" aria-label="param-name" aria-describedby="button-addon">
-                      <input type="text" class="form-control" placeholder="value" aria-label="param-value" aria-describedby="button-addon">
+                      <input type="text" class="form-control" placeholder="name" name="param_name" aria-label="param-name" aria-describedby="button-del">
+                      <input type="text" class="form-control" placeholder="value" name="param_value" aria-label="param-value" aria-describedby="button-del">
                       <div class="input-group-append">
                         <button class="btn btn-danger del-param-list" style="width:35px;" type="button"><b>-</b></button>
                       </div>
@@ -207,10 +194,11 @@
 
           <footer class="w3-container border-top mt-3 p-3 w3-center">
             <button type="button" class="btn btn-secondary" id="btnNewRegReset">취소</button>
-            <button type="button" class="btn btn-info" id="btnNewRegLink">등록</button>
+            <button type="submit" class="btn btn-info" id="btnNewRegLink">등록</button>
           </footer>
         </div>
       </div>
+      <form>
     </div>
     <hr>
     <div class="w3-container w3-section" id="menuSetting">
@@ -287,13 +275,13 @@
       <div class="w3-section flex-container">
         <div class="icon"><i class="w3-xlarge fa fa-user"></i></div>
         <div class="" style="flex-grow: 8;">
-          <input class="input-field" id="userId" name="userId" type="text" placeholder="Username" maxlength="20" required>
+          <input class="input-field" id="userId" name="userId" type="text" placeholder="Username" maxlength="20">
         </div>
       </div>
       <div class="w3-section flex-container">
         <div class="icon"><i class="w3-xlarge fa fa-key"></i></div>
         <div class="" style="flex-grow: 8">
-          <input class="input-field" id="userPw" name="userPw" type="password" placeholder="Password" maxlength="20" required>
+          <input class="input-field" id="userPw" name="userPw" type="password" placeholder="Password" maxlength="20">
         </div>
       </div>
       <div class="w3-section">

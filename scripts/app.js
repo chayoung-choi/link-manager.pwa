@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.3.6', verCode:'20200210.02'},
+    appVer   : {verName: '0.3.7', verCode:'20200211.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -111,40 +111,79 @@
 
   $('#menuNewRegLink .form-control').change(function(){
     console.log('change');
+    if ( this.name == 'fullpath' ){
+      fn_setFullpath();
+    } else {
+      fn_getFullpath();
+    }
   });
 
-  $('#menuNewRegLink .form-control').keydown(function(){
+  $('#menuNewRegLink .form-control').keyup(function(){
     console.log('keypress');
-    fn_regexUrl();
+    if ( this.name == 'fullpath' ){
+      fn_setFullpath();
+    } else {
+      fn_getFullpath();
+    }
   });
+  function fn_setFullpath(){
+    var fullpath = $('input[name="fullpath"]').val().trim();
+    console.log(fullpath);
+    var url = fn_parserUrl(fullpath);
 
-  function fn_regexUrl(){
-    var data = {url: 'https://abcd.domain.com:8080/first?a=1hash', attr: []};
 
-    const prop = ["fullpath", "protocol", "username", "password", "host", "port", "pathname", "querystring", "fragment"].map(v => {
-      return {
-        key: v,
-        value: '',
-      }
-    });
+    // $('#menuNewRegLink card-body .form-control').each(function(idx, el){
+    //   console.log(this);
+    //   this.value = url.attr[el.name];
+    //   // if (el.name){
+    //   //
+    //   // }
+    // });
+  }
 
-    // const regex = /^((\w+):)?\/\/((\w+)?(:(\w+))?@)?([^\/\?:]+)(:(\d+))?(\/?([^\/\?#][^\?#]*)?)?(\?([^#]+))?(#(\w*))?/g;
-    const regex = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    const res = data.url.match(regex);
-    console.log('res', res);
+  function fn_getFullpath(){
+    var form_host = $('#menuNewRegLink .form-control[name="host"]').val();
+    var form_menu = $('#menuNewRegLink .form-control[name="menu"]').val();
+    var form_pathname = $('#menuNewRegLink .form-control[name="pathname"]').val();
+
+    try {
+      var fullpath = app.hostData[form_host][0].ORIGIN + '/' + form_pathname + '?';
+      $('#menuNewRegLink .form-control[name="param_name"]').each(function(idx, el){
+        console.log(el.value);
+        if (gfn.nvl(el.value.trim()) != ""){
+          var param_value = $('#menuNewRegLink .form-control[name="param_value"]').eq(idx).val();
+          fullpath  += el.value + '=' + gfn.nvl(param_value) + "&";
+        }
+      });
+      fullpath = fullpath.substr(0, fullpath.length-1);
+      $('#menuNewRegLink .form-control[name="fullpath"]').val(fullpath);
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  function fn_parserUrl(url){
+    var data = {url: url, attr: {}};
+    // var prop = ["fullpath", "protocol", "username", "password", "host", "port", "pathname", "querystring", "fragment"].map(v => {
+    //   return { key: v, value: '' }
+    // });
+    var prop = ["fullpath", "protocol", "username", "password", "host", "port", "pathname", "querystring", "fragment"];
+
+    const regex = /^((\w+):)?\/\/((\w+)?(:(\w+))?@)?([^\/\?:]+)(:(\d+))?(\/?([^\/\?#][^\?#]*)?)?(\?([^#]+))?(#(\w*))?/;
+    var res = data.url.match(regex);
     if (res.length) {
-        const position = [2, 4, 6, 7, 9, 11, 13];
+        const position = [0, 2, 4, 6, 7, 9, 11, 13];
         const arr = [];
         for (let i = 0, len = position.length; i < len; i++) {
-          arr.push(res[position[i]]);
+          data.attr[prop[i]] = res[position[i]];
+          // arr.push(res[position[i]]);
         }
-        console.log(arr);
-        prop.map((v,i)=>{
-        	v.value = arr[i];
-          return v;
-        });
+        // prop.map((v,i)=>{
+        // 	v.value = arr[i];
+        //   return v;
+        // });
     }
-    console.log(prop);
+    return data;
   }
   async function processLogin(){
     gfn.console('processLogin', 'processLogin');
@@ -270,9 +309,9 @@ app.updateLinkCard = function(data){
 
 // #신규등록 Box의 Server정보 업데이트
 app.updateServerListInForm = function(data){
-  var selectBox = document.querySelector('#menuNewRegLink [name="server"]');
-  $('#menuNewRegLink [name="server"] option:gt(0)').remove();
-  $('#menuNewRegLink [name="server"]').val('');
+  var selectBox = document.querySelector('#menuNewRegLink [name="host"]');
+  $('#menuNewRegLink [name="host"] option:gt(0)').remove();
+  $('#menuNewRegLink [name="host"]').val('');
   for (var key in data){
     var op = new Option(key, key);
     selectBox.options.add(op);
