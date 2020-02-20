@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.3.7', verCode:'20200211.01'},
+    appVer   : {verName: '0.4.0', verCode:'20200220.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -464,6 +464,20 @@ function fn_hostParser(hostList) {
   return hostData;
 }
 
+function fn_makeJsonData(data){
+  var result = [];
+  var header = data[0];
+  for (var i=1; i<data.length; i++){
+    var json = {};
+    var row = data[i];
+    for (var j=0; j<header.length; j++){
+      json[header[j]] = row[j];
+    }
+    result.push(json);
+  }
+  return result;
+}
+
 function fn_updateCard() {
   alert("app.card upd");
 }
@@ -557,16 +571,18 @@ var gfn = {
   app.getServerDate = function(sheetName, onlyServer) {
     // var id = app.userInfo.id;
     var id = app.userInfo.userKey;
-    var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?'
+    var url = 'https://script.google.com/macros/s/AKfycbzGO-mgwC6G79z6eK1EsKYz-nsMH_HQYNZsy-qQxuHIHud4sAQ/exec?'
         + 'id=' + id + '&'
-        + 'sheet_name=' + sheetName;
+        + 'sheet_name=' + sheetName + '&'
+        + 'q=SELECT * WHERE 1=1';
 
     // 캐싱 데이터 매핑
     if (onlyServer != true && 'caches' in window) {
       caches.match(url).then(function(response) {
         if (response) {
           response.json().then(function updateFromCache(json) {
-            var results = json.list;
+            var list = json.result.list;
+            var results = fn_makeJsonData(list);
             gfn.console('[app.getServerDate.'+sheetName+'] 캐시 매핑', results);
             app.processMappingData(sheetName, results);
           });
@@ -579,7 +595,8 @@ var gfn = {
       if (request.readyState === XMLHttpRequest.DONE) {
         if (request.status === 200) {
           var response = JSON.parse(request.response);
-          var results = response.list;
+          var list = response.result.list;
+          var results = fn_makeJsonData(list);
           gfn.console('[app.getServerDate.'+sheetName+'] 서버 통신', results);
           app.processMappingData(sheetName, results);
         }
@@ -621,7 +638,7 @@ var gfn = {
   // POST 통신
   app.setServerData = function(sheetName){
     var id = app.userInfo.userKey;
-    var url = 'https://script.google.com/macros/s/AKfycbzblyyKhXtgiWvkQaWRMObrq1BrazFJ1Bae2DEH5GQqg3VwMVM/exec?';
+    var url = 'https://script.google.com/macros/s/AKfycbzGO-mgwC6G79z6eK1EsKYz-nsMH_HQYNZsy-qQxuHIHud4sAQ/exec?';
         // + 'id=' + id + '&'
         // + 'sheet_name=' + sheetName;
     var xhr = new XMLHttpRequest();

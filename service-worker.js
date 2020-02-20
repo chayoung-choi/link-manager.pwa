@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var _appVersion = 'LM_v037';
-var _dataCache = 'LM_data-v037';
+var _appVersion = 'LM_v038';
+var _dataCache = 'LM_data-v038';
 var filesToCache = [
   '/link-manager.pwa/',
   '/link-manager.pwa/index.html',
