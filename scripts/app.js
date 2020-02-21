@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.4.0', verCode:'20200220.02'},
+    appVer   : {verName: '0.4.1', verCode:'20200221.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -59,7 +59,19 @@
   });
 
   document.getElementById('btnNewRegLink').addEventListener('click', function() {
-    app.setServerData('LINKS');
+    console.log("btnNewRegLink");
+    var emptyValue = false;
+    // $("form[name='formNewRegLink'] .form-control").each(function(index, el){
+    //   if (gfn.nvl(el.value.trim()) == ""){
+    //     emptyValue = true;
+    //     return false;
+    //   }
+    // });
+
+    console.log("btnNewRegLink2", emptyValue);
+    if (!emptyValue){
+      app.setServerData('LINKS');
+    }
   });
 
   document.getElementById('btnSyncStart').addEventListener('click', function() {
@@ -316,6 +328,7 @@ app.updateServerListInForm = function(data){
     var op = new Option(key, key);
     selectBox.options.add(op);
   }
+  selectBox.options.add(new Option("미등록", " "));
 }
 
 // #신규등록 Box의 메뉴정보 업데이트
@@ -464,6 +477,7 @@ function fn_hostParser(hostList) {
   return hostData;
 }
 
+// 서버 result data Json으로 parser
 function fn_makeJsonData(data){
   var result = [];
   var header = data[0];
@@ -637,6 +651,7 @@ var gfn = {
 
   // POST 통신
   app.setServerData = function(sheetName){
+    console.log(sheetName);
     var id = app.userInfo.userKey;
     var url = 'https://script.google.com/macros/s/AKfycbzGO-mgwC6G79z6eK1EsKYz-nsMH_HQYNZsy-qQxuHIHud4sAQ/exec?';
         // + 'id=' + id + '&'
@@ -644,20 +659,32 @@ var gfn = {
     var xhr = new XMLHttpRequest();
     var formData = new FormData();
     formData.append('sheet_name', 'LINKS');
+    formData.append('id', id);
     formData.append('KEY', id);
-    formData.append('TITLE', 'test' + new Date());
-    formData.append('MENU_CODE', 'menu-test');
-    formData.append('SERVER', 'server-test');
-    formData.append('PATHNAME', 'test');
-    formData.append('PARAMS', 'test');
-    formData.append('rowid', '10');
-    xhr.onload = function() {
-      if (xhr.status === 200 || xhr.status === 201) {
-        console.log(xhr.responseText);
-      } else {
-        console.error(xhr.responseText);
-      }
-    };
+
+    switch (sheetName) {
+      case 'MENU':
+        break;
+      case 'LINKS':
+        formData.append('TITLE', document.formNewRegLink.linktitle.value);
+        formData.append('SERVER', document.formNewRegLink.host.value);
+        formData.append('MENU_CODE', document.formNewRegLink.menu.value);
+        formData.append('PATHNAME', document.formNewRegLink.pathname.value);
+        formData.append('PARAMS', "");
+        break;
+      case 'HOST':
+        break;
+      default:
+    }
+
+    // xhr.onload = function() {
+    //   if (xhr.status === 200 || xhr.status === 201) {
+    //     console.log(xhr.responseText);
+    //   } else {
+    //     console.error(xhr.responseText);
+    //   }
+    // };
+    console.log("Sdfsdf");
     xhr.open('POST', url);
     xhr.send(formData); // 폼 데이터 객체 전송
   }

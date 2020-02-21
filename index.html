@@ -310,6 +310,12 @@ function w3_close() {
   document.getElementById("myOverlay").style.display = "none";
 }
 
+var submitAction = function(e) {
+	e.preventDefault();
+  e.stopPropagation();
+};
+$('form').bind('submit', submitAction);
+
 $(document).ready(function(){
   var maxH = 0;
   $(".card-params").each(function(){
