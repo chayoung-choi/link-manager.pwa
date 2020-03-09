@@ -138,22 +138,10 @@
               <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">Full URL</span>
               </div>
-              <input type="text" class="form-control" name="fullpath">
+              <input type="text" class="form-control" name="fullpath" readonly>
             </div>
           </header>
           <div class="w3-container card-body">
-            <div class="input-group mb-3">
-              <div class="input-group-prepend" style="min-width:15%;">
-                <span class="input-group-label cy-color-mint w-100">Server</span>
-              </div>
-              <select class="w3-select form-control" name="host" required>
-                <option value="" disabled selected>Choose your Server</option>
-              </select>
-              <div class="input-group-append">
-                <button class="btn btn-info" style="width:35px;" type="button" id="btnAddServer"><b>+</b></button>
-              </div>
-            </div>
-
             <div class="input-group mb-3">
               <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">메뉴</span>
@@ -168,9 +156,21 @@
 
             <div class="input-group mb-3">
               <div class="input-group-prepend" style="min-width:15%;">
+                <span class="input-group-label cy-color-mint w-100">Server</span>
+              </div>
+              <select class="w3-select form-control change-check" name="host" required>
+                <option value="" disabled selected>Choose your Server</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-info" style="width:35px;" type="button" id="btnAddServer"><b>+</b></button>
+              </div>
+            </div>
+
+            <div class="input-group mb-3">
+              <div class="input-group-prepend" style="min-width:15%;">
                 <span class="input-group-label cy-color-mint w-100">Pathname</span>
               </div>
-              <input type="text" class="form-control" name="pathname" required>
+              <input type="text" class="form-control change-check" name="pathname" value="/" required>
             </div>
 
             <div class="input-group" name="form-params">
@@ -181,8 +181,8 @@
                 <ul class="list-group">
                   <li class="list-group-item">
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="name" name="param_name" aria-label="param-name" aria-describedby="button-del">
-                      <input type="text" class="form-control" placeholder="value" name="param_value" aria-label="param-value" aria-describedby="button-del">
+                      <input type="text" class="form-control change-check" placeholder="name" name="param_name" aria-label="param-name" aria-describedby="button-del">
+                      <input type="text" class="form-control change-check" placeholder="value" name="param_value" aria-label="param-value" aria-describedby="button-del">
                       <div class="input-group-append">
                         <button class="btn btn-danger del-param-list" style="width:35px;" type="button"><b>-</b></button>
                       </div>
@@ -313,6 +313,9 @@ function w3_close() {
 var submitAction = function(e) {
 	e.preventDefault();
   e.stopPropagation();
+  if (e.keyCode == '13'){
+    return;
+  }
 };
 $('form').bind('submit', submitAction);
 
