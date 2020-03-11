@@ -206,7 +206,7 @@
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
       <div class="w3-row-padding">
         <div class="w3-col l4 m6 s12 w3-margin-bottom">
-          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+          <div id="btnSettingUser" class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
             계정 정보
             <label class="w3-right">
               <span id="menuSettingUserId" class="cy-color-mint user-id"><span>
@@ -215,7 +215,7 @@
           </div>
         </div>
         <div class="w3-col l4 m6 s12 w3-margin-bottom">
-          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+          <div id="btnSettingServer" class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
             서버 정보
             <label class="w3-right">
               <i class="fa fa-angle-right"></i>
@@ -223,7 +223,7 @@
           </div>
         </div>
         <div class="w3-col l4 m6 s12 w3-margin-bottom">
-          <div class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
+          <div id="btnSettingMenu" class="w3-card w3-round w3-padding w3-padding-16 w3-hover-opacity">
             메뉴 설정
             <label class="w3-right">
               <i class="fa fa-angle-right"></i>
@@ -296,6 +296,34 @@
   </div>
 </div>
 <!-- Modal Login-Form END -->
+
+<!-- Modal Server START -->
+<div id="modalSettingServer" class="w3-modal">
+  <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:600px;">
+    <header class="w3-container cy-bg-color-mint p-3 m-0">
+     <h3>서버 정보</h3>
+    </header>
+    <div class="w3-container" name="formLogin">
+      <div class="w3-section flex-container">
+        <div class="icon"><i class="w3-xlarge fa fa-user"></i></div>
+        <div class="" style="flex-grow: 8;">
+          <input class="input-field" id="userId" name="userId" type="text" placeholder="Username" maxlength="20">
+        </div>
+      </div>
+      <div class="w3-section flex-container">
+        <div class="icon"><i class="w3-xlarge fa fa-key"></i></div>
+        <div class="" style="flex-grow: 8">
+          <input class="input-field" id="userPw" name="userPw" type="password" placeholder="Password" maxlength="20">
+        </div>
+      </div>
+    </div>
+    <div class="w3-container w3-light-grey w3-padding w3-center">
+      <button class="btn btn-secondary" onclick="document.getElementById('modalSettingServer').style.display='none'">취소</button>
+      <button class="btn btn-info" id="btnSaveServer">저장</button>
+    </div>
+  </div>
+</div>
+<!-- Modal Server END -->
 
 <script src="scripts/app.js" async></script>
 <script>

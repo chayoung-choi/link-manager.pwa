@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.4.2', verCode:'20200309.01'},
+    appVer   : {verName: '0.4.3', verCode:'20200311.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -79,6 +79,20 @@
       location.reload();
     }
   });
+
+  document.getElementById('btnReset').addEventListener('click', function() {
+    if (confirm('캐시 데이터를 초기화합니다.')){
+      localStorage.clear();
+      location.reload();
+    }
+  });
+
+  document.getElementById('btnSettingServer').addEventListener('click', function() {
+    document.getElementById('modalSettingServer').style.display = "block";
+  });
+
+
+
 
   $("button.add-param-list").click(function(){
     var item = $(this).parents('li.list-group-item').clone(true);
@@ -509,6 +523,7 @@ function fn_getParamList(){
     }
   }
   // return encodeURIComponent(params);
+  params = params.substr(0, params.length-1);
   return params;
 }
 
@@ -666,12 +681,25 @@ var gfn = {
       case 'MENU':
         break;
       case 'LINKS':
-        formData.append('TITLE', document.formNewRegLink.linktitle.value);
-        formData.append('SERVER', document.formNewRegLink.host.value);
-        formData.append('MENU_CODE', document.formNewRegLink.menu.value);
-        formData.append('PATHNAME', document.formNewRegLink.pathname.value);
-        formData.append('PARAMS', fn_getParamList());
+        var link = {};
+        link['TITLE'] = document.formNewRegLink.linktitle.value;
+        link['SERVER'] = document.formNewRegLink.host.value;
+        link['MENU_CODE'] = document.formNewRegLink.menu.value;
+        link['PATHNAME'] = document.formNewRegLink.pathname.value;
+        link['PARAMS'] = fn_getParamList();
+        link['SEQ'] = " ";
+        link['CREATED'] = new Date();
+
+        formData.append('TITLE', link.TITLE);
+        formData.append('SERVER', link.SERVER);
+        formData.append('MENU_CODE', link.MENU_CODE);
+        formData.append('PATHNAME', link.PATHNAME);
+        formData.append('PARAMS', link.PARAMS);
         formData.append('SEQ', " ");
+
+        app.updateLinkCard(link);
+        app.linksData.push(link);
+        localStorage["linksData"] = JSON.stringify(app.linksData);
         break;
       case 'HOST':
         break;
@@ -685,7 +713,6 @@ var gfn = {
         console.error(xhr.responseText);
       }
     };
-    console.log("Sdfsdf");
     xhr.open('POST', url);
     xhr.send(formData); // 폼 데이터 객체 전송
   }
