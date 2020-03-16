@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.4.3', verCode:'20200311.01'},
+    appVer   : {verName: '0.4.4', verCode:'20200316.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -88,11 +88,20 @@
   });
 
   document.getElementById('btnSettingServer').addEventListener('click', function() {
+    fn_getServerInfo();
     document.getElementById('modalSettingServer').style.display = "block";
   });
 
+  document.getElementById('modalServerSelectBox').addEventListener('change', function() {
+    console.log(this.value);
+    fn_getServerList(this.value);
+  });
+  document.getElementById('btnModalAddServer').addEventListener('click', function() {
 
+  });
+  document.getElementById('btnSaveServer').addEventListener('click', function() {
 
+  });
 
   $("button.add-param-list").click(function(){
     var item = $(this).parents('li.list-group-item').clone(true);
@@ -196,6 +205,34 @@
     }
     return data;
   }
+
+  // 서버 정보 팝업
+  function fn_getServerInfo(){
+    var hostData = app.hostData;
+    $('#modalSettingServer select[name="host"] option:not(:first-child)').remove();
+    var selectBox = document.querySelector('#modalSettingServer select[name="host"]');
+
+    for (var key in hostData){
+      var op = new Option(key, key);
+      selectBox.options.add(op);
+    }
+  }
+
+  // 서버 정보 팝업에서 서버 변경시
+  function fn_getServerList(server){
+    var data = app.hostData[server];
+    var list = document.querySelector('#modalSettingServer .list-group-item:last-child');
+    $('#modalSettingServer .list-group-item:not(:first-child)').remove();
+    for (var i=0; i<data.length; i++){
+      var el = data[i];
+      var temp = list.cloneNode(true);
+      temp.querySelectorAll('.form-control')[0].value = el.TYPE;
+      temp.querySelectorAll('.form-control')[1].value = el.NAME;
+      temp.querySelectorAll('.form-control')[2].value = el.ORIGIN;
+      document.querySelector('#modalSettingServer .list-group').appendChild(temp);
+    }
+  }
+
   async function processLogin(){
     gfn.console('processLogin', 'processLogin');
     $('#loading').show();

@@ -299,27 +299,42 @@
 
 <!-- Modal Server START -->
 <div id="modalSettingServer" class="w3-modal">
-  <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large" style="max-width:600px;">
+  <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-round-large mt-5" style="max-width:600px;">
     <header class="w3-container cy-bg-color-mint p-3 m-0">
      <h3>서버 정보</h3>
     </header>
-    <div class="w3-container" name="formLogin">
-      <div class="w3-section flex-container">
-        <div class="icon"><i class="w3-xlarge fa fa-user"></i></div>
-        <div class="" style="flex-grow: 8;">
-          <input class="input-field" id="userId" name="userId" type="text" placeholder="Username" maxlength="20">
+    <div class="w3-container w3-padding" name="formSettingServer">
+      <div class="input-group mb-1">
+        <div class="input-group-prepend">
+          <span class="input-group-label cy-color-mint">Server</span>
+        </div>
+        <select class="w3-select form-control change-check" id="modalServerSelectBox" name="host">
+          <option value="" disabled selected>Choose your Server</option>
+        </select>
+        <div class="input-group-append">
+          <button class="btn btn-info" style="width:35px;" type="button" id="btnModalAddServer"><b>+</b></button>
         </div>
       </div>
-      <div class="w3-section flex-container">
-        <div class="icon"><i class="w3-xlarge fa fa-key"></i></div>
-        <div class="" style="flex-grow: 8">
-          <input class="input-field" id="userPw" name="userPw" type="password" placeholder="Password" maxlength="20">
-        </div>
-      </div>
+      <ul class="list-group">
+        <li class="list-group-item list-header bg-light">
+          <div class="input-group">
+            <input type="text" class="form-control" aria-label="text with button addon" aria-describedby="button-addon1" value="Type" readonly style="width:30px;">
+            <input type="text" class="form-control" aria-label="text with button addon" aria-describedby="button-addon2" value="Name" readonly>
+            <input type="text" class="form-control" aria-label="text with button addon" aria-describedby="button-addon3" value="Orgin" readonly>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="input-group">
+            <input type="text" class="form-control" aria-label="text with button addon" aria-describedby="button-addon1">
+            <input type="text" class="form-control" aria-label="text with button addon" aria-describedby="button-addon2">
+            <input type="text" class="form-control" aria-label="text with button addon" aria-describedby="button-addon3">
+          </div>
+        </li>
+      </ul>
     </div>
     <div class="w3-container w3-light-grey w3-padding w3-center">
-      <button class="btn btn-secondary" onclick="document.getElementById('modalSettingServer').style.display='none'">취소</button>
-      <button class="btn btn-info" id="btnSaveServer">저장</button>
+      <input type="button" class="btn btn-secondary" onclick="document.getElementById('modalSettingServer').style.display='none'" value="취소">
+      <input type="button" id="btnSaveServer" class="btn btn-info" value="저장">
     </div>
   </div>
 </div>
