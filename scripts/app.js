@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.4.5', verCode:'20200324.01'},
+    appVer   : {verName: '0.4.8', verCode:'20200327.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -342,6 +342,7 @@ app.updateLinkCard = function(data){
     var paramTagIcon = clonParamTagIcon.cloneNode(true);
     paramTagIcon.textContent = '#' + key;
     paramTagIcon.dataset[key] = paramJson[key];
+    paramTagIcon.title = paramJson[key];
     card.querySelector('.card-params').appendChild(paramTagIcon);
   }
 
@@ -771,6 +772,8 @@ var gfn = {
       return;
     }
     gfn.console('init', localStorage.userInfo);
+    document.getElementById('btnUserKey').textContent = app.userInfo.id;
+    document.getElementById('userKey').value = app.userInfo.id;
 
     // 2. Host 정보
     if (localStorage.hostData){
