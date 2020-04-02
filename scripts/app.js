@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.4.8', verCode:'20200327.02'},
+    appVer   : {verName: '0.4.9', verCode:'20200402.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -59,9 +59,7 @@
   });
 
   document.getElementById('btnNewRegLink').addEventListener('click', function() {
-    if (!confirm("등록하시겠습니까?")){
-      return;
-    }
+    if (!confirm("등록하시겠습니까?")){ return; }
 
     var emptyValue = false;
     if (!emptyValue){
@@ -71,13 +69,6 @@
 
   document.getElementById('btnSyncStart').addEventListener('click', function() {
     app.startSyncFromServer();
-  });
-
-  document.getElementById('btnReset').addEventListener('click', function() {
-    if (confirm('캐시 데이터를 초기화합니다.')){
-      localStorage.clear();
-      location.reload();
-    }
   });
 
   document.getElementById('btnReset').addEventListener('click', function() {
@@ -140,22 +131,27 @@
   });
 
   $('#menuNewRegLink .form-control.change-check').change(function(){
-    console.log('change');
-    if ( this.name == 'fullpath' ){
-      fn_setFullpath();
-    } else {
-      fn_getFullpath();
-    }
+    fn_changeCheck(this.name);
   });
 
   $('#menuNewRegLink .form-control.change-check').keyup(function(){
-    console.log('keypress');
-    if ( this.name == 'fullpath' ){
+    fn_changeCheck(this.name);
+  });
+
+  $('#menuNewRegLink [name="host"]').change(function(){
+    if ( this.value == ' ' ){
+      $('#txtPathname').text('URL');
+    } else {
+      $('#txtPathname').text('Pathname');
+    }
+  });
+  function fn_changeCheck(name){
+    if ( name == 'fullpath' ){
       fn_setFullpath();
     } else {
       fn_getFullpath();
     }
-  });
+  }
   function fn_setFullpath(){
     var fullpath = $('input[name="fullpath"]').val().trim();
     var url = fn_parserUrl(fullpath);
@@ -167,7 +163,11 @@
     var form_pathname = $('#menuNewRegLink .form-control[name="pathname"]').val();
 
     try {
-      var fullpath = app.hostData[form_host][0].ORIGIN + '/' + form_pathname + '?';
+      var fullpath = "";
+      if ( gfn.nvl(app.hostData[form_host]) != "" ){
+        fullpath = app.hostData[form_host][0].ORIGIN;
+      }
+      fullpath += form_pathname + '?';
       $('#menuNewRegLink .form-control[name="param_name"]').each(function(idx, el){
         console.log(el.value);
         if (gfn.nvl(el.value.trim()) != ""){
@@ -294,7 +294,7 @@ app.updateSidebar = function(data) {
 }
 
 // #View Link Card Section
-app.updateViewLinkCardSection = function(data){
+app.updateViewLinkCardSection = function(){
   document.getElementById('viewLinkCardSection').innerHTML = '';
   var menuList = app.menuData;
 
@@ -310,7 +310,7 @@ app.updateViewLinkCardSection = function(data){
     document.getElementById('viewLinkCardSection').appendChild(hr);
   }
 
-  app.updateLinkCardList(data);
+  // app.updateLinkCardList(data);
 }
 
 // #Link Card List Update
@@ -346,14 +346,19 @@ app.updateLinkCard = function(data){
     card.querySelector('.card-params').appendChild(paramTagIcon);
   }
 
-  // link url L,Q,O,W~
-  Array.from(app.hostData[data.SERVER]).forEach((host) => {
-    var hostType = host.TYPE.toLowerCase();
-    var fullUrl = host.ORIGIN + data.PATHNAME + '?' + data.PARAMS;
-    card.querySelector('.host-type-' + hostType).href = fullUrl;
-  });
-
+  if (data.SERVER == " "){
+    var fullUrl = data.PATHNAME + '?' + data.PARAMS;
+    card.querySelector('.host-type-l').href = fullUrl;
+  } else {
+    // link url L,Q,O,W~
+    Array.from(app.hostData[data.SERVER]).forEach((host) => {
+      var hostType = host.TYPE.toLowerCase();
+      var fullUrl = host.ORIGIN + data.PATHNAME + '?' + data.PARAMS;
+      card.querySelector('.host-type-' + hostType).href = fullUrl;
+    });
+  }
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
+
 }
 
 // #신규등록 Box의 Server정보 업데이트
@@ -365,7 +370,7 @@ app.updateServerListInForm = function(data){
     var op = new Option(key, key);
     selectBox.options.add(op);
   }
-  selectBox.options.add(new Option("미등록", " "));
+  selectBox.options.add(new Option("직접입력", " "));
 }
 
 // #신규등록 Box의 메뉴정보 업데이트
@@ -688,9 +693,10 @@ var gfn = {
         app.updateSidebar(data);
         app.saveToStorage('menuData', data);
         app.updateMenuListInForm(app.menuData);
+        app.updateViewLinkCardSection();
         break;
       case 'LINKS':
-        app.updateViewLinkCardSection(data);
+        app.updateLinkCardList(data);
         app.saveToStorage('linksData', data);
         break;
       case 'HOST':
@@ -721,7 +727,7 @@ var gfn = {
       case 'LINKS':
         var link = {};
         link['TITLE'] = document.formNewRegLink.linktitle.value;
-        link['SERVER'] = document.formNewRegLink.host.value;
+        link['SERVER'] = $("#menuNewRegLink [name='host']").val();
         link['MENU_CODE'] = document.formNewRegLink.menu.value;
         link['PATHNAME'] = document.formNewRegLink.pathname.value;
         link['PARAMS'] = fn_getParamList();
@@ -734,9 +740,19 @@ var gfn = {
         formData.append('PATHNAME', link.PATHNAME);
         formData.append('PARAMS', link.PARAMS);
         formData.append('SEQ', " ");
-
+        console.log("link", link);
         app.updateLinkCard(link);
-        app.linksData.push(link);
+
+        if (gfn.nvl(app.linksData) == ""){
+          var linkData = new Array();
+          linkData.push(link);
+          console.log("app.linksData1", linkData);
+          app.linksData = linkData;
+        } else {
+          console.log("app.linksData2", link);
+          app.linksData.push(link);
+        }
+        console.log("app.linksData3", app.linkData);
         localStorage["linksData"] = JSON.stringify(app.linksData);
         break;
       case 'HOST':
@@ -786,12 +802,13 @@ var gfn = {
       app.menuData = JSON.parse(localStorage.menuData);
       app.updateSidebar(app.menuData);
       app.updateMenuListInForm(app.menuData);
+      app.updateViewLinkCardSection();
     }
 
     // 4. Link 정보
     if (localStorage.linksData){
       app.linksData = JSON.parse(localStorage.linksData);
-      app.updateViewLinkCardSection(app.linksData);
+      app.updateLinkCardList(app.linksData);
     }
 
     // 5. 동기화 시간

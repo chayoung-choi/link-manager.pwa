@@ -86,7 +86,7 @@
   <a href="javascript:void(0)" class="w3-button cy-bg-color-mint" onclick="w3_open()">
     <i class="fa fa-bars"></i>
   </a>
-  <span>Link Manager</span>
+  <span style="vertical-align: middle;">Link Manager</span>
 </header>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -171,7 +171,7 @@
 
             <div class="input-group mb-3">
               <div class="input-group-prepend" style="min-width:15%;">
-                <span class="input-group-label cy-color-mint w-100">Pathname</span>
+                <span class="input-group-label cy-color-mint w-100" id="txtPathname">Pathname</span>
               </div>
               <input type="text" class="form-control change-check" name="pathname" value="/" required>
             </div>
@@ -382,13 +382,13 @@ $(document).ready(function(){
   <div class="w3-container w3-section section-box" data-updated="" id="">
     <h1 class="w3-xlarge cy-color-mint section-title"><b>Section Title.</b></h1>
     <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
-    <div class="w3-row-padding link-content" style="display:flex; flex-wrap:wrap; align-content:stretch; align-items:stretch;"></div>
+    <div class="w3-row-padding link-content d-flex flex-wrap align-content-stretch"></div>
   </div>
 
   <!-- Link Card template START -->
   <div class="w3-col m4 l3 w3-mobile w3-section link-card w3-display-container">
-    <div class="w3-card" style="min-height:100%;">
-      <header class="w3-container w3-light-grey w3-cell-row" style="padding-right: 0px;">
+    <div class="w3-card d-flex align-items-end flex-column" style="min-height:100%;">
+      <header class="w3-container w3-light-grey w3-cell-row pr-0">
         <div class="w3-cell">
           <h5 class="card-title mt-2">Card Title</h5>
         </div>
@@ -402,9 +402,9 @@ $(document).ready(function(){
           </div>
         </div>
       </header>
-      <div class="card-content">
-        <div class="w3-container w3-padding w3-small card-params"></div>
-        <div class="w3-bar w3-center w3-container w3-padding-small">
+      <div class="card-content w3-cell-row mt-auto">
+        <div class="w3-container w3-padding w3-small card-params py-0 pt-1"></div>
+        <div class="w3-bar w3-center w3-container w3-padding-small mt-auto">
           <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green text-decoration-none w30 host-type-l" target="_blank">Local</a>
           <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue text-decoration-none w30 host-type-q" target="_blank">QA</a>
           <div class="w3-dropdown-hover w30" style="float:none;">
@@ -422,7 +422,7 @@ $(document).ready(function(){
   </div>
   <!-- Link Card template END -->
 
-  <button class="w3-button btn-secondary w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge param-tag" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom" style="margin:0 1px;">
+  <button class="w3-button btn-secondary w3-tiny w3-white w3-border w3-padding-small w3-round-xxlarge param-tag mt-1" data-toggle="tooltip" data-placement="bottom" title="Tooltip on bottom" style="margin:0 1px;">
     #param
   </button>
 </template>
