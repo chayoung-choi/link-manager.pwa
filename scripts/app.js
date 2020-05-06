@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.4.9', verCode:'20200402.01'},
+    appVer   : {verName: '0.5.0', verCode:'20200429.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
@@ -51,19 +51,26 @@
     elBtnUserKey.classList.remove('w3-hide');
   }
 
+  // [신규 등록 > '취소' 버튼]
   document.getElementById('btnNewRegReset').addEventListener('click', function() {
-    var formControlEl = document.querySelectorAll('#menuNewRegLink .form-control');
-      Array.from(formControlEl).forEach((el) => {
-        el.value = '';
-      });
+    $("#modalNewRegLink").hide();
+    var formControlEl = document.querySelectorAll('#modalNewRegLink .form-control');
+    Array.from(formControlEl).forEach((el) => {
+      el.value = '';
+      if (el.name == 'pathname'){
+        el.value = '/';
+      }
+    });
   });
 
+  // [신규 등록 > '등록' 버튼]
   document.getElementById('btnNewRegLink').addEventListener('click', function() {
     if (!confirm("등록하시겠습니까?")){ return; }
 
     var emptyValue = false;
     if (!emptyValue){
       app.setServerData('LINKS');
+      $('modalNewRegLink').hode();
     }
   });
 
@@ -76,6 +83,27 @@
       localStorage.clear();
       location.reload();
     }
+  });
+  document.getElementById('menuNewRegLink').addEventListener('click', function() {
+    var selectHostBox = document.querySelector('#modalNewRegLink [name="host"]');
+    $('#modalNewRegLink [name="host"] option:gt(0)').remove();
+    $('#modalNewRegLink [name="host"]').val('');
+
+    for (var key in app.hostData){
+      var op = new Option(key, key);
+      selectHostBox.options.add(op);
+    }
+    selectHostBox.options.add(new Option("직접입력", " "));
+
+    var selectMenuBox = document.querySelector('#modalNewRegLink [name="menu"]');
+    $('#modalNewRegLink [name="menu"] option:gt(0)').remove();
+    $('#modalNewRegLink [name="menu"]').val('');
+    var data = app.menuData;
+    for (var i=0; i<data.length; i++){
+      var op = new Option(data[i].MENU_NAME, data[i].MENU_CODE);
+      selectMenuBox.options.add(op);
+    }
+    document.getElementById('modalNewRegLink').style.display = "block";
   });
 
   document.getElementById('btnSettingServer').addEventListener('click', function() {
@@ -130,15 +158,15 @@
     $(this).parents('li.list-group-item').remove();
   });
 
-  $('#menuNewRegLink .form-control.change-check').change(function(){
+  $('#modalNewRegLink .form-control.change-check').change(function(){
     fn_changeCheck(this.name);
   });
 
-  $('#menuNewRegLink .form-control.change-check').keyup(function(){
+  $('#modalNewRegLink .form-control.change-check').keyup(function(){
     fn_changeCheck(this.name);
   });
 
-  $('#menuNewRegLink [name="host"]').change(function(){
+  $('#modalNewRegLink [name="host"]').change(function(){
     if ( this.value == ' ' ){
       $('#txtPathname').text('URL');
     } else {
@@ -158,9 +186,9 @@
   }
 
   function fn_getFullpath(){
-    var form_host = $('#menuNewRegLink .form-control[name="host"]').val();
-    var form_menu = $('#menuNewRegLink .form-control[name="menu"]').val();
-    var form_pathname = $('#menuNewRegLink .form-control[name="pathname"]').val();
+    var form_host = $('#modalNewRegLink .form-control[name="host"]').val();
+    var form_menu = $('#modalNewRegLink .form-control[name="menu"]').val();
+    var form_pathname = $('#modalNewRegLink .form-control[name="pathname"]').val();
 
     try {
       var fullpath = "";
@@ -168,15 +196,15 @@
         fullpath = app.hostData[form_host][0].ORIGIN;
       }
       fullpath += form_pathname + '?';
-      $('#menuNewRegLink .form-control[name="param_name"]').each(function(idx, el){
+      $('#modalNewRegLink .form-control[name="param_name"]').each(function(idx, el){
         console.log(el.value);
         if (gfn.nvl(el.value.trim()) != ""){
-          var param_value = $('#menuNewRegLink .form-control[name="param_value"]').eq(idx).val();
+          var param_value = $('#modalNewRegLink .form-control[name="param_value"]').eq(idx).val();
           fullpath  += el.value + '=' + gfn.nvl(param_value) + "&";
         }
       });
       fullpath = fullpath.substr(0, fullpath.length-1);
-      $('#menuNewRegLink .form-control[name="fullpath"]').val(fullpath);
+      $('#modalNewRegLink .form-control[name="fullpath"]').val(fullpath);
     } catch(err) {
       console.log(err);
     }
@@ -255,11 +283,27 @@
   var btnDelete = document.querySelectorAll(".btn-delete");
   var btnUpdate = document.querySelectorAll(".btn-update");
 
+  let removeToast;
+  function toast(string) {
+    const toast = document.getElementById("toast");
+
+    toast.classList.contains("reveal") ?
+      (clearTimeout(removeToast), removeToast = setTimeout(function () {
+          document.getElementById("toast").classList.remove("reveal")
+      }, 3000)) :
+      removeToast = setTimeout(function () {
+          document.getElementById("toast").classList.remove("reveal")
+      }, 1000)
+    toast.classList.add("reveal"),
+      toast.innerText = string;
+  }
+
   $(function(){
     // console.log('바로');
     // app.getServerDate('HOST');
     // app.getServerDate('MENU');
     // alert(app.appVer.verCode);
+    // toast('안녕?');
   });
 
 /*****************************************************************************
@@ -358,31 +402,8 @@ app.updateLinkCard = function(data){
     });
   }
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
-
 }
 
-// #신규등록 Box의 Server정보 업데이트
-app.updateServerListInForm = function(data){
-  var selectBox = document.querySelector('#menuNewRegLink [name="host"]');
-  $('#menuNewRegLink [name="host"] option:gt(0)').remove();
-  $('#menuNewRegLink [name="host"]').val('');
-  for (var key in data){
-    var op = new Option(key, key);
-    selectBox.options.add(op);
-  }
-  selectBox.options.add(new Option("직접입력", " "));
-}
-
-// #신규등록 Box의 메뉴정보 업데이트
-app.updateMenuListInForm = function(data){
-  var selectBox = document.querySelector('#menuNewRegLink [name="menu"]');
-  $('#menuNewRegLink [name="menu"] option:gt(0)').remove();
-  $('#menuNewRegLink [name="menu"]').val('');
-  for (var i=0; i<data.length; i++){
-    var op = new Option(data[i].MENU_NAME, data[i].MENU_CODE);
-    selectBox.options.add(op);
-  }
-}
 // #전체 동기화 진행
 app.startSyncFromServer = function(){
   document.getElementById('btnSyncStart').children[0].classList.add('w3-spin');
@@ -692,7 +713,6 @@ var gfn = {
       case 'MENU':
         app.updateSidebar(data);
         app.saveToStorage('menuData', data);
-        app.updateMenuListInForm(app.menuData);
         app.updateViewLinkCardSection();
         break;
       case 'LINKS':
@@ -701,7 +721,6 @@ var gfn = {
         break;
       case 'HOST':
         app.saveToStorage('hostData', fn_hostParser(data));
-        app.updateServerListInForm(app.hostData);
         break;
       default:
     }
@@ -727,7 +746,7 @@ var gfn = {
       case 'LINKS':
         var link = {};
         link['TITLE'] = document.formNewRegLink.linktitle.value;
-        link['SERVER'] = $("#menuNewRegLink [name='host']").val();
+        link['SERVER'] = $("#modalNewRegLink [name='host']").val();
         link['MENU_CODE'] = document.formNewRegLink.menu.value;
         link['PATHNAME'] = document.formNewRegLink.pathname.value;
         link['PARAMS'] = fn_getParamList();
@@ -794,14 +813,12 @@ var gfn = {
     // 2. Host 정보
     if (localStorage.hostData){
       app.hostData = JSON.parse(localStorage.hostData);
-      app.updateServerListInForm(app.hostData);
     }
 
     // 3. Menu 정보
     if (localStorage.menuData){
       app.menuData = JSON.parse(localStorage.menuData);
       app.updateSidebar(app.menuData);
-      app.updateMenuListInForm(app.menuData);
       app.updateViewLinkCardSection();
     }
 
