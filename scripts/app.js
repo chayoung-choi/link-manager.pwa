@@ -4,9 +4,12 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.0', verCode:'20200429.01'},
+    appVer   : {verName: '0.5.2', verCode:'20200507.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
+    menuData : {},
+    hostData : {},
+    linksData : {},
     syncConfig : {hostSync: false, menuSync: false, linksSync: false},
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
@@ -70,7 +73,7 @@
     var emptyValue = false;
     if (!emptyValue){
       app.setServerData('LINKS');
-      $('modalNewRegLink').hode();
+      $('#modalNewRegLink').hide();
     }
   });
 
@@ -290,10 +293,10 @@
     toast.classList.contains("reveal") ?
       (clearTimeout(removeToast), removeToast = setTimeout(function () {
           document.getElementById("toast").classList.remove("reveal")
-      }, 3000)) :
+      }, 1000)) :
       removeToast = setTimeout(function () {
           document.getElementById("toast").classList.remove("reveal")
-      }, 1000)
+      }, 3000)
     toast.classList.add("reveal"),
       toast.innerText = string;
   }
@@ -759,20 +762,7 @@ var gfn = {
         formData.append('PATHNAME', link.PATHNAME);
         formData.append('PARAMS', link.PARAMS);
         formData.append('SEQ', " ");
-        console.log("link", link);
         app.updateLinkCard(link);
-
-        if (gfn.nvl(app.linksData) == ""){
-          var linkData = new Array();
-          linkData.push(link);
-          console.log("app.linksData1", linkData);
-          app.linksData = linkData;
-        } else {
-          console.log("app.linksData2", link);
-          app.linksData.push(link);
-        }
-        console.log("app.linksData3", app.linkData);
-        localStorage["linksData"] = JSON.stringify(app.linksData);
         break;
       case 'HOST':
         break;
@@ -782,8 +772,13 @@ var gfn = {
     xhr.onload = function() {
       if (xhr.status === 200 || xhr.status === 201) {
         console.log(xhr.responseText);
+        var res = JSON.parse(xhr.responseText);
+        link['SEQ'] = res.result.seq;
+        app.pushToStorage("linksData", link);
+        toast('저장되었습니다.');
       } else {
         console.error(xhr.responseText);
+        toast('서버 저장 오류. 잠시 후 다시 시도해주세요.');
       }
     };
     xhr.open('POST', url);
@@ -793,6 +788,11 @@ var gfn = {
   app.saveToStorage = function(key, val){
     app[key] = val;
     localStorage[key] = JSON.stringify(val);
+  }
+  app.pushToStorage = function(key, val){
+    console.log("app.pushToStorage", key, val);
+    app[key].push(val);
+    localStorage[key] = JSON.stringify(app[key]);
   }
 /************************************************************************
  * Code required to start the app
