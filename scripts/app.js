@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.2', verCode:'20200507.01'},
+    appVer   : {verName: '0.5.3', verCode:'20200511.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -72,7 +72,7 @@
 
     var emptyValue = false;
     if (!emptyValue){
-      app.setServerData('LINKS');
+      app.postServerData('LINKS');
       $('#modalNewRegLink').hide();
     }
   });
@@ -376,10 +376,12 @@ app.updateLinkCard = function(data){
   card.dataset.linkId = data.SEQ;
   card.dataset.updated = data.UPDATED;
   card.querySelector('.btn-update').addEventListener('click', function(){
-    fn_updateCard();
+    // fn_updateCard();
+    app.updateServerLinkCard(data);
   });
   card.querySelector('.btn-delete').addEventListener('click', function(){
-    fn_deleteCard();
+    if (!confirm('삭제하시겠습니까?')){ return; }
+    app.deleteServerLinkCard(data);
   });
 
   // param hashtag icon
@@ -594,6 +596,14 @@ function fn_getParamList(){
   return params;
 }
 
+function fn_jsonToFormdata(json){
+  var formData = new FormData();
+  for (var key in json){
+    formData.append(key, json[key]);
+  }
+  return formData;
+}
+
 var gfn = {
   nvl : function(str){
     if (typeof str == "undefined" || str == null || str == "") {
@@ -730,52 +740,59 @@ var gfn = {
     app.syncConfig[sheetName.toLowerCase()+'Sync'] = true;
   }
 
+  app.insertServerLinkCard = function(){
+    var link = {};
+    link['action'] = "I";
+    link['TITLE'] = document.formNewRegLink.linktitle.value;
+    link['SERVER'] = $("#modalNewRegLink [name='host']").val();
+    link['MENU_CODE'] = document.formNewRegLink.menu.value;
+    link['PATHNAME'] = document.formNewRegLink.pathname.value;
+    link['PARAMS'] = fn_getParamList();
+    link['SEQ'] = " ";
+    link['CREATED'] = new Date();
+    app.updateLinkCard(link);
+    postServerData('LINKS', link);
+  }
+  app.updateServerLinkCard = function(data){
+    data.action = 'U';
+    // app.postServerData('LINKS', data);
+  }
+  app.deleteServerLinkCard = function(data){
+    data.action = 'D';
+    // TO-DO : view card 삭제 작업
+    app.postServerData('LINKS', data);
+  }
+
   // POST 통신
-  app.setServerData = function(sheetName){
-    console.log(sheetName);
+  app.postServerData = function(sheetName, data){
     var id = app.userInfo.userKey;
     var url = 'https://script.google.com/macros/s/AKfycbzGO-mgwC6G79z6eK1EsKYz-nsMH_HQYNZsy-qQxuHIHud4sAQ/exec?';
-        // + 'id=' + id + '&'
-        // + 'sheet_name=' + sheetName;
+
     var xhr = new XMLHttpRequest();
-    var formData = new FormData();
-    formData.append('sheet_name', 'LINKS');
+    var formData = fn_jsonToFormdata(data);
     formData.append('id', id);
     formData.append('KEY', id);
-
-    switch (sheetName) {
-      case 'MENU':
-        break;
-      case 'LINKS':
-        var link = {};
-        link['TITLE'] = document.formNewRegLink.linktitle.value;
-        link['SERVER'] = $("#modalNewRegLink [name='host']").val();
-        link['MENU_CODE'] = document.formNewRegLink.menu.value;
-        link['PATHNAME'] = document.formNewRegLink.pathname.value;
-        link['PARAMS'] = fn_getParamList();
-        link['SEQ'] = " ";
-        link['CREATED'] = new Date();
-
-        formData.append('TITLE', link.TITLE);
-        formData.append('SERVER', link.SERVER);
-        formData.append('MENU_CODE', link.MENU_CODE);
-        formData.append('PATHNAME', link.PATHNAME);
-        formData.append('PARAMS', link.PARAMS);
-        formData.append('SEQ', " ");
-        app.updateLinkCard(link);
-        break;
-      case 'HOST':
-        break;
-      default:
-    }
+    formData.append('sheet_name', sheetName);
 
     xhr.onload = function() {
       if (xhr.status === 200 || xhr.status === 201) {
         console.log(xhr.responseText);
+        var resultMessage = '저장되었습니다.';
         var res = JSON.parse(xhr.responseText);
-        link['SEQ'] = res.result.seq;
-        app.pushToStorage("linksData", link);
-        toast('저장되었습니다.');
+        switch (data.action) {
+          case 'I':
+            link['SEQ'] = res.result.seq;
+            app.pushToStorage("linksData", link);
+            break;
+          case 'U':
+            break;
+          case 'D':
+            resultMessage = '삭제되었습니다.';
+            break;
+          default:
+        }
+
+        toast(resultMessage);
       } else {
         console.error(xhr.responseText);
         toast('서버 저장 오류. 잠시 후 다시 시도해주세요.');
@@ -806,7 +823,7 @@ var gfn = {
       gfn.console('init', 'no id');
       return;
     }
-    gfn.console('init', localStorage.userInfo);
+
     document.getElementById('btnUserKey').textContent = app.userInfo.id;
     document.getElementById('userKey').value = app.userInfo.id;
 
