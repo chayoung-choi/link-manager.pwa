@@ -388,7 +388,7 @@ a:hover, a:focus {text-decoration: none;}
     opacity: 0;
     visibility: hidden;
     transition: opacity .5s, visibility .5s, transform .5s;
-    background: rgba(0, 0, 0, .35);
+    background: rgba(0, 0, 0, .70);
     color: #fff;
     z-index: 10000;
 }

@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.3', verCode:'20200511.01'},
+    appVer   : {verName: '0.5.4', verCode:'20200512.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -72,7 +72,7 @@
 
     var emptyValue = false;
     if (!emptyValue){
-      app.postServerData('LINKS');
+      app.insertServerLinkCard()
       $('#modalNewRegLink').hide();
     }
   });
@@ -200,7 +200,6 @@
       }
       fullpath += form_pathname + '?';
       $('#modalNewRegLink .form-control[name="param_name"]').each(function(idx, el){
-        console.log(el.value);
         if (gfn.nvl(el.value.trim()) != ""){
           var param_value = $('#modalNewRegLink .form-control[name="param_value"]').eq(idx).val();
           fullpath  += el.value + '=' + gfn.nvl(param_value) + "&";
@@ -373,15 +372,15 @@ app.updateLinkCard = function(data){
 
   var card = app.mainSectionTemplate.content.querySelector('.link-card').cloneNode(true);
   card.querySelector('.card-title').textContent = data.TITLE;
-  card.dataset.linkId = data.SEQ;
-  card.dataset.updated = data.UPDATED;
+  card.dataset.linkId =  data.SERVER + '-' + data.SEQ;
+  card.dataset.updated = gfn.formatDate(new Date(data.UPDATED), 'yyyymmdd24hhmiss');
   card.querySelector('.btn-update').addEventListener('click', function(){
     // fn_updateCard();
     app.updateServerLinkCard(data);
   });
   card.querySelector('.btn-delete').addEventListener('click', function(){
     if (!confirm('삭제하시겠습니까?')){ return; }
-    app.deleteServerLinkCard(data);
+    app.deleteLinkCard(data);
   });
 
   // param hashtag icon
@@ -407,6 +406,43 @@ app.updateLinkCard = function(data){
     });
   }
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
+}
+
+app.deleteLinkCard = function(data){
+  for (var i=0; i<app.linksData.length; i++) {
+    console.log(i);
+    if ( app.linksData[i].SERVER == data.SERVER && app.linksData[i].SEQ == data.SEQ ){
+      app.linksData.splice(i, 1);
+      break;
+    }
+  }
+  $("[data-link-id='"+data.SERVER+"-"+data.SEQ+"']").remove();
+  app.deleteServerLinkCard(data);
+}
+
+app.insertServerLinkCard = function(){
+  var link = {};
+  link['action'] = "I";
+  link['TITLE'] = document.formNewRegLink.linktitle.value;
+  link['SERVER'] = $("#modalNewRegLink [name='host']").val();
+  link['MENU_CODE'] = document.formNewRegLink.menu.value;
+  link['PATHNAME'] = document.formNewRegLink.pathname.value;
+  link['PARAMS'] = fn_getParamList();
+  link['SEQ'] = "temp-" + (new Date()).getTime();
+  link['CREATED'] = new Date();
+  link['UPDATED'] = new Date();
+  app.updateLinkCard(link);
+  app.postServerData('LINKS', link);
+}
+
+app.updateServerLinkCard = function(data){
+  data.action = 'U';
+  // app.postServerData('LINKS', data);
+}
+
+app.deleteServerLinkCard = function(data){
+  data.action = 'D';
+  app.postServerData('LINKS', data);
 }
 
 // #전체 동기화 진행
@@ -740,29 +776,6 @@ var gfn = {
     app.syncConfig[sheetName.toLowerCase()+'Sync'] = true;
   }
 
-  app.insertServerLinkCard = function(){
-    var link = {};
-    link['action'] = "I";
-    link['TITLE'] = document.formNewRegLink.linktitle.value;
-    link['SERVER'] = $("#modalNewRegLink [name='host']").val();
-    link['MENU_CODE'] = document.formNewRegLink.menu.value;
-    link['PATHNAME'] = document.formNewRegLink.pathname.value;
-    link['PARAMS'] = fn_getParamList();
-    link['SEQ'] = " ";
-    link['CREATED'] = new Date();
-    app.updateLinkCard(link);
-    postServerData('LINKS', link);
-  }
-  app.updateServerLinkCard = function(data){
-    data.action = 'U';
-    // app.postServerData('LINKS', data);
-  }
-  app.deleteServerLinkCard = function(data){
-    data.action = 'D';
-    // TO-DO : view card 삭제 작업
-    app.postServerData('LINKS', data);
-  }
-
   // POST 통신
   app.postServerData = function(sheetName, data){
     var id = app.userInfo.userKey;
@@ -781,13 +794,16 @@ var gfn = {
         var res = JSON.parse(xhr.responseText);
         switch (data.action) {
           case 'I':
-            link['SEQ'] = res.result.seq;
-            app.pushToStorage("linksData", link);
+            var tempSeq = data['SEQ'];
+            data['SEQ'] = res.result.seq;
+            $("[data-link-id='"+ data['SERVER'] +"-"+ tempSeq +"']")[0].dataset.linkId = data['SERVER'] +"-"+ data['SEQ'];
+            app.pushToStorage("linksData", data);
             break;
           case 'U':
             break;
           case 'D':
             resultMessage = '삭제되었습니다.';
+            app.saveToStorage("linksData", app.linksData);
             break;
           default:
         }
