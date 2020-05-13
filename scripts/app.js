@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.4', verCode:'20200512.01'},
+    appVer   : {verName: '0.5.5', verCode:'20200513.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -410,7 +410,6 @@ app.updateLinkCard = function(data){
 
 app.deleteLinkCard = function(data){
   for (var i=0; i<app.linksData.length; i++) {
-    console.log(i);
     if ( app.linksData[i].SERVER == data.SERVER && app.linksData[i].SEQ == data.SEQ ){
       app.linksData.splice(i, 1);
       break;
