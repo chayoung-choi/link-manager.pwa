@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.5', verCode:'20200513.01'},
+    appVer   : {verName: '0.5.6', verCode:'20200514.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -159,6 +159,7 @@
       item.appendTo($(this).parents('ul.list-group'));
     }
     $(this).parents('li.list-group-item').remove();
+    fn_getFullpath();
   });
 
   $('#modalNewRegLink .form-control.change-check').change(function(){
@@ -172,8 +173,10 @@
   $('#modalNewRegLink [name="host"]').change(function(){
     if ( this.value == ' ' ){
       $('#txtPathname').text('URL');
+      $('#modalNewRegLink #slash').hide();
     } else {
       $('#txtPathname').text('Pathname');
+      $('#modalNewRegLink #slash').show();
     }
   });
   function fn_changeCheck(name){
@@ -189,17 +192,18 @@
   }
 
   function fn_getFullpath(){
-    var form_host = $('#modalNewRegLink .form-control[name="host"]').val();
     var form_menu = $('#modalNewRegLink .form-control[name="menu"]').val();
+    var form_host = $('#modalNewRegLink .form-control[name="host"]').val();
     var form_pathname = $('#modalNewRegLink .form-control[name="pathname"]').val();
 
     try {
       var fullpath = "";
       if ( gfn.nvl(app.hostData[form_host]) != "" ){
-        fullpath = app.hostData[form_host][0].ORIGIN;
+        fullpath = app.hostData[form_host][0].ORIGIN + "/";
       }
-      fullpath += form_pathname + '?';
+
       $('#modalNewRegLink .form-control[name="param_name"]').each(function(idx, el){
+        if (idx == 0){ fullpath += form_pathname + '?'; }
         if (gfn.nvl(el.value.trim()) != ""){
           var param_value = $('#modalNewRegLink .form-control[name="param_value"]').eq(idx).val();
           fullpath  += el.value + '=' + gfn.nvl(param_value) + "&";
