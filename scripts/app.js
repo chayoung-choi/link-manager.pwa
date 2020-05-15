@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.7', verCode:'20200515.01'},
+    appVer   : {verName: '0.5.8', verCode:'20200515.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -315,6 +315,19 @@
     // toast('안녕?');
   });
 
+  // [Top Scroll 이동 버튼]
+  window.onscroll = function() {scrollFunction()};
+  document.getElementById('btnTopScroll').addEventListener('click', function (){
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+  });
+  function scrollFunction() {
+    if (document.body.scrollTop > 30 || document.documentElement.scrollTop > 30) {
+      document.getElementById('btnTopScroll').style.display = "block";
+    } else {
+      document.getElementById('btnTopScroll').style.display = "none";
+    }
+  }
 /*****************************************************************************
  *
  * Methods to update/refresh the UI
