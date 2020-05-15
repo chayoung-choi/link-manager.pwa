@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
+  <!-- 2019-2020 Chayoung.dev  -->
   <title>Link Manager</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -219,14 +220,14 @@
 </div>
 <!-- Modal Login-Form END -->
 
-<div id="modalNewRegLink" class="w3-modal">
+<div id="modalLinkMgmt" class="w3-modal">
   <div class="w3-modal-content w3-card-4 w3-animate-zoom mt-5 mt-md-0 mb-3 w3-round-large" style="max-width:600px;">
     <header class="w3-container cy-bg-color-mint p-3 m-0" style="border-radius: 8px 8px 0 0;">
-     <h3>신규 등록</h3>
+     <h3 class="mb-0"><span class="modal-title">신규 등록</span></h3>
     </header>
     <div class="w3-container">
-      <form name="formNewRegLink">
-        <!-- <header class="w3-container w3-padding cy-bg-color-mint"> -->
+      <form name="formLinMgmtk">
+        <div class="modal-link-data" data-action="I"></div>
         <div class="input-group my-3">
           <div class="input-group-prepend" style="min-width:15%;">
             <span class="input-group-label cy-color-mint w-100"><b>Link Title</b></span>
@@ -239,7 +240,6 @@
           </div>
           <input type="text" class="form-control" name="fullpath" readonly>
         </div>
-        <!-- <div class="w3-container card-body"> -->
           <div class="input-group mb-3">
             <div class="input-group-prepend" style="min-width:15%;">
               <span class="input-group-label cy-color-mint w-100">메뉴</span>
@@ -290,16 +290,15 @@
               </ul>
             </div>
           </div>
-        <!-- </div> -->
       </form>
     </div>
     <footer class="w3-container border-top mt-3 p-3 w3-center">
-      <button type="button" class="btn btn-secondary" id="btnNewRegReset">취소</button>
-      <button type="submit" class="btn btn-info" id="btnNewRegLink">등록</button>
+      <button type="button" class="btn btn-secondary" id="btnLinkMgmtReset">취소</button>
+      <button type="submit" class="btn btn-info" id="btnLinkMgmtSave">등록</button>
     </footer>
   </div>
 </div>
-<!-- Modal Server END -->
+<!-- Modal new link END -->
 
 <!-- Modal Server START -->
 <div id="modalSettingServer" class="w3-modal">

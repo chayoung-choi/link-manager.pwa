@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.6', verCode:'20200514.01'},
+    appVer   : {verName: '0.5.7', verCode:'20200515.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -54,26 +54,23 @@
     elBtnUserKey.classList.remove('w3-hide');
   }
 
-  // [신규 등록 > '취소' 버튼]
-  document.getElementById('btnNewRegReset').addEventListener('click', function() {
-    $("#modalNewRegLink").hide();
-    var formControlEl = document.querySelectorAll('#modalNewRegLink .form-control');
+  // [Link 등록 > '취소' 버튼]
+  document.getElementById('btnLinkMgmtReset').addEventListener('click', function() {
+    $("#modalLinkMgmt").hide();
+    var formControlEl = document.querySelectorAll('#modalLinkMgmt .form-control');
     Array.from(formControlEl).forEach((el) => {
       el.value = '';
-      if (el.name == 'pathname'){
-        el.value = '/';
-      }
     });
   });
 
-  // [신규 등록 > '등록' 버튼]
-  document.getElementById('btnNewRegLink').addEventListener('click', function() {
+  // [Link 등록 > '등록' 버튼]
+  document.getElementById('btnLinkMgmtSave').addEventListener('click', function() {
     if (!confirm("등록하시겠습니까?")){ return; }
 
     var emptyValue = false;
     if (!emptyValue){
       app.insertServerLinkCard()
-      $('#modalNewRegLink').hide();
+      $('#modalLinkMgmt').hide();
     }
   });
 
@@ -88,9 +85,15 @@
     }
   });
   document.getElementById('menuNewRegLink').addEventListener('click', function() {
-    var selectHostBox = document.querySelector('#modalNewRegLink [name="host"]');
-    $('#modalNewRegLink [name="host"] option:gt(0)').remove();
-    $('#modalNewRegLink [name="host"]').val('');
+    var modalLinkMgmt = document.getElementById('modalLinkMgmt');
+    modalLinkMgmt.querySelector(".modal-title").textContent = "신규 등록";
+    modalLinkMgmt.querySelector("#btnLinkMgmtSave").textContent = "등록";
+    modalLinkMgmt.querySelector(".modal-link-data").dataset.action = 'I';
+    modalLinkMgmt.querySelector(".modal-link-data").removeAttribute('data-seq');
+
+    var selectHostBox = document.querySelector('#modalLinkMgmt [name="host"]');
+    $('#modalLinkMgmt [name="host"] option:gt(0)').remove();
+    $('#modalLinkMgmt [name="host"]').val('');
 
     for (var key in app.hostData){
       var op = new Option(key, key);
@@ -98,15 +101,15 @@
     }
     selectHostBox.options.add(new Option("직접입력", " "));
 
-    var selectMenuBox = document.querySelector('#modalNewRegLink [name="menu"]');
-    $('#modalNewRegLink [name="menu"] option:gt(0)').remove();
-    $('#modalNewRegLink [name="menu"]').val('');
+    var selectMenuBox = document.querySelector('#modalLinkMgmt [name="menu"]');
+    $('#modalLinkMgmt [name="menu"] option:gt(0)').remove();
+    $('#modalLinkMgmt [name="menu"]').val('');
     var data = app.menuData;
     for (var i=0; i<data.length; i++){
       var op = new Option(data[i].MENU_NAME, data[i].MENU_CODE);
       selectMenuBox.options.add(op);
     }
-    document.getElementById('modalNewRegLink').style.display = "block";
+    document.getElementById('modalLinkMgmt').style.display = "block";
   });
 
   document.getElementById('btnSettingServer').addEventListener('click', function() {
@@ -162,21 +165,21 @@
     fn_getFullpath();
   });
 
-  $('#modalNewRegLink .form-control.change-check').change(function(){
+  $('#modalLinkMgmt .form-control.change-check').change(function(){
     fn_changeCheck(this.name);
   });
 
-  $('#modalNewRegLink .form-control.change-check').keyup(function(){
+  $('#modalLinkMgmt .form-control.change-check').keyup(function(){
     fn_changeCheck(this.name);
   });
 
-  $('#modalNewRegLink [name="host"]').change(function(){
+  $('#modalLinkMgmt [name="host"]').change(function(){
     if ( this.value == ' ' ){
       $('#txtPathname').text('URL');
-      $('#modalNewRegLink #slash').hide();
+      $('#modalLinkMgmt #slash').hide();
     } else {
       $('#txtPathname').text('Pathname');
-      $('#modalNewRegLink #slash').show();
+      $('#modalLinkMgmt #slash').show();
     }
   });
   function fn_changeCheck(name){
@@ -192,9 +195,9 @@
   }
 
   function fn_getFullpath(){
-    var form_menu = $('#modalNewRegLink .form-control[name="menu"]').val();
-    var form_host = $('#modalNewRegLink .form-control[name="host"]').val();
-    var form_pathname = $('#modalNewRegLink .form-control[name="pathname"]').val();
+    var form_menu = $('#modalLinkMgmt .form-control[name="menu"]').val();
+    var form_host = $('#modalLinkMgmt .form-control[name="host"]').val();
+    var form_pathname = $('#modalLinkMgmt .form-control[name="pathname"]').val();
 
     try {
       var fullpath = "";
@@ -202,15 +205,15 @@
         fullpath = app.hostData[form_host][0].ORIGIN + "/";
       }
 
-      $('#modalNewRegLink .form-control[name="param_name"]').each(function(idx, el){
+      $('#modalLinkMgmt .form-control[name="param_name"]').each(function(idx, el){
         if (idx == 0){ fullpath += form_pathname + '?'; }
         if (gfn.nvl(el.value.trim()) != ""){
-          var param_value = $('#modalNewRegLink .form-control[name="param_value"]').eq(idx).val();
+          var param_value = $('#modalLinkMgmt .form-control[name="param_value"]').eq(idx).val();
           fullpath  += el.value + '=' + gfn.nvl(param_value) + "&";
         }
       });
       fullpath = fullpath.substr(0, fullpath.length-1);
-      $('#modalNewRegLink .form-control[name="fullpath"]').val(fullpath);
+      $('#modalLinkMgmt .form-control[name="fullpath"]').val(fullpath);
     } catch(err) {
       console.log(err);
     }
@@ -317,7 +320,7 @@
  * Methods to update/refresh the UI
  *
  ****************************************************************************/
-// #사이드바 메뉴 리스트 설정
+// [사이드바 메뉴 리스트 설정]
 app.updateSidebar = function(data) {
   data = data.sort(fn_menuSort);
 
@@ -343,7 +346,7 @@ app.updateSidebar = function(data) {
   }
 }
 
-// #View Link Card Section
+// [Main Link Card Section 업데이트]
 app.updateViewLinkCardSection = function(){
   document.getElementById('viewLinkCardSection').innerHTML = '';
   var menuList = app.menuData;
@@ -363,14 +366,14 @@ app.updateViewLinkCardSection = function(){
   // app.updateLinkCardList(data);
 }
 
-// #Link Card List Update
+// [Link Card List 업데이트]
 app.updateLinkCardList = function(data){
   Array.from(data).forEach((el) => {
     app.updateLinkCard(el);
   });
 }
 
-// #Link Card Update
+// [단일 Link Card 업데이트]
 app.updateLinkCard = function(data){
   if (document.getElementById(data.MENU_CODE) == null) { return; }
 
@@ -379,8 +382,7 @@ app.updateLinkCard = function(data){
   card.dataset.linkId =  data.SERVER + '-' + data.SEQ;
   card.dataset.updated = gfn.formatDate(new Date(data.UPDATED), 'yyyymmdd24hhmiss');
   card.querySelector('.btn-update').addEventListener('click', function(){
-    // fn_updateCard();
-    app.updateServerLinkCard(data);
+    app.showLinkUpdateModal(data);
   });
   card.querySelector('.btn-delete').addEventListener('click', function(){
     if (!confirm('삭제하시겠습니까?')){ return; }
@@ -412,6 +414,17 @@ app.updateLinkCard = function(data){
   document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
 }
 
+// [Link Card 수정 modal Show]
+app.showLinkUpdateModal = function(data){
+  var modalLinkMgmt = document.getElementById('modalLinkMgmt');
+  modalLinkMgmt.querySelector(".modal-title").textContent = "Link 수정";
+  modalLinkMgmt.querySelector("#btnLinkMgmtSave").textContent = "저장";
+  modalLinkMgmt.querySelector(".modal-link-data").dataset.action = 'U';
+  modalLinkMgmt.querySelector(".modal-link-data").dataset.seq = data.SEQ;
+
+  $("#modalLinkMgmt").show();
+}
+
 app.deleteLinkCard = function(data){
   for (var i=0; i<app.linksData.length; i++) {
     if ( app.linksData[i].SERVER == data.SERVER && app.linksData[i].SEQ == data.SEQ ){
@@ -426,10 +439,10 @@ app.deleteLinkCard = function(data){
 app.insertServerLinkCard = function(){
   var link = {};
   link['action'] = "I";
-  link['TITLE'] = document.formNewRegLink.linktitle.value;
-  link['SERVER'] = $("#modalNewRegLink [name='host']").val();
-  link['MENU_CODE'] = document.formNewRegLink.menu.value;
-  link['PATHNAME'] = document.formNewRegLink.pathname.value;
+  link['TITLE'] = document.formLinMgmtk.linktitle.value;
+  link['SERVER'] = $("#modalLinkMgmt [name='host']").val();
+  link['MENU_CODE'] = document.formLinMgmtk.menu.value;
+  link['PATHNAME'] = document.formLinMgmtk.pathname.value;
   link['PARAMS'] = fn_getParamList();
   link['SEQ'] = "temp-" + (new Date()).getTime();
   link['CREATED'] = new Date();
@@ -448,7 +461,7 @@ app.deleteServerLinkCard = function(data){
   app.postServerData('LINKS', data);
 }
 
-// #전체 동기화 진행
+// [전체 동기화 진행]
 app.startSyncFromServer = function(){
   document.getElementById('btnSyncStart').children[0].classList.add('w3-spin');
   document.getElementById('loading').classList.add('w3-show');
@@ -599,8 +612,8 @@ function fn_makeJsonData(data){
   return result;
 }
 
-function fn_updateCard() {
-  alert("app.card upd");
+function fn_updateLinkCard(data) {
+
 }
 function fn_deleteCard() {
   alert("app.card del");
@@ -622,8 +635,8 @@ function fn_availableBody(b){
 // 등록화면에서 param key와 value 가져오기
 function fn_getParamList(){
   var params = "";
-  var nameList = document.formNewRegLink.param_name;
-  var valueList = document.formNewRegLink.param_value;
+  var nameList = document.formLinMgmtk.param_name;
+  var valueList = document.formLinMgmtk.param_value;
   for (var i=0; i<nameList.length; i++){
     var name = nameList[i].value;
     if (gfn.nvl(name) != ""){
