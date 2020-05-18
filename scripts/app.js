@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.8', verCode:'20200515.02'},
+    appVer   : {verName: '0.5.9', verCode:'20200518.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -84,31 +84,16 @@
       location.reload();
     }
   });
+
+  // [Link 신규등록 Open]
   document.getElementById('menuNewRegLink').addEventListener('click', function() {
     var modalLinkMgmt = document.getElementById('modalLinkMgmt');
     modalLinkMgmt.querySelector(".modal-title").textContent = "신규 등록";
     modalLinkMgmt.querySelector("#btnLinkMgmtSave").textContent = "등록";
     modalLinkMgmt.querySelector(".modal-link-data").dataset.action = 'I';
     modalLinkMgmt.querySelector(".modal-link-data").removeAttribute('data-seq');
-
-    var selectHostBox = document.querySelector('#modalLinkMgmt [name="host"]');
-    $('#modalLinkMgmt [name="host"] option:gt(0)').remove();
-    $('#modalLinkMgmt [name="host"]').val('');
-
-    for (var key in app.hostData){
-      var op = new Option(key, key);
-      selectHostBox.options.add(op);
-    }
-    selectHostBox.options.add(new Option("직접입력", " "));
-
-    var selectMenuBox = document.querySelector('#modalLinkMgmt [name="menu"]');
-    $('#modalLinkMgmt [name="menu"] option:gt(0)').remove();
-    $('#modalLinkMgmt [name="menu"]').val('');
-    var data = app.menuData;
-    for (var i=0; i<data.length; i++){
-      var op = new Option(data[i].MENU_NAME, data[i].MENU_CODE);
-      selectMenuBox.options.add(op);
-    }
+    getHostBoxOnLinkMgmt();
+    getMenuBoxOnLinkMgmt();
     document.getElementById('modalLinkMgmt').style.display = "block";
   });
 
@@ -268,6 +253,30 @@
       temp.querySelectorAll('.form-control')[2].value = el.ORIGIN;
       document.querySelector('#modalSettingServer .list-group').appendChild(temp);
     }
+  }
+
+  // [Link 관리창 서버 SelectBox 설정]
+  function getHostBoxOnLinkMgmt(val){
+    var selectBox = document.querySelector('#modalLinkMgmt [name="host"]');
+    $('#modalLinkMgmt [name="host"] option:gt(0)').remove();
+    for (var key in app.hostData){
+      var op = new Option(key, key);
+      selectBox.options.add(op);
+    }
+    selectBox.options.add(new Option("직접입력", " "));
+    $('#modalLinkMgmt [name="host"]').val(val);
+  }
+
+  // [Link 관리창 메뉴 SelectBox 설정]
+  function getMenuBoxOnLinkMgmt(val){
+    var data = app.menuData;
+    var selectBox = document.querySelector('#modalLinkMgmt [name="menu"]');
+    $('#modalLinkMgmt [name="menu"] option:gt(0)').remove();
+    for (var i=0; i<data.length; i++){
+      var op = new Option(data[i].MENU_NAME, data[i].MENU_CODE);
+      selectBox.options.add(op);
+    }
+    $('#modalLinkMgmt [name="menu"]').val(val);
   }
 
   async function processLogin(){
@@ -434,7 +443,11 @@ app.showLinkUpdateModal = function(data){
   modalLinkMgmt.querySelector("#btnLinkMgmtSave").textContent = "저장";
   modalLinkMgmt.querySelector(".modal-link-data").dataset.action = 'U';
   modalLinkMgmt.querySelector(".modal-link-data").dataset.seq = data.SEQ;
-
+  modalLinkMgmt.querySelector("form [name='linktitle']").value = data.TITLE;
+  modalLinkMgmt.querySelector("form [name='pathname']").value = data.PATHNAME;
+  getMenuBoxOnLinkMgmt(data.MENU_CODE);
+  getHostBoxOnLinkMgmt(data.SERVER);
+  console.log(data);
   $("#modalLinkMgmt").show();
 }
 
@@ -452,10 +465,10 @@ app.deleteLinkCard = function(data){
 app.insertServerLinkCard = function(){
   var link = {};
   link['action'] = "I";
-  link['TITLE'] = document.formLinMgmtk.linktitle.value;
+  link['TITLE'] = document.formLinkMgmt.linktitle.value;
   link['SERVER'] = $("#modalLinkMgmt [name='host']").val();
-  link['MENU_CODE'] = document.formLinMgmtk.menu.value;
-  link['PATHNAME'] = document.formLinMgmtk.pathname.value;
+  link['MENU_CODE'] = document.formLinkMgmt.menu.value;
+  link['PATHNAME'] = document.formLinkMgmt.pathname.value;
   link['PARAMS'] = fn_getParamList();
   link['SEQ'] = "temp-" + (new Date()).getTime();
   link['CREATED'] = new Date();
@@ -645,11 +658,30 @@ function fn_availableBody(b){
   }
 }
 
+// 등록화면에 param key와 value 할당하기
+function fn_setParamList(data){
+  var params = data.substr(1, data.length).split("&");
+  console.log("params", params);
+  for (var i=0; i<params.length; i++){
+    var param = params.split("=");
+    // to-do
+    document.querySelectorAll("#modalLinkMgmt form [name='param_name']")[i].value = data.TITLE;
+    document.querySelectorAll("#modalLinkMgmt form [name='param_value']")[i].value = data.TITLE;
+    var name = nameList[i].value;
+    if (gfn.nvl(name) != ""){
+      params += name + "=" + valueList[i].value + "&";
+    }
+  }
+  // return encodeURIComponent(params);
+  params = params.substr(0, params.length-1);
+  return params;
+}
+
 // 등록화면에서 param key와 value 가져오기
 function fn_getParamList(){
   var params = "";
-  var nameList = document.formLinMgmtk.param_name;
-  var valueList = document.formLinMgmtk.param_value;
+  var nameList = document.formLinkMgmt.param_name;
+  var valueList = document.formLinkMgmt.param_value;
   for (var i=0; i<nameList.length; i++){
     var name = nameList[i].value;
     if (gfn.nvl(name) != ""){
