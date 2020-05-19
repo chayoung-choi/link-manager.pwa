@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.5.9', verCode:'20200518.01'},
+    appVer   : {verName: '0.6.0', verCode:'20200519.04'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -92,9 +92,11 @@
     modalLinkMgmt.querySelector("#btnLinkMgmtSave").textContent = "등록";
     modalLinkMgmt.querySelector(".modal-link-data").dataset.action = 'I';
     modalLinkMgmt.querySelector(".modal-link-data").removeAttribute('data-seq');
+
     getHostBoxOnLinkMgmt();
     getMenuBoxOnLinkMgmt();
-    document.getElementById('modalLinkMgmt').style.display = "block";
+    initParamItem();
+    $("#modalLinkMgmt").show();
   });
 
   document.getElementById('btnSettingServer').addEventListener('click', function() {
@@ -113,15 +115,62 @@
 
   });
 
-  $("button.add-param-list").click(function(){
-    var item = $(this).parents('li.list-group-item').clone(true);
-    item.find('.form-control').each(function(idx, el){
-      el.value = '';
-    });
-    item.appendTo($(this).parents('ul.list-group'));
-  })
+  // [Link 관리 > Server Change 이벤트]
+  document.querySelector("#modalLinkMgmt [name='host']").addEventListener('change', function(){
+    if ( this.value == ' ' ){
+      $('#txtPathname').text('URL');
+      $('#modalLinkMgmt #slash').hide();
+    } else {
+      $('#txtPathname').text('Pathname');
+      $('#modalLinkMgmt #slash').show();
+    }
+  });
+
+  // [Link 관리 > param list 초기화]
+  function initParamItem(){
+    var group = document.querySelector("#modalLinkMgmt [name='form-params'] .list-group");
+    var item = group.querySelector(".list-group-item:first-child").cloneNode(true);
+    item.getElementsByClassName("form-control")[0].value = '';
+    item.getElementsByClassName("form-control")[1].value = '';
+    group.innerHTML = '';
+    group.appendChild(item);
+  }
+
+  // [Link 관리 > param list element 추가]
+  function appendParamItem(){
+    var group = document.querySelector("#modalLinkMgmt [name='form-params'] .list-group");
+    var item = group.querySelector(".list-group-item:first-child").cloneNode(true);
+    item.getElementsByClassName("form-control")[0].value = '';
+    item.getElementsByClassName("form-control")[1].value = '';
+
+    var inputList = item.querySelectorAll(".form-control.change-check");
+    for (var i=0; i<inputList.length; i++){
+      inputList[i].addEventListener("change", fn_getFullpath);
+      inputList[i].addEventListener("keyup", fn_getFullpath);
+    }
+
+    var delBtnList = item.querySelectorAll("button.del-param-list");
+    for (var i=0; i<delBtnList.length; i++){
+      delBtnList[i].addEventListener("click", function(){
+        if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
+          var item = $(this).parents('li.list-group-item').clone(true);
+          item.find('.form-control').each(function(idx, el){
+            console.log("test"):
+            el.value = '';
+            el.readOnly = false;
+          });
+          item.appendTo($(this).parents('ul.list-group'));
+        }
+        $(this).parents('li.list-group-item').remove();
+        fn_getFullpath();
+      });
+      delBtnList[i].addEventListener("keyup", fn_getFullpath);
+    }
+    group.appendChild(item);
+  }
 
   $('[name="form-params"] [aria-label="param-name"]').change(function(){
+    console.log($(this));
     if ( $(this).parents('li.list-group-item').next().length > 0 ){
       return;
     }
@@ -138,6 +187,7 @@
   });
 
   $('[name="form-params"] button.del-param-list').click(function(){
+    console.log("click button.del-param-list");
     if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
       var item = $(this).parents('li.list-group-item').clone(true);
       item.find('.form-control').each(function(idx, el){
@@ -150,36 +200,18 @@
     fn_getFullpath();
   });
 
+  // [Link 관리 > Server Change 이벤트]
+  // $('#modalLinkMgmt .form-control.change-check').change(fn_getFullpath);
+  // $('#modalLinkMgmt .form-control.change-check').on('keyup', function(){ fn_getFullpath(); });
   $('#modalLinkMgmt .form-control.change-check').change(function(){
-    fn_changeCheck(this.name);
+    fn_getFullpath();
   });
-
   $('#modalLinkMgmt .form-control.change-check').keyup(function(){
-    fn_changeCheck(this.name);
+    fn_getFullpath();
   });
-
-  $('#modalLinkMgmt [name="host"]').change(function(){
-    if ( this.value == ' ' ){
-      $('#txtPathname').text('URL');
-      $('#modalLinkMgmt #slash').hide();
-    } else {
-      $('#txtPathname').text('Pathname');
-      $('#modalLinkMgmt #slash').show();
-    }
-  });
-  function fn_changeCheck(name){
-    if ( name == 'fullpath' ){
-      fn_setFullpath();
-    } else {
-      fn_getFullpath();
-    }
-  }
-  function fn_setFullpath(){
-    var fullpath = $('input[name="fullpath"]').val().trim();
-    var url = fn_parserUrl(fullpath);
-  }
 
   function fn_getFullpath(){
+    console.log("fn_getFullpath");
     var form_menu = $('#modalLinkMgmt .form-control[name="menu"]').val();
     var form_host = $('#modalLinkMgmt .form-control[name="host"]').val();
     var form_pathname = $('#modalLinkMgmt .form-control[name="pathname"]').val();
@@ -444,10 +476,13 @@ app.showLinkUpdateModal = function(data){
   modalLinkMgmt.querySelector(".modal-link-data").dataset.action = 'U';
   modalLinkMgmt.querySelector(".modal-link-data").dataset.seq = data.SEQ;
   modalLinkMgmt.querySelector("form [name='linktitle']").value = data.TITLE;
-  modalLinkMgmt.querySelector("form [name='pathname']").value = data.PATHNAME;
+  modalLinkMgmt.querySelector("form [name='pathname']").value = data.PATHNAME.replace(/^\//, "");
+
   getMenuBoxOnLinkMgmt(data.MENU_CODE);
   getHostBoxOnLinkMgmt(data.SERVER);
-  console.log(data);
+
+  // initParamItem();
+  setParamList(data.PARAMS);
   $("#modalLinkMgmt").show();
 }
 
@@ -658,23 +693,19 @@ function fn_availableBody(b){
   }
 }
 
-// 등록화면에 param key와 value 할당하기
-function fn_setParamList(data){
-  var params = data.substr(1, data.length).split("&");
-  console.log("params", params);
+// [Link 관리 > param name & value 할당하기]
+function setParamList(data){
+  var params = data.split("&");
+
+  if ( gfn.nvl(params) == "" ){ return; }
+
   for (var i=0; i<params.length; i++){
-    var param = params.split("=");
-    // to-do
-    document.querySelectorAll("#modalLinkMgmt form [name='param_name']")[i].value = data.TITLE;
-    document.querySelectorAll("#modalLinkMgmt form [name='param_value']")[i].value = data.TITLE;
-    var name = nameList[i].value;
-    if (gfn.nvl(name) != ""){
-      params += name + "=" + valueList[i].value + "&";
-    }
+    var param = params[i].split("=");
+    console.log("param", param);
+    document.querySelectorAll("#modalLinkMgmt form [name='param_name']")[i].value = gfn.nvl(param[0]);
+    document.querySelectorAll("#modalLinkMgmt form [name='param_value']")[i].value = gfn.nvl(param[1]);
+    appendParamItem();
   }
-  // return encodeURIComponent(params);
-  params = params.substr(0, params.length-1);
-  return params;
 }
 
 // 등록화면에서 param key와 value 가져오기
@@ -688,7 +719,7 @@ function fn_getParamList(){
       params += name + "=" + valueList[i].value + "&";
     }
   }
-  // return encodeURIComponent(params);
+
   params = params.substr(0, params.length-1);
   return params;
 }
