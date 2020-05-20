@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.6.0', verCode:'20200519.04'},
+    appVer   : {verName: '0.6.1', verCode:'20200520.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -145,28 +145,31 @@
 
     var inputList = item.querySelectorAll(".form-control.change-check");
     for (var i=0; i<inputList.length; i++){
+      console.log(i);
       inputList[i].addEventListener("change", fn_getFullpath);
       inputList[i].addEventListener("keyup", fn_getFullpath);
     }
 
-    var delBtnList = item.querySelectorAll("button.del-param-list");
-    for (var i=0; i<delBtnList.length; i++){
-      delBtnList[i].addEventListener("click", function(){
-        if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
-          var item = $(this).parents('li.list-group-item').clone(true);
-          item.find('.form-control').each(function(idx, el){
-            console.log("test"):
-            el.value = '';
-            el.readOnly = false;
-          });
-          item.appendTo($(this).parents('ul.list-group'));
-        }
-        $(this).parents('li.list-group-item').remove();
-        fn_getFullpath();
-      });
-      delBtnList[i].addEventListener("keyup", fn_getFullpath);
-    }
+    item.querySelector("button.del-param-list").addEventListener("click", function(){
+      clickParamDelBtn();
+
+    });
     group.appendChild(item);
+  }
+
+  // [Link 관리 > param list의 Delete 버튼 클릭]
+  function clickParamDelBtn(){
+    console.log("clickParamDelBtn");
+    if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
+      var item = $(this).parents('li.list-group-item').clone(true);
+      item.find('.form-control').each(function(idx, el){
+        el.value = '';
+        el.readOnly = false;
+      });
+      item.appendTo($(this).parents('ul.list-group'));
+    }
+    $(this).parents('li.list-group-item').remove();
+    fn_getFullpath();
   }
 
   $('[name="form-params"] [aria-label="param-name"]').change(function(){
