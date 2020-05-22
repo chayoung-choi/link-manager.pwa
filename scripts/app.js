@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.6.1', verCode:'20200520.01'},
+    appVer   : {verName: '0.6.3', verCode:'20200522.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -126,14 +126,45 @@
     }
   });
 
+  // [Link 관리 > Param Name 변경 시 Param Row 추가]
+  document.querySelector("#modalLinkMgmt [name='param_name']").addEventListener('change', function(){
+    console.log("appendParamItem");
+    var item = $(this).parents('li.list-group-item');
+    if ( item.nextAll().length < 1 ){
+      appendParamItem();
+    }
+  });
+
+  // [Link 관리 > Param 삭제 버튼 클릭]
+  document.querySelector("#modalLinkMgmt .btn.del-param-list").addEventListener('click', function(){
+    console.log("clickParamDelBtn", $(this),  $(this).parents('li.list-group-item').siblings().length);
+    var item = $(this).parents('li.list-group-item');
+    if ( item.siblings().length < 1 ){
+      item.find('.form-control').each(function(idx, el){
+        el.value = '';
+      });
+    } else {
+      item.remove();
+    }
+    fn_getFullpath();
+  });
+
+  // [Link 관리 > Param value 변경시]
+  const modalLinkMamtChangeCheckList = document.querySelectorAll("#modalLinkMgmt .form-control.change-check");
+  modalLinkMamtChangeCheckList.forEach(function(changeInput){
+    changeInput.addEventListener("change", fn_getFullpath);
+    changeInput.addEventListener("keyup", fn_getFullpath);
+  });
+
   // [Link 관리 > param list 초기화]
   function initParamItem(){
     var group = document.querySelector("#modalLinkMgmt [name='form-params'] .list-group");
-    var item = group.querySelector(".list-group-item:first-child").cloneNode(true);
+    group.querySelectorAll(".list-group-item:not(:first-child)").forEach(function(li){
+      li.remove();
+    })
+    var item = group.querySelector(".list-group-item");
     item.getElementsByClassName("form-control")[0].value = '';
     item.getElementsByClassName("form-control")[1].value = '';
-    group.innerHTML = '';
-    group.appendChild(item);
   }
 
   // [Link 관리 > param list element 추가]
@@ -145,76 +176,49 @@
 
     var inputList = item.querySelectorAll(".form-control.change-check");
     for (var i=0; i<inputList.length; i++){
-      console.log(i);
       inputList[i].addEventListener("change", fn_getFullpath);
       inputList[i].addEventListener("keyup", fn_getFullpath);
     }
 
+    item.querySelector(".form-control[name='param_name']").addEventListener('change', function(){
+      if ( this.parentElement.parentElement.nextElementSibling == null ){ // li.list-group-item
+        appendParamItem();
+      }
+    });
+
     item.querySelector("button.del-param-list").addEventListener("click", function(){
       clickParamDelBtn();
-
     });
     group.appendChild(item);
   }
 
   // [Link 관리 > param list의 Delete 버튼 클릭]
   function clickParamDelBtn(){
-    console.log("clickParamDelBtn");
-    if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
-      var item = $(this).parents('li.list-group-item').clone(true);
-      item.find('.form-control').each(function(idx, el){
-        el.value = '';
-        el.readOnly = false;
-      });
-      item.appendTo($(this).parents('ul.list-group'));
+    var targetRow = event.target.parentElement.parentElement.parentElement; // li.list-group-item
+    if ( event.target.nodeName == "B" ){
+      targetRow = targetRow.parentElement;
     }
-    $(this).parents('li.list-group-item').remove();
+
+    if ( targetRow.parentNode.querySelectorAll(".list-group-item").length > 1 ){
+      targetRow.remove();
+    } else {
+      targetRow.getElementsByClassName("form-control")[0].value = '';
+      targetRow.getElementsByClassName("form-control")[1].value = '';
+    }
     fn_getFullpath();
   }
-
-  $('[name="form-params"] [aria-label="param-name"]').change(function(){
-    console.log($(this));
-    if ( $(this).parents('li.list-group-item').next().length > 0 ){
-      return;
-    }
-    var item = $(this).parents('li.list-group-item').clone(true);
-    item.find('.form-control').each(function(idx, el){
-      el.value = '';
-      el.readOnly = false;
-    });
-    item.appendTo($(this).parents('ul.list-group'));
-  });
-
-  $('[name="form-params"] .form-control[readonly]').dblclick(function(){
-    $(this).prop('readonly', false);
-  });
-
-  $('[name="form-params"] button.del-param-list').click(function(){
-    console.log("click button.del-param-list");
-    if ( $(this).parents('li.list-group-item').siblings().length < 1 ){
-      var item = $(this).parents('li.list-group-item').clone(true);
-      item.find('.form-control').each(function(idx, el){
-        el.value = '';
-        el.readOnly = false;
-      });
-      item.appendTo($(this).parents('ul.list-group'));
-    }
-    $(this).parents('li.list-group-item').remove();
-    fn_getFullpath();
-  });
 
   // [Link 관리 > Server Change 이벤트]
   // $('#modalLinkMgmt .form-control.change-check').change(fn_getFullpath);
   // $('#modalLinkMgmt .form-control.change-check').on('keyup', function(){ fn_getFullpath(); });
-  $('#modalLinkMgmt .form-control.change-check').change(function(){
-    fn_getFullpath();
-  });
-  $('#modalLinkMgmt .form-control.change-check').keyup(function(){
-    fn_getFullpath();
-  });
+  // $('#modalLinkMgmt .form-control.change-check').change(function(){
+  //   fn_getFullpath();
+  // });
+  // $('#modalLinkMgmt .form-control.change-check').keyup(function(){
+  //   fn_getFullpath();
+  // });
 
   function fn_getFullpath(){
-    console.log("fn_getFullpath");
     var form_menu = $('#modalLinkMgmt .form-control[name="menu"]').val();
     var form_host = $('#modalLinkMgmt .form-control[name="host"]').val();
     var form_pathname = $('#modalLinkMgmt .form-control[name="pathname"]').val();
@@ -314,28 +318,31 @@
     $('#modalLinkMgmt [name="menu"]').val(val);
   }
 
-  async function processLogin(){
-    gfn.console('processLogin', 'processLogin');
-    $('#loading').show();
-    var id = document.getElementById('userId').value;
-    var pw = document.getElementById('userPw').value;
 
-    if (id == 'smos' && pw == '1234'){
-      fn_availableBody(true);
-      var autoLogin = document.getElementById('autoLogin').checked;
-      var userInfo = {'id': id, 'userKey': id, 'autoLogin': autoLogin};
-      app.saveToStorage('userInfo', userInfo);
-      await app.getServerDate('HOST');
-      await app.getServerDate('MENU');
-    } else {
-      alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-    }
-    $('#loading').hide();
-  }
+
+  // async function processLogin(){
+  //   gfn.console('processLogin', 'processLogin');
+  //   $('#loading').show();
+  //   var id = document.getElementById('userId').value;
+  //   var pw = document.getElementById('userPw').value;
+  //
+  //   if (id == 'smos' && pw == '1234'){
+  //     fn_availableBody(true);
+  //     var autoLogin = document.getElementById('autoLogin').checked;
+  //     var userInfo = {'id': id, 'userKey': id, 'autoLogin': autoLogin};
+  //     app.saveToStorage('userInfo', userInfo);
+  //     await app.getServerDate('HOST');
+  //     await app.getServerDate('MENU');
+  //   } else {
+  //     alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+  //   }
+  //   $('#loading').hide();
+  // }
   var linkCards = document.querySelectorAll(".link-card");
   var btnDelete = document.querySelectorAll(".btn-delete");
   var btnUpdate = document.querySelectorAll(".btn-update");
 
+  // [Toast 띄우기]
   let removeToast;
   function toast(string) {
     const toast = document.getElementById("toast");
@@ -419,7 +426,6 @@ app.updateViewLinkCardSection = function(){
     document.getElementById('viewLinkCardSection').appendChild(section);
     document.getElementById('viewLinkCardSection').appendChild(hr);
   }
-
   // app.updateLinkCardList(data);
 }
 
@@ -484,8 +490,9 @@ app.showLinkUpdateModal = function(data){
   getMenuBoxOnLinkMgmt(data.MENU_CODE);
   getHostBoxOnLinkMgmt(data.SERVER);
 
-  // initParamItem();
+  initParamItem();
   setParamList(data.PARAMS);
+  fn_getFullpath();
   $("#modalLinkMgmt").show();
 }
 
