@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.0', verCode:'20200526.01'},
+    appVer   : {verName: '1.0.1', verCode:'20200526.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -459,6 +459,9 @@ app.updateLinkCard = function(data){
     paramTagIcon.textContent = '#' + key;
     paramTagIcon.dataset[key] = paramJson[key];
     paramTagIcon.title = paramJson[key];
+    paramTagIcon.addEventListener('click', function(){
+      toast(this.title);
+    });
     card.querySelector('.card-params').appendChild(paramTagIcon);
   }
 
@@ -992,7 +995,7 @@ var gfn = {
  * Code required to start the app
  ************************************************************************/
   app.userInfo = localStorage.userInfo;
-  gfn.console('init', app.appVer.verCode);
+  gfn.console('App Code:', app.appVer.verCode);
   if (app.userInfo) {
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);
@@ -1024,7 +1027,7 @@ var gfn = {
 
     // 5. 동기화 시간
     app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
-    console.log('lastSyncDt', new Date(app.lastSyncDt));
+    gfn.console('Last Sync Date:', gfn.formatDate(new Date(app.lastSyncDt), 'yyyy.mm.dd 24hh:mi:ss'));
     document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   } else {
     console.log("localStorage not available");
