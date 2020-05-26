@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '0.6.4', verCode:'20200525.01'},
+    appVer   : {verName: '1.0.0', verCode:'20200526.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -1033,9 +1033,30 @@ var gfn = {
     // document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   }
 
+  // if ('serviceWorker' in navigator) {
+  //   navigator.serviceWorker
+  //            .register('./service-worker.js')
+  //            .then(function() { console.log('Service Worker Registered'); });
+  // }
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-             .register('./service-worker.js')
-             .then(function() { console.log('Service Worker Registered'); });
+    navigator.serviceWorker.register('./service-worker.js').then(regist => {
+      console.log('Service Worker Registered');
+
+      regist.addEventListener('updatefound', () => {
+        const newWorker = regist.installing;
+        console.log('Service Worker update found!');
+
+        newWorker.addEventListener('statechange', function(){
+          console.log('Service Worker state changed', this.state);
+        });
+      });
+    });
+
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      alert('최신 업데이트 버전이 있습니다. 앱을 업데이트합니다.');
+      window.location.reload();
+      console.log('Controller changed');
+    });
+             // .then(function() { console.log('Service Worker Registered'); });
   }
 })();
