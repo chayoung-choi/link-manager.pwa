@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.1', verCode:'20200526.02'},
+    appVer   : {verName: '1.0.2', verCode:'20200527.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -16,6 +16,7 @@
     sidebarTemplate: document.getElementById('sidebarTemplate'),
     mainSectionTemplate: document.getElementById('mainSectionTemplate')
   };
+
   /*****************************************************************************
    *
    * Event listeners for UI elements
@@ -81,11 +82,12 @@
     }
   });
 
-  // [Link 신규등록 Open]
-  document.getElementById('menuNewRegLink').addEventListener('click', function() {
-    app.showLinkNewRegModal();
+  // [Sidebar Menu 클릭 이벤트 적용]
+  Array.prototype.forEach.call(document.querySelectorAll('nav .nav-sidebar a'), (el, index) => {
+    el.addEventListener('click', function(){
+      app.clickNavSidebarMenu(el.id);
+    });
   });
-
 
   document.getElementById('btnSettingServer').addEventListener('click', function() {
     fn_getServerInfo();
@@ -334,7 +336,6 @@
   let removeToast;
   function toast(string) {
     const toast = document.getElementById("toast");
-
     toast.classList.contains("reveal") ?
       (clearTimeout(removeToast), removeToast = setTimeout(function () {
           document.getElementById("toast").classList.remove("reveal")
@@ -392,8 +393,12 @@ app.updateSidebar = function(data) {
     }
 
     var sideMenu = item.cloneNode(true);
-    sideMenu.href = '#'+menu.MENU_CODE;
+    sideMenu.id = menu.MENU_CODE;
+    // sideMenu.href = '#'+menu.MENU_CODE;
     sideMenu.textContent = menu.MENU_NAME;
+    sideMenu.addEventListener('click', function(){
+      app.clickNavSidebarMenu(this.id);
+    });
     viewSidebar.appendChild(sideMenu);
   }
 }
@@ -409,7 +414,7 @@ app.updateViewLinkCardSection = function(){
     var hr = document.createElement('hr');
     var menuCode = menuList[i].MENU_CODE;
 
-    section.id = menuCode;
+    section.id = menuCode + 'Section';
     section.querySelector('.section-title b').textContent = menuList[i].MENU_NAME+'.';
     document.getElementById('viewLinkCardSection').appendChild(section);
     document.getElementById('viewLinkCardSection').appendChild(hr);
@@ -440,7 +445,7 @@ app.updateLinkCard = function(data){
       if (!confirm('삭제하시겠습니까?')){ return; }
       app.deleteLinkCard(data);
     });
-    document.getElementById(data.MENU_CODE).querySelector('.link-content').appendChild(card);
+    document.getElementById(data.MENU_CODE+'Section').querySelector('.link-content').appendChild(card);
   }
 
   var updateDt = gfn.formatDate(new Date(data.UPDATED), 'yyyymmdd24hhmiss');
@@ -591,6 +596,21 @@ app.updateServerLinkCard = function(data){
 app.deleteServerLinkCard = function(data){
   data.action = 'D';
   app.postServerData('LINKS', data);
+}
+
+// [Sidebar Menu 클릭]
+app.clickNavSidebarMenu = function(id){
+  if ( id == 'menuSetting' ){
+    return;
+  }
+  if ( id == 'menuNewRegLink' ){
+    app.showLinkNewRegModal();
+    return;
+  }
+
+  var topMenuHeight = document.querySelector(".fix-header").offsetHeight;
+  var location = document.querySelector("#"+ id +"Section").offsetTop;
+  window.scrollTo({top:location - topMenuHeight - 10, behavior:'smooth'});
 }
 
 // [전체 동기화 진행]

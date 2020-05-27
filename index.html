@@ -67,14 +67,14 @@
       </tr>
     </table>
   </div>
-  <div class="w3-bar-block">
-    <a href="#" id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">Home</a>
+  <div class="w3-bar-block nav-sidebar">
+    <a id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">Home</a>
     <div id="viewSidebar"></div>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menuMktxJsonSplit" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">MKTX JSON 분할</a>
-    <a href="#" id="menuNewRegLink" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">신규등록</a>
+    <a id="menuMktxJsonSplit" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">MKTX JSON 분할</a>
+    <a id="menuNewRegLink" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">신규등록</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
-    <a href="#menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">설정</a>
+    <a id="menuSetting" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">설정</a>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
   </div>
     <div class="w100 nav-footer w3-padding w3-medium w3-center" style="background:#2f6766;">
@@ -83,7 +83,7 @@
 </nav>
 
 <!-- Top menu on small screens -->
-<header class="w3-container w3-top w3-hide-large cy-bg-color-mint w3-xlarge w3-padding" style="z-index:1;">
+<header class="w3-container w3-top w3-hide-large cy-bg-color-mint w3-xlarge w3-padding fix-header" style="z-index:1;">
   <a href="javascript:void(0)" class="w3-button cy-bg-color-mint" onclick="w3_open()">
     <i class="fa fa-bars"></i>
   </a>
@@ -99,32 +99,23 @@
   <!-- Push down content on small screens -->
   <div class="w3-hide-large w3-padding-32"></div>
 
-  <div class="w3-container mt-3" id="home">
-    <!-- <h1 class="" style="font-size:5vw;"><b>Daekyo CNS SmartMOS</b></h1> -->
-  </div>
+  <div class="w3-container mt-3" id="menuHomeSection"></div>
 
   <!-- Content START ---->
   <section id="viewLinkCardSection">
     <div class="w3-container w3-section" style="width:8rem; height:8rem; margin: 0 auto;">
       <div class="loader6">Loading...</div>
     </div>
-    <!-- <div class="w3-container w3-section" id="menu1">
-      <h1 class="w3-xlarge cy-color-mint"><b>관리시스템.</b></h1>
-      <hr style="width:50px;border:3px solid #5FCECf;margin-top:-5px;" class="w3-round">
-      <div class="w3-row-padding link-content" style="display:flex; flex-wrap:wrap;">
-      </div>
-    </div>
-    <hr> -->
   </section>
   <!-- Content END ---->
 
   <section id="viewUtilitySection">
-    <div class="w3-container w3-section" id="menuMktxJsonSplit">
+    <div class="w3-container w3-section" id="menuMktxJsonSplitSection">
       <h1 class="w3-xlarge cy-color-mint"><b>MKTX JSON 분할.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
     </div>
     <hr>
-    <div class="w3-container w3-section" id="menuSetting">
+    <div class="w3-container w3-section" id="menuSettingSection">
       <h1 class="w3-xlarge cy-color-mint"><b>설정.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
       <div class="w3-row-padding">
@@ -381,7 +372,7 @@ $(document).ready(function(){
 
 <template id="sidebarTemplate">
   <hr style="border:0.5px solid #fff; margin:5px;" class="w3-round w3-opacity sidebar-line">
-  <a href="#" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white sidebar-item text-decoration-none">NAME</a>
+  <a onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white sidebar-item text-decoration-none">NAME</a>
 </template>
 
 <template id="mainSectionTemplate">
