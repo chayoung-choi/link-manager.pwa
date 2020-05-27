@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.3', verCode:'20200527.02'},
+    appVer   : {verName: '1.0.4', verCode:'20200527.03'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -453,23 +453,30 @@ app.updateLinkCard = function(data){
   var card = document.querySelector("[data-link-id='"+ linkId +"']");
   if (card == null){
     card = app.mainSectionTemplate.content.querySelector('.link-card').cloneNode(true);
-    card.dataset.linkId =  data.SERVER + '-' + data.SEQ;
-    card.querySelector('.btn-update').addEventListener('click', function(){
-      app.showLinkUpdateModal(data);
-    });
-    card.querySelector('.btn-delete').addEventListener('click', function(){
-      if (!confirm('삭제하시겠습니까?')){ return; }
-      app.deleteLinkCard(data);
-    });
+    card.dataset.linkId =  linkId;
     document.getElementById(data.MENU_CODE+'Section').querySelector('.link-content').appendChild(card);
   }
 
   var updateDt = gfn.formatDate(new Date(data.UPDATED), 'yyyymmdd24hhmiss');
   if ( card.dataset.updated >= updateDt ){
+    console.log('동기화 안함', card.dataset.updated);
     return;
   }
   card.querySelector('.card-title').textContent = data.TITLE;
   card.dataset.updated = updateDt;
+  var btnUpdate = card.querySelector('.btn-update');
+  var btnDelete = card.querySelector('.btn-delete');
+  var replaceBtnUpdate = btnUpdate.cloneNode(true);
+  var replaceBtnDelete = btnDelete.cloneNode(true);
+  replaceBtnUpdate.addEventListener('click', function(){
+    app.showLinkUpdateModal(data);
+  });
+  replaceBtnDelete.addEventListener('click', function(){
+    if (!confirm('삭제하시겠습니까?')){ return; }
+    app.deleteLinkCard(data);
+  });
+  card.querySelector('.btn-update').parentNode.replaceChild(replaceBtnUpdate, btnUpdate);
+  card.querySelector('.btn-delete').parentNode.replaceChild(replaceBtnDelete, btnDelete);
 
   // param hashtag icon
   card.querySelector('.card-params').innerHTML = '';
@@ -552,24 +559,27 @@ app.showLinkUpdateModal = function(data){
   $("#modalLinkMgmt").show();
 }
 
-app.deleteLinkCard = function(data){
-  for (var i=0; i<app.linksData.length; i++) {
-    if ( app.linksData[i].SERVER == data.SERVER && app.linksData[i].SEQ == data.SEQ ){
-      app.linksData.splice(i, 1);
-      break;
-    }
+app.deleteLinkCard = function(link){
+  var linkId = link.SERVER+ "-" +link.SEQ;
+  var idx = app.findIndexInLinksData(linkId);
+  if (idx > -1){
+    app.linksData.splice(idx, 1);
   }
-  $("[data-link-id='"+ data.SERVER +"-"+ data.SEQ +"']").remove();
-  app.deleteServerLinkCard(data);
+
+  $("[data-link-id='"+ linkId +"']").remove();
+  app.deleteServerLinkCard(link);
 }
 
 app.updateLinkDataInStorage = function(link){
-  var getIndexLinksData = (el) => el.SERVER == link.SERVER && el.SEQ == link.SEQ;
-  console.log();
-  var idx = app.linksData.findIndex(getIndexLinksData);
+  var idx = app.findIndexInLinksData(link.SERVER+ "-" +link.SEQ);
   if (idx > -1){
     app.linksData[idx] = link;
   }
+}
+
+app.findIndexInLinksData = function(linkId){
+  var getIndexLinksData = (el) => el.SERVER+ "-" +el.SEQ == linkId;
+  return app.linksData.findIndex(getIndexLinksData);
 }
 
 app.saveLinkMgmt = function(){
@@ -586,27 +596,6 @@ app.saveLinkMgmt = function(){
 
   app.updateLinkCard(link);
   app.postServerData('LINKS', link);
-}
-
-app.insertServerLinkCard = function(){
-  var link = {};
-  link['action'] = "I";
-  link['TITLE'] = document.formLinkMgmt.linktitle.value;
-  link['SERVER'] = $("#modalLinkMgmt [name='host']").val();
-  link['MENU_CODE'] = document.formLinkMgmt.menu.value;
-  link['PATHNAME'] = document.formLinkMgmt.pathname.value;
-  link['PARAMS'] = fn_getParamList();
-
-  link['CREATED'] = new Date();
-  link['UPDATED'] = new Date();
-  app.updateLinkCard(link);
-  app.postServerData('LINKS', link);
-}
-
-app.updateServerLinkCard = function(data){
-  data.action = 'U';
-  app.updateLinkCard(link);
-  // app.postServerData('LINKS', data);
 }
 
 app.deleteServerLinkCard = function(data){

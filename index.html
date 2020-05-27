@@ -37,7 +37,7 @@
 <div>
 
 <!-- Sidebar/menu -->
-<nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:4;width:250px;font-weight:bold; margin-right: 250px;" id="mySidebar">
+<nav class="w3-sidebar cy-bg-color-mint w3-collapse w3-top w3-large w3-padding" style="z-index:3;width:250px;font-weight:bold; margin-right: 250px;" id="mySidebar">
   <br>
   <div class="w3-cell-row">
     <div class="w3-cell w3-cell-middle">
@@ -157,7 +157,8 @@
 </div>
 <!-- Footer Container -->
 <footer class="w3-light-grey w3-container w3-padding-16 w3-margin-top">
-  <img class="w3-right" src="images/logo/title_bm.png" alt="logo" style="width:240px;">
+  <div class="d-sm-none d-lg-inline-block" style="width:250px;"></div>
+  <img class="" src="images/logo/title_bm.png" alt="logo" style="width:240px;">
 </footer>
 </div>
 <!-- End page content -->
@@ -336,7 +337,7 @@
 </div>
 <!-- Modal Server END -->
 
-<button type="button" id="btnTopScroll" class="btn btn-outline-secondary btn-light shadow-sm position-fixed" style="display:none; bottom:20px; right:20px; width:40px; height:40px;">
+<button type="button" id="btnTopScroll" class="btn btn-outline-secondary btn-light shadow-sm position-fixed" style="display:none; bottom:15px; right:15px; width:40px; height:40px; opacity: 0.7;">
   <svg class="bi bi-chevron-bar-up" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" d="M3.646 11.854a.5.5 0 00.708 0L8 8.207l3.646 3.647a.5.5 0 00.708-.708l-4-4a.5.5 0 00-.708 0l-4 4a.5.5 0 000 .708zM2.4 5.2c0 .22.18.4.4.4h10.4a.4.4 0 000-.8H2.8a.4.4 0 00-.4.4z" clip-rule="evenodd"/>
   </svg>
@@ -365,10 +366,10 @@ var submitAction = function(e) {
 $('form').bind('submit', submitAction);
 
 $(document).ready(function(){
-  var maxH = 0;
-  $(".card-params").each(function(){
-    $(this).height();
-  });
+  // var maxH = 0;
+  // $(".card-params").each(function(){
+  //   $(this).height();
+  // });
 });
 </script>
 
@@ -401,8 +402,11 @@ $(document).ready(function(){
           </div>
         </div>
       </header>
-      <div class="card-content w3-cell-row mt-auto">
+      <!-- <div class="card-content w3-cell-row mt-auto"> -->
+      <div class="link-param-box w3-cell-row">
         <div class="w3-container w3-padding w3-small card-params py-0 pt-1"></div>
+      </div>
+      <div class="link-btn-box w3-cell-row mt-auto">
         <div class="w3-bar w3-center w3-container w3-padding-small mt-auto">
           <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-green text-decoration-none w30 host-type-l" target="_blank">Local</a>
           <a href="https://www.naver.com" class="w3-button w3-small w3-round-large cy-bg-color-blue text-decoration-none w30 host-type-q" target="_blank">QA</a>
