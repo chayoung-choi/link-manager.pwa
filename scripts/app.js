@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.2', verCode:'20200527.01'},
+    appVer   : {verName: '1.0.3', verCode:'20200527.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -14,7 +14,8 @@
     daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
-    mainSectionTemplate: document.getElementById('mainSectionTemplate')
+    mainSectionTemplate: document.getElementById('mainSectionTemplate'),
+    mainSectionForMenu : {menuSetting:'viewSettingSection', menuMktxJsonSplit:'viewUtilitySection'}
   };
 
   /*****************************************************************************
@@ -145,6 +146,11 @@
     changeInput.addEventListener("keyup", fn_getFullpath);
   });
 
+  /*****************************************************************************
+   *
+   * function for app methods
+   *
+   ****************************************************************************/
   // [Link 관리 > param list 초기화]
   function initParamItem(){
     var group = document.querySelector("#modalLinkMgmt [name='form-params'] .list-group");
@@ -308,7 +314,17 @@
     $('#modalLinkMgmt [name="menu"]').val(val);
   }
 
-
+  // [Sidebar Menu에 따른 Section 활성화]
+  function showMainSection(menuCode){
+    var targetSection = app.mainSectionForMenu[menuCode];
+    if (gfn.nvl(targetSection) == ''){
+      targetSection = 'viewLinkCardSection';
+    }
+    document.querySelectorAll('.w3-main > section').forEach(function(el){
+      el.classList.add('w3-hide');
+    });
+    document.querySelector('.w3-main #'+targetSection).classList.remove('w3-hide');
+  }
 
   // async function processLogin(){
   //   gfn.console('processLogin', 'processLogin');
@@ -600,14 +616,11 @@ app.deleteServerLinkCard = function(data){
 
 // [Sidebar Menu 클릭]
 app.clickNavSidebarMenu = function(id){
-  if ( id == 'menuSetting' ){
-    return;
-  }
   if ( id == 'menuNewRegLink' ){
     app.showLinkNewRegModal();
     return;
   }
-
+  showMainSection(id);
   var topMenuHeight = document.querySelector(".fix-header").offsetHeight;
   var location = document.querySelector("#"+ id +"Section").offsetTop;
   window.scrollTo({top:location - topMenuHeight - 10, behavior:'smooth'});
