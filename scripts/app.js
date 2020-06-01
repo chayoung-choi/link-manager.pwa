@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.4', verCode:'20200527.03'},
+    appVer   : {verName: '1.0.5', verCode:'20200601.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -247,7 +247,7 @@
     var prop = ["fullpath", "protocol", "username", "password", "host", "port", "pathname", "querystring", "fragment"];
 
     const regex = /^((\w+):)?\/\/((\w+)?(:(\w+))?@)?([^\/\?:]+)(:(\d+))?(\/?([^\/\?#][^\?#]*)?)?(\?([^#]+))?(#(\w*))?/;
-    var res = data.url.match(regex);
+    var res = url.match(regex);
     if (res.length) {
         const position = [0, 2, 4, 6, 7, 9, 11, 13];
         const arr = [];
@@ -454,7 +454,6 @@ app.updateLinkCard = function(data){
   if (card == null){
     card = app.mainSectionTemplate.content.querySelector('.link-card').cloneNode(true);
     card.dataset.linkId =  linkId;
-    document.getElementById(data.MENU_CODE+'Section').querySelector('.link-content').appendChild(card);
   }
 
   var updateDt = gfn.formatDate(new Date(data.UPDATED), 'yyyymmdd24hhmiss');
@@ -505,6 +504,7 @@ app.updateLinkCard = function(data){
     });
   }
 
+  document.getElementById(data.MENU_CODE+'Section').querySelector('.link-content').appendChild(card);
 }
 
 // [Link Card 신규 등록 modal Show]
@@ -593,6 +593,10 @@ app.saveLinkMgmt = function(){
   link['PARAMS'] = fn_getParamList();
   link['CREATED'] = new Date();
   link['UPDATED'] = new Date();
+
+  if ($('#txtPathname').text() == 'Pathname'){
+    link['PATHNAME'] = "/" + link['PATHNAME'].replace(/^\//, "");
+  }
 
   app.updateLinkCard(link);
   app.postServerData('LINKS', link);
@@ -764,13 +768,6 @@ function fn_makeJsonData(data){
     result.push(json);
   }
   return result;
-}
-
-function fn_updateLinkCard(data) {
-
-}
-function fn_deleteCard() {
-  alert("app.card del");
 }
 
 // 로그인 화면 활성화
