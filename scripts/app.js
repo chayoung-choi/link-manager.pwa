@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.5', verCode:'20200601.01'},
+    appVer   : {verName: '1.0.6', verCode:'20200601.02'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -47,6 +47,7 @@
       if (confirm('user-key 변경 시 동기화를 진행합니다.')){
         elBtnUserKey.textContent = elUserKey.value;
         elBtnUserKey.classList.add('w3-hide');
+        document.getElementById('loading').classList.add('w3-show');
         app.startSyncFromServer();
       } else {
         elUserKey.value = elBtnUserKey.textContent;
@@ -60,17 +61,6 @@
   document.getElementById('btnLinkMgmtReset').addEventListener('click', function() {
     $("#modalLinkMgmt").hide();
   });
-
-  // [Link 등록 > '등록' 버튼]
-  // document.getElementById('btnLinkMgmtSave').addEventListener('click', function() {
-  //   if (!confirm("등록하시겠습니까?")){ return; }
-  //
-  //   var emptyValue = false;
-  //   if (!emptyValue){
-  //     app.insertServerLinkCard()
-  //     $('#modalLinkMgmt').hide();
-  //   }
-  // });
 
   document.getElementById('btnSyncStart').addEventListener('click', function() {
     app.startSyncFromServer();
@@ -107,7 +97,7 @@
 
   // [Link 관리 > Server Change 이벤트]
   document.querySelector("#modalLinkMgmt [name='host']").addEventListener('change', function(){
-    if ( this.value == ' ' ){
+    if ( this.value == 'no-server' ){
       $('#txtPathname').text('URL');
       $('#modalLinkMgmt #slash').hide();
     } else {
@@ -298,7 +288,7 @@
       var op = new Option(key, key);
       selectBox.options.add(op);
     }
-    selectBox.options.add(new Option("직접입력", " "));
+    selectBox.options.add(new Option("직접입력", "no-server"));
     $('#modalLinkMgmt [name="host"]').val(val);
   }
 
@@ -393,55 +383,74 @@
 app.updateSidebar = function(data) {
   data = data.sort(fn_menuSort);
 
-  var viewSidebar = document.getElementById('viewSidebar');
-  viewSidebar.innerHTML = '';
+  document.querySelectorAll('#viewSidebar .sidebar-item').forEach(function(el){
+    el.dataset.state = "no-updated";
+  });
 
+  var viewSidebar = document.getElementById('viewSidebar');
   var sidebarTemplate = app.sidebarTemplate.content.cloneNode(true);
   var item = sidebarTemplate.querySelector('.sidebar-item');
   var line = sidebarTemplate.querySelector('.sidebar-line');
   var depth = 0;
   for (var i=0; i<data.length; i++){
-
     var menu = data[i];
-    if (depth != menu.DEPTH){
-      viewSidebar.appendChild(line);
-      depth = menu.DEPTH;
+    var sideMenu = viewSidebar.querySelector('#'+menu.MENU_CODE);
+    if (sideMenu == null){
+      sideMenu = item.cloneNode(true);
+      sideMenu.id = menu.MENU_CODE;
+      if (depth != menu.DEPTH){
+        viewSidebar.appendChild(line);
+        depth = menu.DEPTH;
+      }
+      sideMenu.dataset.state = "good";
+      sideMenu.textContent = menu.MENU_NAME;
+      sideMenu.addEventListener('click', function(){
+        app.clickNavSidebarMenu(this.id);
+      });
     }
 
-    var sideMenu = item.cloneNode(true);
-    sideMenu.id = menu.MENU_CODE;
-    // sideMenu.href = '#'+menu.MENU_CODE;
-    sideMenu.textContent = menu.MENU_NAME;
-    sideMenu.addEventListener('click', function(){
-      app.clickNavSidebarMenu(this.id);
-    });
     viewSidebar.appendChild(sideMenu);
   }
+
+  document.querySelectorAll('#viewSidebar .sidebar-item[data-state="no-updated"]').forEach(function(el){
+    el.dataset.state = "no-updated";
+  });
 }
 
 // [Main Link Card Section 업데이트]
 app.updateViewLinkCardSection = function(){
-  document.getElementById('viewLinkCardSection').innerHTML = '';
+  var viewLinkCardSection = document.getElementById('viewLinkCardSection');
   var menuList = app.menuData;
 
   for (var i=0; i<menuList.length; i++){
-    var clonContent = app.mainSectionTemplate.content.cloneNode(true);
-    var section = clonContent.querySelector('.section-box');
-    var hr = document.createElement('hr');
-    var menuCode = menuList[i].MENU_CODE;
+    var sectionId = menuList[i].MENU_CODE + 'Section';
+    var section = viewLinkCardSection.querySelector('#' + sectionId);
 
-    section.id = menuCode + 'Section';
+    if (section == null){
+      var clonContent = app.mainSectionTemplate.content.cloneNode(true);
+      section = clonContent.querySelector('.section-box');
+      section.id = sectionId;
+      var hr = document.createElement('hr');
+      document.getElementById('viewLinkCardSection').appendChild(section);
+      document.getElementById('viewLinkCardSection').appendChild(hr);
+    }
     section.querySelector('.section-title b').textContent = menuList[i].MENU_NAME+'.';
-    document.getElementById('viewLinkCardSection').appendChild(section);
-    document.getElementById('viewLinkCardSection').appendChild(hr);
   }
   // app.updateLinkCardList(data);
 }
 
 // [Link Card List 업데이트]
 app.updateLinkCardList = function(data){
+  document.querySelectorAll('#viewLinkCardSection .link-card').forEach(function(el){
+    el.dataset.state = "no-updated";
+  });
+
   Array.from(data).forEach((el) => {
     app.updateLinkCard(el);
+  });
+
+  document.querySelectorAll('#viewLinkCardSection .link-card[data-state="no-updated"]').forEach(function(el){
+    el.remove();
   });
 }
 
@@ -456,11 +465,12 @@ app.updateLinkCard = function(data){
     card.dataset.linkId =  linkId;
   }
 
+  card.dataset.state = "good";
   var updateDt = gfn.formatDate(new Date(data.UPDATED), 'yyyymmdd24hhmiss');
   if ( card.dataset.updated >= updateDt ){
-    console.log('동기화 안함', card.dataset.updated);
     return;
   }
+
   card.querySelector('.card-title').textContent = data.TITLE;
   card.dataset.updated = updateDt;
   var btnUpdate = card.querySelector('.btn-update');
@@ -492,11 +502,10 @@ app.updateLinkCard = function(data){
     card.querySelector('.card-params').appendChild(paramTagIcon);
   }
 
-  if (data.SERVER == " "){
+  if (data.SERVER == "no-server"){
     var fullUrl = data.PATHNAME + '?' + data.PARAMS;
     card.querySelector('.host-type-l').href = fullUrl;
   } else {
-    // link url L,Q,O,W~
     Array.from(app.hostData[data.SERVER]).forEach((host) => {
       var hostType = host.TYPE.toLowerCase();
       var fullUrl = host.ORIGIN + data.PATHNAME + '?' + data.PARAMS;
@@ -622,7 +631,6 @@ app.clickNavSidebarMenu = function(id){
 // [전체 동기화 진행]
 app.startSyncFromServer = function(){
   document.getElementById('btnSyncStart').children[0].classList.add('w3-spin');
-  document.getElementById('loading').classList.add('w3-show');
 
   for (var key in app.syncConfig) {
     app.syncConfig[key] = false;
@@ -1048,28 +1056,23 @@ var gfn = {
     app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
     gfn.console('Last Sync Date:', gfn.formatDate(new Date(app.lastSyncDt), 'yyyy.mm.dd 24hh:mi:ss'));
     document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
+
+    // 6. 자동 동기화
+    app.startSyncFromServer();
   } else {
     console.log("localStorage not available");
-    // fn_availableBody(false);
-    // app.lastSyncDt = JSON.parse(localStorage.lastSyncDt);
-    // document.getElementById('lastSyncDt').textContent = gfn.formatDate(new Date(app.lastSyncDt));
   }
 
-  // if ('serviceWorker' in navigator) {
-  //   navigator.serviceWorker
-  //            .register('./service-worker.js')
-  //            .then(function() { console.log('Service Worker Registered'); });
-  // }
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js').then(regist => {
-      console.log('Service Worker Registered');
+      gfn.console('Service Worker Registered');
 
       regist.addEventListener('updatefound', () => {
         const newWorker = regist.installing;
-        console.log('Service Worker update found!');
+        gfn.console('Service Worker update found!');
 
         newWorker.addEventListener('statechange', function(){
-          console.log('Service Worker state changed', this.state);
+          gfn.console('Service Worker state changed', this.state);
         });
       });
     });
@@ -1077,8 +1080,6 @@ var gfn = {
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       alert('최신 업데이트 버전이 있습니다. 앱을 업데이트합니다.');
       window.location.reload();
-      console.log('Controller changed');
     });
-             // .then(function() { console.log('Service Worker Registered'); });
   }
 })();
