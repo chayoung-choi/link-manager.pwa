@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.6', verCode:'20200601.02'},
+    appVer   : {verName: '1.0.7', verCode:'20200607.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -15,7 +15,8 @@
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
     mainSectionTemplate: document.getElementById('mainSectionTemplate'),
-    mainSectionForMenu : {menuSetting:'viewSettingSection', menuMktxJsonSplit:'viewUtilitySection'}
+    mainSectionForMenu : {menuHome:'viewHomeSection', menuSetting:'viewSettingSection'
+                        , menuMktxJsonSplit:'viewUtilitySection'}
   };
 
   /*****************************************************************************
@@ -1060,16 +1061,17 @@ var gfn = {
     // 6. 자동 동기화
     app.startSyncFromServer();
   } else {
-    console.log("localStorage not available");
+    gfn.console('localStorage not available', '');
+    showMainSection('menuHome');
   }
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js').then(regist => {
-      gfn.console('Service Worker Registered');
+      gfn.console('Service Worker Registered', '');
 
       regist.addEventListener('updatefound', () => {
         const newWorker = regist.installing;
-        gfn.console('Service Worker update found!');
+        gfn.console('Service Worker update found!', '');
 
         newWorker.addEventListener('statechange', function(){
           gfn.console('Service Worker state changed', this.state);
