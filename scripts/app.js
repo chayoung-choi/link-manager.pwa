@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.7', verCode:'20200607.01'},
+    appVer   : {verName: '1.0.8', verCode:'20200701.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -15,7 +15,7 @@
     cardTemplate: document.getElementById('cardTemplate'),
     sidebarTemplate: document.getElementById('sidebarTemplate'),
     mainSectionTemplate: document.getElementById('mainSectionTemplate'),
-    mainSectionForMenu : {menuHome:'viewHomeSection', menuSetting:'viewSettingSection'
+    mainSectionForMenu : {menuSetting:'viewSettingSection'
                         , menuMktxJsonSplit:'viewUtilitySection'}
   };
 
@@ -109,7 +109,6 @@
 
   // [Link 관리 > Param Name 변경 시 Param Row 추가]
   document.querySelector("#modalLinkMgmt [name='param_name']").addEventListener('change', function(){
-    console.log("appendParamItem");
     var item = $(this).parents('li.list-group-item');
     if ( item.nextAll().length < 1 ){
       appendParamItem();
@@ -311,10 +310,19 @@
     if (gfn.nvl(targetSection) == ''){
       targetSection = 'viewLinkCardSection';
     }
+
     document.querySelectorAll('.w3-main > section').forEach(function(el){
       el.classList.add('w3-hide');
     });
-    document.querySelector('.w3-main #'+targetSection).classList.remove('w3-hide');
+
+    var tabNo = $("#" + targetSection).data("tab");
+    document.querySelectorAll('.w3-main > section[data-tab="'+ tabNo +'"]').forEach(function(el){
+      el.classList.remove('w3-hide');
+    });
+
+    var topMenuHeight = document.querySelector(".fix-header").offsetHeight;
+    var location = document.querySelector("#"+ menuCode +"Section").offsetTop;
+    window.scrollTo({top:location - topMenuHeight - 10, behavior:'smooth'});
   }
 
   // async function processLogin(){
@@ -624,9 +632,6 @@ app.clickNavSidebarMenu = function(id){
     return;
   }
   showMainSection(id);
-  var topMenuHeight = document.querySelector(".fix-header").offsetHeight;
-  var location = document.querySelector("#"+ id +"Section").offsetTop;
-  window.scrollTo({top:location - topMenuHeight - 10, behavior:'smooth'});
 }
 
 // [전체 동기화 진행]
@@ -1024,6 +1029,7 @@ var gfn = {
  ************************************************************************/
   app.userInfo = localStorage.userInfo;
   gfn.console('App Code:', app.appVer.verCode);
+  let initialApp = false;
   if (app.userInfo) {
     // 1. User 정보
     app.userInfo = JSON.parse(localStorage.userInfo);
@@ -1062,26 +1068,37 @@ var gfn = {
     app.startSyncFromServer();
   } else {
     gfn.console('localStorage not available', '');
-    showMainSection('menuHome');
+    initialApp = true;
+    showMainSection('viewHome');
   }
 
   if ('serviceWorker' in navigator) {
+    let init = true;
     navigator.serviceWorker.register('./service-worker.js').then(regist => {
       gfn.console('Service Worker Registered', '');
 
       regist.addEventListener('updatefound', () => {
         const newWorker = regist.installing;
-        gfn.console('Service Worker update found!', '');
-
         newWorker.addEventListener('statechange', function(){
-          gfn.console('Service Worker state changed', this.state);
+          if (!init && this.state == "activated"){
+            alert('최신 업데이트 버전이 있습니다. 앱을 업데이트합니다.');
+            window.location.reload();
+          }
         });
       });
     });
 
+    navigator.serviceWorker.ready.then((registration) => {
+        if (registration.active.state == "activated"){
+          init = false;
+        }
+    });
+
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      alert('최신 업데이트 버전이 있습니다. 앱을 업데이트합니다.');
-      window.location.reload();
+      console.log("navigator.serviceWorker.controller", navigator.serviceWorker.controller.state);
+      if (navigator.serviceWorker.controller.state == "activated"){
+
+      }
     });
   }
 })();

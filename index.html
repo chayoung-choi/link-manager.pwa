@@ -68,7 +68,7 @@
     </table>
   </div>
   <div class="w3-bar-block nav-sidebar">
-    <a id="menuHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">Home</a>
+    <a id="viewHome" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">Home</a>
     <div id="viewSidebar"></div>
     <hr style="border:0.5px solid #fff; margin:5px;;" class="w3-round w3-opacity">
     <a id="menuMktxJsonSplit" onclick="w3_close()" class="w3-bar-item w3-button w3-round-large w3-hover-white text-decoration-none">MKTX JSON 분할</a>
@@ -101,37 +101,29 @@
 
   <!-- <div class="w3-container mt-3" id="menuHomeSection"></div> -->
 
-  <section id="viewHomeSection" class="w3-hide">
+  <section id="viewHomeSection" data-tab="1">
     <div class="w3-container w3-section">
       <h1 class="w3-xlarge cy-color-mint"><b>Welcome Link-Manager</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
-      <div class="w3-row-padding">
-        <div class="w3-col">
-          신규 유저
-        </div>
-        <div class="w3-col">
-          기존 유저
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- Content START ---->
-  <section id="viewLinkCardSection">
+  <section id="viewLinkCardSection" data-tab="1">
     <!-- <div class="w3-container w3-section" style="width:8rem; height:8rem; margin: 0 auto;">
       <div class="loader6">Loading...</div>
     </div> -->
   </section>
   <!-- Content END ---->
 
-  <section id="viewUtilitySection" class="w3-hide">
+  <section id="viewUtilitySection" class="w3-hide" data-tab="2">
     <div class="w3-container w3-section" id="menuMktxJsonSplitSection">
       <h1 class="w3-xlarge cy-color-mint"><b>MKTX JSON 분할.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
     </div>
     <!-- <hr> -->
   </section>
-  <section id="viewSettingSection" class="w3-hide">
+  <section id="viewSettingSection" class="w3-hide" data-tab="3">
     <div class="w3-container w3-section" id="menuSettingSection">
       <h1 class="w3-xlarge cy-color-mint"><b>설정.</b></h1>
       <hr style="width:50px;border:3px solid #5FCECf;" class="w3-round">
