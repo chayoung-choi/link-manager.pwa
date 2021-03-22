@@ -4,7 +4,7 @@
   var app = {
     appName  : 'Link Manager',
     appPath  : '/link-manager.pwa',
-    appVer   : {verName: '1.0.8', verCode:'20200701.01'},
+    appVer   : {verName: '1.1.0', verCode:'20210322.01'},
     userInfo : {id: '', userKey: ''},
     lastSyncDt : '0',
     menuData : {},
@@ -513,7 +513,9 @@ app.updateLinkCard = function(data){
 
   if (data.SERVER == "no-server"){
     var fullUrl = data.PATHNAME + '?' + data.PARAMS;
-    card.querySelector('.host-type-l').href = fullUrl;
+    var btn = `<a href="`+fullUrl+`" class="w3-button w3-small w3-round-large cy-bg-color-red text-decoration-none w100 host-type-o" target="_blank">Link</a>`;
+    card.querySelector('.link-btn-box > .w3-bar').innerHTML = btn;
+
   } else {
     Array.from(app.hostData[data.SERVER]).forEach((host) => {
       var hostType = host.TYPE.toLowerCase();
@@ -675,6 +677,8 @@ app.startSyncFromServer = function(){
       clearInterval(timerSync);
     }
   }, 1000);
+
+  document.getElementById('site-noti').remove();
 }
 
 function asyncFunction1() {
