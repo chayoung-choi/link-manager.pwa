@@ -17,3 +17,7 @@
 ## Link 수정
 
 ![수정](https://user-images.githubusercontent.com/47589936/91109416-d8dc3280-e6b5-11ea-9f55-2c7d1c736c2b.png)
+
+
+### PWA(모바일 바로가기)
+![KakaoTalk_20220906_153506928](https://user-images.githubusercontent.com/47589936/188563729-7b83f11f-f303-4673-96e2-dd9027bcfa2b.jpg)
